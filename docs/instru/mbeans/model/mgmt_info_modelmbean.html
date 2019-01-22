@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Management Information of a Web Server in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;2.3.1&nbsp;Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+The following tables summarises the management information exposed by the model MBean<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0" align="center"
+ bgcolor="#eeeeee">
+  <tbody>
+    <tr>
+      <td valign="top" align="center" rowspan="1" colspan="4" bgcolor="#ccccff"><b>Attribute
+Information</b><br>
+      </td>
+    </tr>
+    <tr bgcolor="#ccc0cc">
+      <td valign="top" align="center"><b><font
+ color="#000000">Attribute Name<br>
+      </font></b></td>
+      <td valign="top" align="center"><b><font
+ color="#000000">Attribute Type<br>
+      </font></b></td>
+      <td valign="top" align="center"><b><font
+ color="#000000">Attribute Access<br>
+      </font></b></td>
+      <td valign="top" align="center"><b><font
+ color="#000000">Attribute Description<br>
+      </font></b></td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee"><b>ServerName</b></td>
+      <td valign="top" bgcolor="#eeeeee"><code><font color="#3333ff">java.lang.String</font></code><br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">read only<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">The name of the machine where
+the server is running</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee"><b>ServerId</b></td>
+      <td valign="top" bgcolor="#eeeeee"><code><font color="#3333ff">java.lang.String</font></code><br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">read only<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">An identifier for the Server.
+&nbsp;In a same machine, multiple servers may run at different ports</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee"><b>ServerStarted</b></td>
+      <td valign="top" bgcolor="#eeeeee"><code><font color="#3333ff">boolean</font></code><br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">read only<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">To check whether the server is
+alive</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee"><b>Port</b></td>
+      <td valign="top" bgcolor="#eeeeee"><code><font color="#3333ff">int</font></code><br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">read write<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">The port at which the server is
+binded</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>StartTime</b><br>
+      </td>
+      <td valign="top"><code><font color="#3333ff">java.util.Date</font></code><br>
+      </td>
+      <td valign="top">read only<br>
+      </td>
+      <td valign="top">To show the latest start time of the server<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>ServerUpTime</b><br>
+      </td>
+      <td valign="top"><code><font color="#3333ff">long</font></code><br>
+      </td>
+      <td valign="top">read only<br>
+      </td>
+      <td valign="top">To show the server uptime<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>restartCount</b><br>
+      </td>
+      <td valign="top"><code><font color="#3333ff">int</font></code><br>
+      </td>
+      <td valign="top">read only<br>
+      </td>
+      <td valign="top">To show the number of times the server has been
+restarted<br>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0" align="center"
+ bgcolor="#eeeeee">
+  <tbody>
+    <tr>
+      <td valign="top" align="center" rowspan="1" colspan="4" bgcolor="#ccccff"><b>Operation
+Information</b><br>
+      </td>
+    </tr>
+    <tr bgcolor="#ccc0cc">
+      <td valign="top" align="center"><b><font
+ color="#000000">Operation Name<br>
+      </font></b></td>
+      <td valign="top" align="center"><b><font
+ color="#000000">Signature<br>
+      </font></b></td>
+      <td valign="top" align="center"><b><font
+ color="#000000">Parameters<br>
+      </font></b></td>
+      <td valign="top" align="center"><b><font
+ color="#000000">Operation Description<br>
+      </font></b></td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee"><b>startService</b></td>
+      <td valign="top" bgcolor="#eeeeee"><code><font color="#3333ff">void</font></code>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">-<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">To start the server</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee"><b>stopService</b></td>
+      <td valign="top" bgcolor="#eeeeee"><code><font color="#3333ff">void</font></code>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">-<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">To stop the server</td>
+    </tr>
+            <tr>
+      <td valign="top"><b>restart</b><br>
+      </td>
+      <td valign="top"><code><font color="#3333ff">void</font></code></td>
+      <td valign="top">-<br>
+      </td>
+      <td valign="top">To restart the server<br>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

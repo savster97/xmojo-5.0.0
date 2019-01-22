@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Architecture in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+  <tbody>
+    <tr>
+      <td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+    </tr>
+    <tr>
+      <td valign="top" align="left" class="HDR_TDLeft"><a href="jmx_intro.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+      <td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;1.1&nbsp;JMX&nbsp;Architecture</font></td>
+      <td valign="top" align="right" class="HDR_TDRight"><a href="../instru/instru_level.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h1>JMX Architecture</h1>
+<br>
+As per JMX specification, JMX architecture is divided into three levels:
+<br>
+<ol>
+  <li>Instrumentation level</li>
+  <li>Agent level</li>
+  <li>Adaptors level</li>
+</ol>
+A diagram representing the JMX architecture is shown below:<br><br>
+<img src="../images/jmxagent_arch.jpg" alt="JMX Architecture diagram" width="484" height="335">
+<br><br>
+The instrumentation level defines an entity known as an MBean. MBeans
+represent the managed resources. Thus, the instrumentation level provides
+a way to access the managed resources (application) via these MBeans. The
+Adaptors level is not completely defined in the JMX specification. This
+level contains the components which help in communicating the MBeans. These
+components are called protocol adaptors and connectors. The agent level contains
+the component called MBeanServer which aids in the communication between the
+adaptors level and the instrumentation level. The agent level also provides
+a set of services that can be used by the management clients.
+<br><br>
+In the above architecture diagram, an additional layer called Remote Manager
+is shown. This layer is where the managers reside. These managers
+allow user to view the management information and also to manage the resource.
+The managers will communicate with the Adaptors level using a common
+protocol. The JMX Manager and the RMI Adaptor communicate using RMI
+protocol. The Web browser and the HTTP Adaptor communicate using HTTP
+Protocol. The SNMP Manager and the SNMP Adaptor communicate using SNMP
+Protocol.
+<br><br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE" >
+  <tbody>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><a href="jmx_intro.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+      <td valign="top" align="center" class="FTR_TDCenter"><a href="../index_no_frames.html" class="HDR_LINK">Home</a></td>
+      <td valign="top" align="right" class="FTR_TDRight"><a href="../instru/instru_level.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+    </tr>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Introduction&nbsp;to&nbsp;JMX</font></td>
+      <td valign="top" align="center" class="FTR_TDCenter"></td>
+      <td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Instrumentation&nbsp;Level</font></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

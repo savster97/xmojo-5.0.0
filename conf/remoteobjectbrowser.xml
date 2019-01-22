@@ -1,0 +1,9 @@
+<agent>
+	<client>
+		<RMI>true</RMI>
+		<CORBA>false</CORBA>
+		<HTTP>false</HTTP>
+		<SOAP>false</SOAP>
+	</client>
+</agent>
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Adaptors Level in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="../agent/services/mlet/mlet.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;4.&nbsp;Adaptors&nbsp;Level</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a href="html/html_adaptor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<h1>Adaptors Level</h1>
+<br>
+The adaptors level forms the third level of the JMX architecture. &nbsp;A
+JMX agent should contain atleast one protocol adaptor or connector. &nbsp;These
+protocol adaptors and connectors provides the possibilities of remote management,
+by defining the manager components which are capable of communicating with
+the agents. &nbsp;There is no specific mention about the adaptors level and
+how they should be written or about the interaction between the adaptors level
+and other levels, according to JMX specification, version 1.0.
+<h2>&nbsp;Protocol Adaptors and Connectors &nbsp;</h2>
+Protocol adaptors and connectors make the agent accessible from remote management
+applications. They provide a view through a specific protocol of the MBeans
+instantiated and registered in the MBean server. They enable a management
+application outside the JVM to: <br>
+<blockquote>
+  <blockquote>
+    <ul>
+      <li>Get or set attributes of existing MBeans</li>
+      <li>Perform operations on existing MBeans</li>
+      <li>Instantiate and register new MBeans</li>
+      <li>Register for and receive notifications emitted by MBeans</li>
+    </ul>
+  </blockquote>
+</blockquote>
+Protocol adaptors provide a management view of the JMX agent through a given
+protocol. They adopt the operations of MBeans and the MBean server into a
+representation in the given protocol, and possibly into a different information
+model, for example SNMP. <br>
+<br>
+Connectors are used to connect an agent with a remote JMX-enabled management
+application, namely, a management application developed using the distributed
+services of the JMX specification. This kind of communication involves a
+connector server in the agent and a connector client in the manager. These
+components convey management operations transparently point-to-point over
+a specific protocol. <br>
+<br>
+Both connector servers and protocol adaptors use the services of the MBean
+server to apply the management operation they receive to the MBeans, and
+to forward notifications to the management application. For an agent to be
+manageable, it must include at least one protocol adaptor or connector server.
+&nbsp;The adaptors and connectors provided by an implementation of the JMX
+specification will be implemented as MBeans.
+<h2>&nbsp;Difference Between Adaptors and Connectors&nbsp; </h2>
+Protocol adaptors, adapt the operations of MBeans and the MBean server into
+a representation in the given protocol, and possibly into a different information
+model, as it is in SNMP, whereas Connectors are used to connect an agent
+with a remote JMX-enabled management application, i.e. a management application
+developed using the distributed services of the JMX specification. <br>
+<br>
+Protocol adaptors usually have server part of the adaptor which converts
+the JMX communications into protocol specific communications, whereas in
+case of Connectors,&nbsp; communication involves a connector server in the
+agent and a connector client in the manager. Management applications that
+connect to a protocol adaptor are usually specific to the given protocol,
+whereas management application which uses connectors are developed using
+the distributed services of the JMX specification. &nbsp;<br>
+<br>
+For example, legacy management applications that rely on a specific management
+protocol, will use protocol adaptors and they access through operations that
+are mapped to those of the MBean server. &nbsp; Whereas management applications,
+that uses connectors will access the JMX agent through a remote representation
+of the MBean server.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="../agent/services/mlet/mlet.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a href="../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a href="html/html_adaptor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">M-Let&nbsp;Service</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"></td>
+			<td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">HTML&nbsp;Adaptor</font></td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

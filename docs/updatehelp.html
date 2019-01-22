@@ -1,0 +1,207 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>Update Manager Help</title>
+</head>
+<body>
+
+<center><font size=+2>Update Manager</font></center>
+
+<p>The Update Manager is a tool which is used for installing the service
+packs (.ppm file) over a product. The service pack may contain certain
+bug fixes and new feature additions for a particular release version of
+the product.
+
+<blockquote>
+<b>NOTE: The Update Manager is a contribution from AdventNet.
+It is meant only for development usage within XMOJO project.
+For more details, contact
+<a href="mailto:support@adventnet.com">support@adventnet.com</a></b>
+</blockquote>
+
+<p>
+The service pack can be classified to be either an ordinary
+without referring to any context of the product (Non - Context based) or
+it may be context based. This document explains about how to use the Update
+manager for installation of Software upgrades in AdventNet products. It
+can be also used by products developed over these products.
+<p>Context based patch implies that the patch will have the consolidated
+upgrades for all the different components of the same product.
+The same patch can be used for updating any context of the product. The
+Update manager also provides a feature for having Mandatory context and
+Optional contexts. The Mandatory context can also be called compulsary
+context and will not be displayed at the time of installation. An Optional
+context is some additional upgrades, but is not absolutely necessary for
+the product to function.
+<p>The Update Manager also has some useful validation incorporated. This
+validation includes compatability checks. If a service pack is not compatable
+ie., service pack of one product is installed in other product , or service
+pack of one product version installed in other version , then update manager
+will not allow the user to install these types of service packs.
+<p>To open the Update Manager tool run the "UpdateManager.bat/sh" file
+present in the &lt;product home>/bin directory.&nbsp; The Update manager
+UI lists the different versions of&nbsp; service pack installed for this
+product. The details of each of the service packs can be viewed by selecting
+the corresponding item in the list and clicking the details button.
+<center>
+<p><img SRC="./images/sum.jpg" BORDER=0 height=525 width=500></center>
+
+<p>The Update manager can be operated in two modes ie., UI and non-UI mode.
+For starting the update manager in command line or non-UI mode, there are
+two ways.
+<ol>
+<li>
+Run the UpdateManager.bat/sh file with <b>-c</b> as a command line argument.</li>
+
+<li>
+The user has to edit the script file ie., UpdateManager.bat or UpdateManager.sh
+depending on the OS. The change required is very simple, just an addition
+of one more argument -c (%JAVA_HOME%\bin\java -Xmx100m com.adventnet.tools.update.installer.UpdateManager&nbsp;
+-u conf <b>-c</b>).</li>
+</ol>
+
+<p><br><b>Update Manger UI</b>
+<p>The main features of the Update Manager UI are:
+<ul>
+<li>
+<a href="#Install_ServicePack">To install the patch.</a></li>
+
+<li>
+<a href="#View_installed_ServicePack">To view Installed Service pack details</a></li>
+
+<li>
+<a href="#Uninstall_ServicePack">To Uninstall a installed Service pack.</a></li>
+</ul>
+
+<p><br><a NAME="Install_ServicePack"></a><b>To install the service pack</b>.
+<p>During the installation of a patch, the corresponding files related
+to bug fixes are updated inside the product installation directory according
+to the respective file locations.
+<ul>
+<li>
+Click the Install button to start installation procedure. The installation
+wizard will popup.</li>
+</ul>
+
+<center><img SRC="./images/sum_install.jpg" BORDER=0 height=425 width=425></center>
+
+<ul>
+<li>
+Use the browse button to give the service pack file (.ppm). Once this file
+is given, the View Readme button will get enabled. Only compatible service
+pack file will be opened.</li>
+
+<li>
+On clicking the View Readme button the readme file related to this service
+pack is displayed in a seperate window.</li>
+
+<li>
+On clicking the next button the various optional contexts available are
+displayed for selection. The user can select the context required and click
+install button.</li>
+
+<li>
+When install button is clicked a new panel is displayed giving details
+of service patch and progress in installation.</li>
+</ul>
+The tool will intimate the user on completion of the installation process.
+<br>&nbsp;
+<p><a NAME="View_installed_ServicePack"></a><b>To view Installed Service
+pack details</b>
+<p>The installed service packs are listed in the main window of the Update
+manager.
+<ul>
+<li>
+The details can be viewed by selecting the service pack version and clicking
+the Details button. The following screen will be shown.</li>
+</ul>
+
+<center><img SRC="./images/sum_details.jpg" height=496 width=460></center>
+
+<ul>
+<li>
+A dialog pops-up displaying the General details about the patch in a tab.
+It contails the patch name, description, installed size and installation
+time.</li>
+
+<li>
+The installation log messages are shown below these details.</li>
+
+<li>
+The other tab displays the README related to this Service pack.</li>
+
+<li>
+The details can also be viewed by double clicking the required service
+pack version.</li>
+</ul>
+<a NAME="Uninstall_ServicePack"></a><b>To Uninstall a service pack</b>
+<p>To uninstall the service pack:
+<ul>
+<li>
+Select the version from the list shown. Then click on the Uninstall button.
+The following screen will be shown.</li>
+</ul>
+
+<center><img SRC="./images/sum_uninstall.jpg" BORDER=0 height=425 width=425></center>
+
+<ul>
+<li>
+This will bring up a dialog which shows the service pack to be uninstalled.
+It also lists all the related service packs that will be uninstalled.</li>
+
+<li>
+On clicking the Uninstall button the status screen is displayed, which
+shows the progress in uninstallation.</li>
+</ul>
+
+<p><br><b>Update Manager in Command line</b>
+<p>The main features of the Update Manager command line are:
+<ul>
+<li>
+<a href="#Install_Commandline">To install the patch through command line.</a></li>
+
+<li>
+<a href="#Uninstall_Commandline">To uninstall a service pack using command
+line.</a></li>
+</ul>
+
+<p><br><a NAME="Install_Commandline"></a><b>To install the patch through
+command line</b>
+<ul>
+<li>
+On invoking the update manager in command line mode, it will as the user
+to select a option.</li>
+
+<li>
+For installation enter <b>i</b> and press enter.</li>
+
+<li>
+The update manager will prompt for Service pack file name. Here enter the
+full path of the .ppm file.</li>
+
+<li>
+If Optional contexts are available in the Service pack the the Update manager
+will ask the user wether he/she wants to install them. On selecting to
+install the optional context , the list of contexts are printed in the
+console. Now one can select the contexts required.</li>
+</ul>
+Now the Update Manager will start the installation process.
+<p><a NAME="Uninstall_Commandline"></a><b>To uninstall a service pack using
+command line</b>
+<ul>
+<li>
+On invoking the update manager in command line mode, it will as the user
+to select a option.</li>
+
+<li>
+For installation enter <b>u</b> and press enter.</li>
+
+<li>
+The tool will request to user to select the version to Uninstall. Here
+the user will have to enter the serial number of the version to be uninstalled.</li>
+</ul>
+Now the Update Manager will start the Uninstallation process.
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Frequently Asked Questions in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../../examples/notification/README.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;6.&nbsp;Frequently&nbsp;Asked&nbsp;Questions</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="trbl_shoot.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<div align="center">
+<h1 align="center">The XMOJO JMX Project FAQ</h1>
+<h1></h1>
+</div>
+<br>
+<a name="Top"></a> <big><big><b>List of topics:</b></big></big>
+<blockquote>
+  <ul>
+  <li><a href="#Installation">Installation</a><br>
+  </li>
+  <li><a href="#General">General</a></li>
+  <li><a href="#Advanced_dynamic_loading">Advanced Dynamic Loading</a></li>
+    <li><a href="#Adaptors_and_connectors">Adaptors and connectors</a></li>
+  <li><a href="#Deployment">Deployment</a><br>
+  </li>
+
+  </ul>
+</blockquote>
+<b><big><big><a name="Installation"></a> Installation</big></big></b><br>
+<ol>
+  <li>What are the supported OS of XMOJO JMX implementation ? [<a
+ href="#Ins_001">Ans.</a>]</li>
+  <li>What are the supported JDK of XMOJO JMX implementation ? [<a
+ href="#Ins_002">Ans.</a>]</li>
+  <li>What are the third-party jars used in XMOJO ? [<a href="#Ins_003">Ans.</a>]<br>
+  </li>
+</ol>
+<b><big><big><a name="General"></a> General</big></big></b>
+<ol>
+  <li>What is JMX ? [<a href="#Gen_001">Ans.</a>]</li>
+  <li>What is an MBean ?&nbsp;[<a href="#Gen_002">Ans.</a>]</li>
+  <li>What are the different types of MBeans ?&nbsp;[<a href="#Gen_003">Ans.</a>]</li>
+  <li>When should I go for Standard MBeans ?&nbsp;[<a href="#Gen_004">Ans.</a>]</li>
+  <li>When should I go for Dynamic MBeans ?&nbsp;[<a href="#Gen_005">Ans.</a>]</li>
+  <li>When should I go for Model MBeans etc. ? [<a href="#Gen_006">Ans.</a>]&nbsp;</li>
+  <li>  How do third-party applications exposed as manageable applications
+? &nbsp;[<a href="#Gen_007">Ans.</a>]</li>
+  <li>How do I make my MBean to send notifications to interested parties ?
+&nbsp;[<a href="#Gen_008">Ans.</a>]</li>
+  <li>What is the purpose of NotificationFilter ? &nbsp;[<a
+ href="#Gen_009">Ans.</a>]</li>
+  <li>What is the purpose of handback object ? &nbsp;[<a href="#Gen_010">Ans.</a>]</li>
+</ol>
+<b><big><big><a name="Advanced_dynamic_loading"></a> Advanced Dynamic Loading</big></big></b>
+<ol>
+  <li>What is an MLet service ? &nbsp;[<a href="#ADL_001">Ans.</a>]</li>
+  <li>Is a Web server required to use the MLet service ? &nbsp;[<a
+ href="#ADL_002">Ans.</a>]</li>
+</ol>
+<b><big><big><a name="Adaptors_and_connectors"></a> Adaptors and Connectors</big></big></b>
+<ol>
+  <li>How do managers communicate with MBeanServer and manage the applications
+? &nbsp;[<a href="#AC_001">Ans.</a>]</li>
+  <li>What are adaptors ?&nbsp;[<a href="#AC_002">Ans.</a>]</li>
+  <li>What are connectors ?&nbsp;[<a href="#AC_007">Ans.</a>]</li>
+  <li>What is the difference between adaptors and connectors ? [<a
+ href="#AC_003">Ans.</a>]<br>
+  </li>
+  <li>What is HTML adaptor and how can I use it ?&nbsp;[<a
+ href="#AC_004">Ans.</a>]</li>
+  <li>What is RMI adaptor and how can I use it ? &nbsp;[<a
+ href="#AC_005">Ans.</a>]</li>
+  <li>What I have to do to make the HTML adaptor work with some other web-servers,
+say Tomcat, Resin etc. ? &nbsp;[<a href="#AC_006">Ans.</a>]</li>
+</ol>
+<b><big><big><a name="Deployment"></a> Deployment<br>
+</big></big></b>
+<ol>
+  <li>What jars are needed from XMOJO for deploying application instrumented
+with JMX ? [<a href="#Dep_001">Ans.</a>]</li>
+</ol>
+<br>
+<h3>&nbsp;Installation <br>
+</h3>
+<div align="right">[<a href="#Installation"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Ins_001"></a>What are the supported OS of XMOJO JMX implementation
+?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">As XMOJO JMX implementation is based on Java, all Operating Systems that
+support JVM (Java Virtual Machine) can be used. Here, we have officially
+tested with Windows, Linux, and Solaris.</font><br>
+<div align="right">[<a href="#Installation"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Ins_002"></a>What are the supported JDKs of XMOJO JMX implementation
+?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">For using the XMOJO JMX implementation, JDK1.2 or later is required. &nbsp;For
+using the tools, JDK1.3 or later is required.</font><br>
+<div align="right">[<a href="#Installation"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+&nbsp;<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Ins_003"></a>What are the&nbsp;third-party jars used in XMOJO ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">The following third-party software packages are used in XMOJO JMX implementation:</font><br>
+<blockquote>
+  <blockquote>
+    <ul>
+      <li><font class="FAQ_ANS">XML Parsers (version 1.1) -- xalan.jar, crimson.jar, and jaxp.jar</font></li>
+      <li><font class="FAQ_ANS">Jetty Web Server (version 2.4.0) -- org.mortbay.jetty.jar</font></li>
+    </ul>
+  </blockquote>
+</blockquote>
+<div align="right">[<a href="#Installation"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+<br>
+<h3>&nbsp;General&nbsp; </h3>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_001"></a>What is JMX ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">The Java Management Extensions (also called the JMX specification) defines
+an architecture, the design patterns, the APIs, and &nbsp;&nbsp;&nbsp; the
+services for application and network management in the Java programming language.</font>
+<br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml;&nbsp;</span><font class="FAQ"><a
+ name="Gen_002"></a>What is an MBean ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Managed Bean or MBean in short is a Java object that follows the design patterns
+set forth in the instrumentation level of the JMX specification. MBeans expose
+a management interface: a set of readable and/or writable attributes and
+a set of invokable operations, along with a self-description.</font><br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml;&nbsp;</span><font class="FAQ"><a
+ name="Gen_003"></a>What are the different types of MBeans ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">JMX 1.0 specification defines four broad types of MBeans, namely Standard
+MBeans, Dynamic MBeans, Model MBeans, and less standardized Open MBeans.
+MBeans can be of Standard or Dynamic, i.e., whose management interface will
+not change (standard) or may change (dynamic). Model MBeans and Open MBeans
+extend the Dynamic MBeans and provides additional features.</font><br>
+<br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_004"></a>When should I go for Standard MBeans ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Managed applications can be instrumented as standard MBeans, if their management
+interface is going to be static. &nbsp;As the management interface is static,
+it is very easy to instrument it as standard MBeans.</font><br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_005"></a>When should I go for Dynamic MBeans ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Dynamic MBeans are most suitable for instrumenting the managed applications
+whose management interface is varying dynamically. &nbsp;Dynamic MBeans give
+great flexibility in instrumenting the managed applications and also they
+enable to wrap the existing application and exposing them as MBeans for management.</font>
+<br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_006"></a>When should I go for Model MBeans ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Model MBeans are also Dynamic MBeans and it will be suitable for instrumenting
+the managed applications which requires dynamic MBeans behavior and needs
+to describe various run-time behavior for attributes, operations, etc. &nbsp;
+Model MBeans enable describing attributes and operations through "Descriptors".</font><br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_007"></a>How do third-party applications exposed as&nbsp; manageable
+applications ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Those applications which are third-party applications or whose source code
+cannot be accessed or whose source should not be modified, etc. can be exposed
+as MBeans using Dynamic MBeans. &nbsp;The wrapper will implement the DynamicMBean
+interface and actually wraps the application.</font><br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_008"></a>How do I make my MBean send notifications to interested
+parties ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">MBeans should implement NotificationBroadcaster interface to enable the notification
+listeners to get registered with the MBean. &nbsp;JMX implementation provides
+a default implementation of the notification broadcaster interface called
+"NotificationBroadcasterSupport". MBeans can extend either the NotificationBroadcasterSupport
+class or implement the NotificationBroadcaster interface.</font><br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_009"></a>What is the purpose of NotificationFilter ?<br>
+</font>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">NotificationFilter is used to filter the notifications emitted by the MBean
+and receive only the interested types among them. &nbsp;The listener while
+registering itself with MBeans as notification listener will have to supply
+the NotificationFilter object which would have implemented the "isNotificationEnabled"
+method of NotificationFilter to filter out the unwanted notifications. &nbsp;If
+this NotificationFilter object is null, then all the emitted notifications
+by the MBeans will be delivered to the listener.</font><br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Gen_010"></a>What is the purpose of &nbsp;hand back object ?<br>
+</font>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Hand back objects are the objects which are of no use to the Notification
+mechanism and their use is purely depends on the listener. It can be any
+object and will be supplied by listener during registration and will be handed
+back to listener during sending notifications.</font><br>
+<div align="right">[<a href="#General"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]
+</div>
+<br>
+<br>
+
+<h3>&nbsp;Advanced Dynamic Loading&nbsp; </h3>
+<div align="right">[<a href="#Advanced_dynamic_loading"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="ADL_001"></a>What is an MLet service ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">The MLet service is useful to load MBeans classes and resources inside an
+MBean Server's JVM from a remote host and register the MBeans in a single
+action. &nbsp;The MLet service loads an m-let text XML-like file which contains
+information about the MBeans that have to be registered. &nbsp;The location
+of the m-let file is specified by a URL.</font><br>
+<div align="right">[<a href="#Advanced_dynamic_loading"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<ul>
+</ul>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="ADL_002"></a>Is a Web server required to use the MLet service ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">No, you can also specify a file URL which points to a local file, when registering
+MBeans with addMBeansFromURL().</font><br>
+<div align="right">[<a href="#Advanced_dynamic_loading"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+<br>
+<h3>&nbsp;Adaptors and Connectors <br>
+</h3>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="AC_001"></a>How do managers communicate with MBeanServer and manage
+the applications ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">The managers or managing applications, communicate with MBeanServer through
+protocol adaptors and connectors depends on what protocol they can understand
+and thus manages the application.</font><br>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml;&nbsp;</span><font class="FAQ"><a
+ name="AC_002"></a>What are adaptors ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Protocol adaptors provide a management view of the JMX agent through a given
+protocol. They adopt the operations of MBeans and the MBean server into a
+representation in the given protocol and possibly into a different information
+model, for example SNMP.</font><br>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml;&nbsp;</span><font class="FAQ"><a
+ name="AC_007"></a>What are connectors ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Protocol connectors convey management operations transparently point-to-point
+over a specific protocol. This kind of communication involves a connector
+server in the agent and a connector client in the manager.</font><br>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="AC_003"></a>What is the difference between adaptors and connectors
+?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">Protocol adaptors usually have server part of the adaptor which converts
+the JMX communications into protocol specific communications, whereas in
+case of Connectors,&nbsp; communication involves a connector server in the
+agent and a connector client in the manager. Management applications that
+connect to a protocol adaptor are usually specific to the given protocol,
+whereas management application which uses connectors are developed using
+the distributed services of the JMX 1.0 specification.</font><br>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="AC_004"></a>What is HTML adaptor and how can I use it ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">HTML adaptor is the adaptor for HTML protocol, using which an application
+can be managed through any HTML3.2 compliant browser or application. In order
+to use HTML adaptor, it has to be reigsted with MBeanServer (as all adaptors
+are MBeans) from the Agent. &nbsp;For more details, refer the HTML Adaptor
+topic in the help documentation.</font><br>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="AC_005"></a>What is RMI adaptor and how can I use it ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">RMI adaptor/connector, is based on the client framework, which helps the managers
+or managing applications, to communicate with MBeanServer through RMI. In
+order to use RMI adaptor, it has to be reigsted with MBeanServer (as all
+adaptors are MBeans) from the Agent. &nbsp;For more details, refer the RMI
+Adaptor topic in the help documentation.</font><br>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="AC_006"></a>What I have to do to make the HTML adaptor work with some
+other web-servers, say Tomcat, Resin etc. ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">By default, the shipped HTML adaptor will use Jetty web server and servlet
+and JSP container. &nbsp;To use any other servlet compatible containers, you
+have to wrap that server and implement the "com.adventnet.adaptors.html.HttpServerInterface"
+interface. &nbsp;For more details, refer the section Plugging in Your Own
+Web Server in the HTML Adaptor topic in the Help documentation.</font><br>
+<div align="right">[<a href="#Adaptors_and_connectors"><font class="FAQ_TOPIC">Topic</font></a>] [<a
+ href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+<br>
+<h3>&nbsp;Deployment <br>
+</h3>
+<div align="right">[<a href="#Deployment"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span
+ style="font-family: Wingdings;">&uuml; </span><font class="FAQ"><a
+ name="Dep_001"></a>What are the jars needed from XMOJO for deploying application
+instrumented with JMX ?</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<font class="FAQ_ANS">The xmojo.jar and xmojoutils.jar are needed. These JAR files are available
+under lib directory.</font><br>
+<div align="right">[<a href="#Deployment"><font class="FAQ_TOPIC">Topic</font></a>] [<a href="#Top"><font class="FAQ_TOP">Top</font></a>]<br>
+</div>
+<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../../examples/notification/README.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="trbl_shoot.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Notification&nbsp;Model&nbsp;Example</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Trouble&nbsp;Shooting</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

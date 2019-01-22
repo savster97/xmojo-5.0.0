@@ -1,0 +1,36 @@
+<HtmlAdaptorSettings>
+
+<GeneralSettings name="isJavaScript" value="true" />
+<GeneralSettings name="limitRestrictFlag" value="true" />
+<GeneralSettings name="maxDispChar" value="30" />
+<GeneralSettings name="mailTo" value="xmojo-support@xmojo.org" />
+<GeneralSettings name="isOperationsLinkNeeded" value="true" />
+<GeneralSettings name="indexfile" value="dynamic_index.html" />
+<GeneralSettings name="refreshtime" value="60" />
+<GeneralSettings name="servletname" value="Jmx_dynamic" />
+<GeneralSettings name="author" value="JMX Agent" />
+<GeneralSettings name="isTextDecoration" value="true" />
+<GeneralSettings name="bgcolor" value="#FFFFFF" />
+<GeneralSettings name="bgimage" value="null" />
+<GeneralSettings name="vlinkColor" value="#0000FF" />
+<GeneralSettings name="alinkColor" value="#0000FF" />
+<GeneralSettings name="linkColor" value="#0000FF" />
+<GeneralSettings name="tableHeaderColor" value="#C0C0C0" />
+<GeneralSettings name="tableRowColor" value="#E0E0E0" />
+<GeneralSettings name="tabIndexColor" value="#0000FF" />
+<GeneralSettings name="numrows" value="10" />
+<GeneralSettings name="fontColor" value="#000000" />
+<GeneralSettings name="fontFace" value="Arial, Helvetica" />
+<GeneralSettings name="fontSize" value="3" />
+<GeneralSettings name="copyrightneeded" value="true" />
+<GeneralSettings name="footermsg" value="Copyright (c) 2003 XMOJO.org. All Rights Reserved." />
+
+<TableHeaders>
+<Attribute name="name" value="Attribute Name" />
+<Attribute name="type" value="Attribute Type" />
+<Attribute name="access" value="Attribute Access" />
+<Attribute name="value" value="Attribute Value" />
+<Attribute name="description" value="Attribute Description" />
+</TableHeaders>
+
+</HtmlAdaptorSettings>

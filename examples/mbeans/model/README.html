@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Model MBean Example in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../docs/styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../dynamic/README.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;5.3&nbsp;Model&nbsp;MBean&nbsp;Example</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../../notification/README.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Model MBean: A Working Example</h1>
+<br>
+To know about Model MBean, please refer to the <a
+ href="../../../docs/instru/mbeans/model/model_mbean.html">ModelMBean</a>
+section.<br>
+<h2>&nbsp;About the Example&nbsp;</h2>
+This example shows how to expose the management information of a Web server
+using model MBeans. It also shows how an existing class, which does not know
+anything about JMX, can be wrapped as an MBean that serves for management.
+The following resources are used:<br>
+<ol>
+  <li>An XML file for exposing the model MBean attributes and operations --
+    <a href="xml/ServerInfo.xml">ServerInfo.xml</a></li>
+  <li>A class which contains the implementation details of the managed resource
+(Web server) -- <a
+ href="src/examples/applications/server/ServerInfo.java">ServerInfo.java</a></li>
+    <li>A class which contains the implementation details for constructing
+a model MBean object using the API -- <a
+ href="src/examples/mbeans/model/ModelServerInfo.java">ModelServerInfo.java</a><br>
+  </li>
+  <li>A simple JMX agent -- <a
+ href="src/examples/agent/RunModelAgent.java">RunModelAgent.java</a></li>
+</ol>
+<h3>&nbsp;ServerInfo.xml&nbsp;</h3>
+This XML file contains the management information. The Model MBean attributes,
+operations, notifications, and constructor descriptors are defined in this
+XML file.<br>
+<h3>&nbsp;ServerInfo&nbsp;</h3>
+This class contains the implementation details of a web server. Though this
+class contains the implementation details, it is not a model MBean.<br>
+<h3>&nbsp;ModelServerInfo&nbsp;</h3>
+This is the model MBean class. This class contains sample code for creating
+a ModelMBean using API. (This class defines a method called getMBeanInfo,
+which returns an object of type ModelMBeanInfo.)<br>
+<h3>&nbsp;RunModelAgent&nbsp;</h3>
+This class is a simple JMX Agent which registers the required adaptors and
+the model MBean. This class obtains the model MBean object in two ways:<br>
+<ol>
+  <li>If the argument passed while invoking the main method is "xml", the
+ServerInfo.xml file will be converted into a ModelMBeanInfo object. A RequiredModelMBean
+object will be created out of this ModelMBeanInfo object. The managed resource
+for this RequiredModelMBean will be set to the ServerInfo class and registered
+with the MBeanServer.</li>
+  <li>If no argument is passed or any argument other than the string "xml"
+is passed, the ModelMBeanInfo object is created using the available API methods.
+The getMBeanInfo method of ModelServerInfo class is invoked, which returns
+a ModelMBeanInfo object. A RequiredModelMBean object will be created out
+of this ModelMBeanInfo object. The managed resource for this RequiredModelMBean
+will be set to the ServerInfo class and registered with the MBeanServer.</li>
+</ol>
+<h2>&nbsp;Running the Example&nbsp;</h2>
+<h3>&nbsp;For Windows OS&nbsp;</h3>
+<ol>
+  <li>Change your working directory to examples/mbeans/model directory.</li>
+  <li>Execute the build.bat (This batch file compiles the Java files under
+the src directory and the output class files will be stored in the classes
+directory.)</li>
+  <li>Execute the run.bat (This batch file executes the RunModelAgent class.)
+    <i>Note: </i>If the model MBean has to be created using the XML file,
+then invoke the run.bat by passing the string argument "xml". In the command
+prompt, type<i> <b>run.bat xml</b></i></li>
+</ol>
+The JMX Agent will be started. RMI Server will be started at port 1099. HTML
+Server will be started at port 8030. For testing the example, refer to the
+section, "Testing the Agent" given below.
+<h3>&nbsp;For Linux OS&nbsp;</h3>
+<ol>
+  <li>Change your working directory to examples/mbeans/model directory.</li>
+  <li>Execute the build.sh (This script file compiles the Java files under
+the src directory and the output class files will be stored in the classes
+directory.)</li>
+  <li>Execute the run.sh (This script file executes the RunModelAgent class.)
+    <i>Note: </i>If the model MBean has to be created using the XML file,
+then invoke the run.sh by passing the string argument "xml". In the console,
+type <b><i>sh run.sh xml</i></b></li>
+</ol>
+The JMX Agent will be started. RMI Server will be started at port 1099. HTML
+Server will be started at port 8030. For testing the example, refer to the
+section "Testing the Agent" given below:
+<h2>&nbsp;Testing the Agent&nbsp;</h2>
+<h3>&nbsp;Using the RMI Client&nbsp;</h3>
+Start the MBeanBrowser tool by executing the mbeanbrowser.bat/mbeanbrowser.sh
+file under <i>XMOJO_HOME</i>/bin directory.<br>
+Connect to the RMI Server. (In the menu bar, choose Settings &gt;&gt; Client
+Settings. Configure the HostName and PortNumber. Here, HostName is the machine
+name where the RMI Server is running. After configuring the client settings,
+choose Operations &gt;&gt; Connect). This will establish a connection with
+the RMI Server.<br>
+<br>
+The registered MBeans will be listed in the left frame. <br>
+<br>
+ Under the domain ModelDomain, an MBean with the name name=ServerInfo will
+be listed. It will expose seven attributes, of which six are read only and
+three operations. Thus, the management information of a Web server is exposed
+using model MBeans.<br>
+<h3>&nbsp;Using the Web Browser&nbsp;</h3>
+Open any Web browser and type the URL http://localhost:8030. If you are testing
+from a remote machine, enter the URL http://hostName:8030. Here, hostName
+is the machine name where the JMX agent is running. If the HTML Adaptor is
+listening at some other port, replace the 8030 with the appropriate port
+number in the above URL.<br>
+<br>
+The index page lists the various domains and some useful links for viewing
+notifications, searching the MBeans, customizing MBean views, etc. Click the
+ModelDomain link under Domains. Two MBeans will be listed. Click the link
+ModelDomain:name=serverInfo. It should list one read write attribute and
+six read only attributes. The read write attribute will be Port and with
+the value 8072. The read only attributes will be RestartCount, ServerId,
+ServerName, ServerUpTime, StartTime, and ServerStarted. Thus, the management
+information of a Web server is exposed using model MBeans.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../dynamic/README.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../docs/index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../../notification/README.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Dynamic&nbsp;MBean&nbsp;Example</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Notification&nbsp;Model&nbsp;Example</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

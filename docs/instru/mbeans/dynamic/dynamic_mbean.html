@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Dynamic MBean in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="../standard/attrName_overloading.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;2.2&nbsp;Dynamic&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a href="when_dynamic_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<h1>Dynamic MBean</h1>
+<br>
+A Java class that implements the interface javax.management.DynamicMBean
+directly or indirectly is a dynamic MBean. In a dynamic MBean, the
+attribute and operations are exposed only at the run time. Hence, Dynamic
+MBean is most appropriate where the management information will not be static.
+<h2>&nbsp;Advantages&nbsp;</h2>
+<ol>
+  <li>No need to define your own management interface.</li>
+  <li>The attributes and operations are exposed only at the run time, and
+exposing the attributes and operations can be controlled dynamically.</li>
+  <li>Description about the dynamic MBean and its attributes and operations
+can be provided.<br>
+  </li>
+</ol>
+<h2>&nbsp;DynamicMBean Interface&nbsp;</h2>
+The javax.management.DynamicMBean interface defines the following six methods:<br>
+<ol>
+  <li>getMBeanInfo</li>
+  <li>getAttribute</li>
+  <li>setAttribute</li>
+  <li>getAttributes</li>
+  <li>setAttributes</li>
+  <li>invoke<br>
+  </li>
+</ol>
+<h3>&nbsp;getMBeanInfo&nbsp;</h3>
+The declaration of the getMBeanInfo method is<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font
+ color="#3333ff">public</font> javax.management.MBeanInfo getMBeanInfo<font
+ color="#ff0000">()</font></code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+The getMBeanInfo method returns an MBeanInfo object. With this MBeanInfo
+object, the attributes, operations, constructors, and notification information
+can be obtained. The management information is obtained from the MBeanInfo
+returned by this method. This is one of the advantages of Dynamic MBeans
+over Standard MBeans. In Standard MBeans, the management information
+will be obtained using MBean introspection. So, some standard lexical
+naming pattern of the methods has to be followed by the implementing class.
+Dynamic MBeans are free from these sorts of restrictions. If
+the implementing class has already defined a method <code>printName()</code>
+which does not follow the standard lexical naming pattern, the method can
+be mapped to the getter or setter method of some attribute (say ServerName)
+in that MBean.<br>
+<br>
+<h3>&nbsp;getAttribute and setAttribute&nbsp;</h3>
+The getAttribute method gets the value of a specific attribute of the Dynamic
+Mbean. The setAttribute method sets the value of a specific attribute
+of the Dynamic MBean. The method declarations are given below:
+<br><br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font color="#3333ff">public</font> <font
+ color="#000099">Object</font> getAttribute<font color="#ff0000">(</font><font
+ color="#000099">String</font> AttributeName<font color="#ff0000">) </font><br>
+&nbsp; &nbsp; &nbsp; &nbsp;<font color="#3333ff">throws</font> <font
+ color="#000000">javax.management.AttributeNotFoundException,</font><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  <font
+ color="#000000">javax.management.MBeanException,</font><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  <font
+ color="#000000">javax.management.ReflectionException</font><br>
+                  <br>
+                  <font color="#3333ff">public void</font> setAttribute<font
+ color="#ff0000">(</font>javax.management.Attribute AttributeName<font
+ color="#ff0000">) </font><br>
+       &nbsp; &nbsp; &nbsp; &nbsp; <font color="#3333ff">throws</font> <font
+ color="#000000">javax.management.AttributeNotFoundException,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+       javax.management.InvalidAttributeValueException,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+       javax.management.MBeanException,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+       javax.management.ReflectionException</font></code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<h3>&nbsp;getAttributes and setAttributes&nbsp;</h3>
+The methods getAttributes and setAttributes are used for getting and setting
+the values of several attributes of the Dynamic MBean respectively. The
+method declarations are given below:
+<br><br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font color="#3333ff">public</font></code><code>
+javax.management.AttributeList getAttributes<font color="#ff0000">(</font><font
+ color="#000099">String</font><font color="#ff0000">[]</font> AttributeNames<font
+ color="#ff0000">) </font><br>
+                  <br>
+                  <font color="#3333ff">public</font>&nbsp;<font
+ color="#000000">javax.management.AttributeList setAttributes</font><font
+ color="#ff0000">(</font>javax.management.AttributeList AttributeNames<font color="#ff0000">)</font></code><font
+ color="#ff0000"> </font><br>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<h3>&nbsp;invoke&nbsp;</h3>
+The method invoke allows an action (method) to be invoked on the Dynamic
+MBean. The method declarations are given below:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font color="#3333ff">public</font><font
+ color="#000099"> Object</font><font> invoke</font><font color="#ff0000">(</font><font
+ color="#000099">String</font><font color="#000099"> <font
+ color="#000000">methodName,</font> </font><font color="#000099">Object</font><font
+ color="#ff0000">[]</font><font color="#000099"> <font color="#000000">parameters,</font>
+                 </font><font color="#000099">String</font><font
+ color="#ff0000">[]</font><font> signature</font><font color="#ff0000">)<br>
+                  </font><font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;                   </font><font
+ color="#3333ff">throws</font><font> </font><font color="#000000">javax.management.MBeanException,<br>
+                  </font><font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font><font
+ color="#000000">javax.management.ReflectionException</font></code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<table class="PTR_OUTER" border="0" cellspacing="1" cellpadding="1">
+    <tbody>
+		<tr>
+			<td valign="top">
+      		    <table class="PTR_CENTER" border="0" cellspacing="1" cellpadding="1">
+					<tbody>
+						<tr>
+							<td valign="top">
+                            	<table class="PTR_INNER" border="0" cellspacing="1" cellpadding="1">
+									<tbody>
+										<tr>
+											<td valign="top">
+											<b>Points to Remember</b><br>
+
+                  <ol>
+                    <li>Dynamic MBean must be a concrete class having at
+least one public constructor and should implement the javax.management.DynamicMBean
+interface.</li>
+                    <li>In a Dynamic MBean, the attributes and operations
+are formed by the MBeanInfo object returned by the getMBeanInfo method.</li>
+                    <li>No semantics to be followed for naming the Attributes.
+Mapping of some method foo( ) for an attribute with name ServerName
+is possible.</li>
+                    <li>Description of the MBean and its attributes and operations
+is possible.</li>
+
+                  </ol>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="../standard/attrName_overloading.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a href="when_dynamic_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Attribute&nbsp;Name&nbsp;Overloading</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"></td>
+			<td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">When&nbsp;Dynamic&nbsp;MBean</font></td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

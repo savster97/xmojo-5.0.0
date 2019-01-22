@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>A Sample Model MBean in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;2.3.1&nbsp;Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top">
+                  <pre><code><font color="#009900">/**</font><br><font
+ color="#009900"> * Build the MBeanInfo which represents the management interface exposed</font><br><font
+ color="#009900"> * by the MBean which comprises of attributes, constructors, operations</font><br><font
+ color="#009900"> * and notifications.</font><br><font color="#009900"> */</font><br><font
+ color="#0000ff">private</font> ModelMBeanInfo <font color="#000000">getMBeanInfo</font>(ObjectName mbeanObjName,<br>        String mbeanName) {<br>        ModelMBeanInfo modelMBeanInfo = <font
+ color="#650099">null</font>;<br><br>        ModelMBeanOperationInfo[] operInfo = <font
+ color="#0000ff">new</font> ModelMBeanOperationInfo[6];<br>        ModelMBeanNotificationInfo[] notifInfo =<br>                <font
+ color="#0000ff">new</font> ModelMBeanNotificationInfo[1];<br><br>        <font
+ color="#0000ff">try</font> {<br>                Descriptor modelMBeanDescriptor = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>(<br>                        <font
+ color="#0000ff">new</font> String[]{(<font color="#006666">"name="</font>+mbeanObjName), <font
+ color="#006666">"descriptorType=mbean"</font>,<br>                        (<font
+ color="#006666">"displayName="</font>+mbeanName), <font color="#006666">"log=T"</font>, <font
+ color="#006666">"logfile=modelmbean.log"</font>,<br>                        <font
+ color="#006666">"currencyTimeLimit=60"</font>, <font color="#006666">"persistPolicy=noMoreOftenThan"</font>,<br>                        <font
+ color="#006666">"persistPeriod=10"</font>, <font color="#006666">"persistLocation=jmxPersistDir"</font>,<br>                        <font
+ color="#006666">"persistName=serverInfo"</font> });<br><br>                modelMBeanInfo =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanInfoSupport</font>(<font
+ color="#006666">"examples.applications.server.ServerInfo"</font>,<br>                        <font
+ color="#006666">"Web Server management application"</font>,<br>                        <font
+ color="#000000">getAttributesInfo</font>(), <font color="#000000">getConstructorsInfo</font>(),<br>                        <font
+ color="#000000">getOperationsInfo</font>(), <font color="#000000">getNotificationsInfo</font>());<br><br>                modelMBeanInfo.<font
+ color="#000000">setMBeanDescriptor</font>(modelMBeanDescriptor);<br><br>        } <font
+ color="#0000ff">catch</font> (Exception e) {<br>                System.out.<font
+ color="#000000">println</font>(<br>                        <font
+ color="#006666">"\nException in buildDynamicMBeanInfo : "</font> +<br>                        e.<font
+ color="#000000">getMessage</font>());<br>                e.<font
+ color="#000000">printStackTrace</font>();<br>        }<br><br>        <font
+ color="#0000ff">return</font> modelMBeanInfo;<br>}<br><br></code><code><font
+ color="#009900">/**</font><br><font color="#009900"> * Build the Attribute information</font><font
+ color="#009900">.</font><br><font color="#009900"> */</font></code><br><code><font
+ color="#0000ff">private</font> ModelMBeanAttributeInfo[] <font
+ color="#000000">getAttributesInfo</font>() {<br>        ModelMBeanAttributeInfo[] attrInfo = <font
+ color="#0000ff">new</font> ModelMBeanAttributeInfo[7];<br><br>        <font
+ color="#0000ff">try</font> {<br>                Descriptor portAttrDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                portAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"Port"</font>);<br>                portAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"attribute"</font>);<br>                portAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"displayName"</font>,<font
+ color="#006666">"Port"</font>);<br>                portAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"getMethod"</font>,<font
+ color="#006666">"getPort"</font>);<br>                portAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"setMethod"</font>,<font
+ color="#006666">"setPort"</font>);<br>                portAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"currencyTimeLimit"</font>,<font
+ color="#006666">"0"</font>);<br><br>                attrInfo[0] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanAttributeInfo</font>(<font
+ color="#006666">"Port"</font>, <font color="#006666">"int"</font>, <font
+ color="#006666">"Port: Server's port number"</font>,<br>                        <font
+ color="#650099">true</font>, <font color="#650099">true</font>, <font
+ color="#650099">false</font>, portAttrDesc);<br><br>                Descriptor restartCountAttrDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                restartCountAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"RestartCount"</font>);<br>                restartCountAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>, <font
+ color="#006666">"attribute"</font>);<br>                restartCountAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"default"</font>, <font
+ color="#006666">"0"</font>);<br>                restartCountAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"displayName"</font>,<font
+ color="#006666">"RestartCount"</font>);<br>                restartCountAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"getMethod"</font>,<font
+ color="#006666">"getRestartCount"</font>);<br><br>                attrInfo[1] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanAttributeInfo</font>(<font
+ color="#006666">"RestartCount"</font>, <font color="#006666">"int"</font>,<br>                        <font
+ color="#006666">"RestartCount: number of times the server is restarted"</font>,<br>                        <font
+ color="#650099">true</font>, <font color="#650099">false</font>, <font
+ color="#650099">false</font>, restartCountAttrDesc);<br><br>                Descriptor serverIdAttrDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                serverIdAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"ServerId"</font>);<br>                serverIdAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>, <font
+ color="#006666">"attribute"</font>);<br>                serverIdAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"default"</font>, <font
+ color="#006666">"test-server_1"</font>);<br>                serverIdAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"displayName"</font>,<font
+ color="#006666">"ServerId"</font>);<br>                serverIdAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"getMethod"</font>,<font
+ color="#006666">"getServerId"</font>);<br><br>                attrInfo[2] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanAttributeInfo</font>(<font
+ color="#006666">"ServerId"</font>, <font color="#006666">"java.lang.String"</font>,<br>                        <font
+ color="#006666">"ServerId: Server ID"</font>, <font color="#650099">true</font>, <font
+ color="#650099">false</font>, <font color="#650099">false</font>,<br>                        serverIdAttrDesc);<br><br>                Descriptor serverNameAttrDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                serverNameAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"ServerName"</font>);<br>                serverNameAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>, <font
+ color="#006666">"attribute"</font>);<br>                serverNameAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"default"</font>, <font
+ color="#006666">"test-server"</font>);<br>                serverNameAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"displayName"</font>,<font
+ color="#006666">"ServerName"</font>);<br>                serverNameAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"getMethod"</font>,<font
+ color="#006666">"getServerName"</font>);<br><br>                attrInfo[3] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanAttributeInfo</font>(<font
+ color="#006666">"ServerName"</font>, <font color="#006666">"java.lang.String"</font>,<br>                        <font
+ color="#006666">"ServerName: name of the server"</font>, <font
+ color="#650099">true</font>, <font color="#650099">false</font>,<br>                        <font
+ color="#650099">false</font>, serverNameAttrDesc);<br><br>                Descriptor serverUpTimeAttrDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                serverUpTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"ServerUpTime"</font>);<br>                serverUpTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>, <font
+ color="#006666">"attribute"</font>);<br>                serverUpTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"default"</font>, <font
+ color="#006666">"0"</font>);<br>                serverUpTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"displayName"</font>,<font
+ color="#006666">"ServerUpTime"</font>);<br>                serverUpTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"getMethod"</font>,<font
+ color="#006666">"getServerUpTime"</font>);<br><br>                attrInfo[4] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanAttributeInfo</font>(<font
+ color="#006666">"ServerUpTime"</font>, <font color="#006666">"long"</font>,<br>                        <font
+ color="#006666">"ServerUpTime: no. of milli seconds passed from the start of the server"</font>,<br>                        <font
+ color="#650099">true</font>, <font color="#650099">false</font>, <font
+ color="#650099">false</font>, serverUpTimeAttrDesc);<br><br>                Descriptor serverTimeAttrDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                serverTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"StartTime"</font>);<br>                serverTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>, <font
+ color="#006666">"attribute"</font>);<br>                serverTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"default"</font>, <font
+ color="#006666">"0"</font>);<br>                serverTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"displayName"</font>,<font
+ color="#006666">"StartTime"</font>);<br>                serverTimeAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"getMethod"</font>,<font
+ color="#006666">"getStartTime"</font>);<br><br>                attrInfo[5] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanAttributeInfo</font>(<font
+ color="#006666">"StartTime"</font>, <font color="#006666">"long"</font>,<br>                        <font
+ color="#006666">"StartTime: time at which the server started"</font>,<br>                        <font
+ color="#650099">true</font>, <font color="#650099">false</font>, <font
+ color="#650099">false</font>, serverTimeAttrDesc);<br><br>                Descriptor serverStartedAttrDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                serverStartedAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"ServerStarted"</font>);<br>                serverStartedAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>, <font
+ color="#006666">"attribute"</font>);<br>                serverStartedAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"default"</font>, <font
+ color="#006666">"false"</font>);<br>                serverStartedAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"displayName"</font>,<font
+ color="#006666">"ServerStarted"</font>);<br>                serverStartedAttrDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"getMethod"</font>,<font
+ color="#006666">"isServerStarted"</font>);<br><br>                attrInfo[6] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanAttributeInfo</font>(<font
+ color="#006666">"ServerStarted"</font>, <font color="#006666">"boolean"</font>,<br>                        <font
+ color="#006666">"ServerStarted: indicates whether the server is started"</font>,<br>                        <font
+ color="#650099">true</font>, <font color="#650099">false</font>, <font
+ color="#650099">true</font>, serverStartedAttrDesc);<br>        } <font
+ color="#0000ff">catch</font> (Exception ex) {<br>                ex.<font
+ color="#000000">printStackTrace</font>();<br>        }<br><br>        <font
+ color="#0000ff">return</font> attrInfo;<br>}<br><br></code><code><font
+ color="#009900">/**</font><br><font color="#009900"> * Build the Constructor information</font><font
+ color="#009900">.</font><br><font color="#009900"> */</font></code><br><code><font
+ color="#0000ff">private</font> ModelMBeanConstructorInfo[] <font
+ color="#000000">getConstructorsInfo</font>() {<br>        ModelMBeanConstructorInfo[] constInfo =<br>                <font
+ color="#0000ff">new</font> ModelMBeanConstructorInfo[2];<br><br>        <font
+ color="#0000ff">try</font> {<br>                Class svrInfoClass = ServerInfo.<font
+ color="#0000ff">class</font>;<br><br>                Constructor[] constructors = svrInfoClass.<font
+ color="#000000">getConstructors</font>();<br><br>                Descriptor serverInfoDefaultConstBeanDesc =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                serverInfoDefaultConstBeanDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                serverInfoDefaultConstBeanDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<br>                        <font
+ color="#006666">"operation"</font>);<br>                serverInfoDefaultConstBeanDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"constructor"</font>);<br><br>                constInfo[0] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanConstructorInfo</font>(<font
+ color="#006666">"ServerInfo(): Constructs a ServerInfo Application"</font>,<br>                        constructors[0], serverInfoDefaultConstBeanDesc);<br><br>                Descriptor serverInfoForuParamsConstBeanDesc =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                serverInfoForuParamsConstBeanDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"ServerInfoFourParams"</font>);<br>                serverInfoForuParamsConstBeanDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<br>                        <font
+ color="#006666">"operation"</font>);<br>                serverInfoForuParamsConstBeanDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"constructor"</font>);<br><br>                constInfo[1] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanConstructorInfo</font>(<font
+ color="#006666">"ServerInfo(): Constructs a ServerInfo Application and takes four params"</font>,<br>                        constructors[1], serverInfoForuParamsConstBeanDesc);<br>        } <font
+ color="#0000ff">catch</font> (Exception ex) {<br>                ex.<font
+ color="#000000">printStackTrace</font>();<br>        }<br><br>        <font
+ color="#0000ff">return</font> constInfo;<br>}<br><br></code><code><font
+ color="#009900">/**</font><br><font color="#009900"> * Build the Operation information</font><font
+ color="#009900">.</font><br><font color="#009900"> */</font></code><br><code><font
+ color="#0000ff">private</font> ModelMBeanOperationInfo[] <font
+ color="#000000">getOperationsInfo</font>() {<br>        ModelMBeanOperationInfo[] operInfo =<br>                <font
+ color="#0000ff">new</font> ModelMBeanOperationInfo[11];<br><br>        <font
+ color="#0000ff">try</font> {<br>                MBeanParameterInfo[] params = <font
+ color="#650099">null</font>;<br><br>                Descriptor startServiceOperDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                startServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"startService"</font>);<br>                startServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                startServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                startServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"operation"</font>);<br><br>                operInfo[0] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"startService"</font>, <font color="#006666">"startService(): Starts the server"</font>,<br>                        params, <font
+ color="#006666">"void"</font>, MBeanOperationInfo.ACTION,<br>                        startServiceOperDesc);<br><br>                Descriptor stopServiceOperDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                stopServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"stopService"</font>);<br>                stopServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                stopServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                stopServiceOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"operation"</font>);<br><br>                operInfo[1] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"stopService"</font>, <font color="#006666">"stopService(): Stops the server"</font>,<br>                        params, <font
+ color="#006666">"void"</font>, MBeanOperationInfo.ACTION,<br>                        stopServiceOperDesc);<br><br>                Descriptor restartOperDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                restartOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"restart"</font>);<br>                restartOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                restartOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                restartOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"operation"</font>);<br><br>                operInfo[2] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"restart"</font>, <font color="#006666">"restart(): Restarts the server"</font>,<br>                        params, <font
+ color="#006666">"void"</font>, MBeanOperationInfo.ACTION,<br>                        restartOperDesc);<br><br>                Descriptor getPortOperDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                getPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"getPort"</font>);<br>                getPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                getPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                getPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"getter"</font>);<br><br>                operInfo[3] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"getPort"</font>, <font color="#006666">"getPort(): Gets the Port number"</font>,<br>                        params, <font
+ color="#006666">"int"</font>, MBeanOperationInfo.INFO,<br>                        getPortOperDesc);<br><br>                Descriptor getRestartCountOperDesc =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                getRestartCountOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"getRestartCount"</font>);<br>                getRestartCountOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                getRestartCountOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                getRestartCountOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"getter"</font>);<br><br>                operInfo[4] = <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"getRestartCount"</font>,<br>                        <font
+ color="#006666">"getRestartCount(): Gets the restart count"</font>,<br>                        params, <font
+ color="#006666">"int"</font>, MBeanOperationInfo.INFO,<br>                        getRestartCountOperDesc);<br><br>                Descriptor getServerIdOperDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                getServerIdOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"getServerId"</font>);<br>                getServerIdOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                getServerIdOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                getServerIdOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"getter"</font>);<br><br>                operInfo[5] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"getServerId"</font>, <font color="#006666">"getServerId(): Gets the server ID"</font>,<br>                        params, <font
+ color="#006666">"java.lang.String"</font>,<br>                        MBeanOperationInfo.INFO, getServerIdOperDesc);<br><br>                Descriptor getServerNameOperDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                getServerNameOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"getServerName"</font>);<br>                getServerNameOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                getServerNameOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                getServerNameOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"getter"</font>);<br><br>                operInfo[6] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"getServerName"</font>, <font color="#006666">"getServerName(): Gets the server name"</font>,<br>                        params, <font
+ color="#006666">"java.lang.String"</font>,<br>                        MBeanOperationInfo.INFO, getServerNameOperDesc);<br><br>                Descriptor getServerUpTimeOperDesc =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                getServerUpTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"getServerUpTime"</font>);<br>                getServerUpTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                getServerUpTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                getServerUpTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"getter"</font>);<br><br>                operInfo[7] = <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"getServerUpTime"</font>,<br>                        <font
+ color="#006666">"getServerUpTime(): Gets the server up time"</font>,<br>                        params, <font
+ color="#006666">"java.lang.String"</font>,<br>                        MBeanOperationInfo.INFO, getServerUpTimeOperDesc);<br><br>                Descriptor getServerStartTimeOperDesc =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                getServerStartTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"getStartTime"</font>);<br>                getServerStartTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                getServerStartTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                getServerStartTimeOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"getter"</font>);<br><br>                operInfo[8] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"getStartTime"</font>, <font color="#006666">"getStartTime(): Gets the server start up time"</font>,<br>                        params, <font
+ color="#006666">"long"</font>, MBeanOperationInfo.INFO,<br>                        getServerStartTimeOperDesc);<br><br>                Descriptor getServerStartedOperDesc =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                getServerStartedOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"isServerStarted"</font>);<br>                getServerStartedOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                getServerStartedOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                getServerStartedOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"getter"</font>);<br><br>                operInfo[9] = <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"isServerStarted"</font>,<br>                        <font
+ color="#006666">"isServerStarted(): Checks whether server is started"</font>,<br>                        params, <font
+ color="#006666">"boolean"</font>, MBeanOperationInfo.INFO,<br>                        getServerStartedOperDesc);<br><br>                Descriptor setPortOperDesc = <font
+ color="#0000ff">new</font> <font color="#000000">DescriptorSupport</font>();<br>                setPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"name"</font>,<font
+ color="#006666">"setPort"</font>);<br>                setPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"descriptorType"</font>,<font
+ color="#006666">"operation"</font>);<br>                setPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"class"</font>,<font
+ color="#006666">"ServerInfo"</font>);<br>                setPortOperDesc.<font
+ color="#000000">setField</font>(<font color="#006666">"role"</font>,<font
+ color="#006666">"setter"</font>);<br><br>                MBeanParameterInfo[] setPortParms =<br>                        <font
+ color="#0000ff">new</font> MBeanParameterInfo[]{<br>                        (<font
+ color="#0000ff">new</font> <font color="#000000">MBeanParameterInfo</font>(<font
+ color="#006666">"portNumber"</font>, <font color="#006666">"int"</font>, <font
+ color="#006666">"new port number"</font>))} ;<br><br>                operInfo[10] =<br>                        <font
+ color="#0000ff">new</font> <font color="#000000">ModelMBeanOperationInfo</font>(<font
+ color="#006666">"setPort"</font>, <font color="#006666">"setPort(): Sets the Port number"</font>,<br>                        setPortParms, <font
+ color="#006666">"void"</font>,<br>                        MBeanOperationInfo.ACTION, setPortOperDesc);<br>        } <font
+ color="#0000ff">catch</font> (Exception e) {<br>                System.out.<font
+ color="#000000">println</font>(<br>                        <font
+ color="#006666">"\nException in getOperationsInfo() : "</font> +<br>                        e.<font
+ color="#000000">getMessage</font>());<br>                e.<font
+ color="#000000">printStackTrace</font>();<br>        }<br><br>        <font
+ color="#0000ff">return</font> operInfo;<br>}<br><br></code><code><font
+ color="#009900">/**</font><br><font color="#009900"> * Build the Notification information</font><font
+ color="#009900">.</font><br><font color="#009900"> */</font></code><br><code><font
+ color="#0000ff">private</font> ModelMBeanNotificationInfo[] <font
+ color="#000000">getNotificationsInfo</font>() {<br>        ModelMBeanNotificationInfo[] notifInfo = </code><code><font
+ color="#0000ff">null</font>;</code><br><code><br>        <font
+ color="#0000ff">return</font> notifInfo;<br>}</code></pre>
+                  </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

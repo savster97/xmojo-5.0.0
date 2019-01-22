@@ -1,0 +1,168 @@
+BODY {
+	background-color: #ffffff;
+	color: #000000;
+	font-size: 10pt;
+	font-family: Arial,Helvetica,Verdana;
+}
+
+
+P {
+	font-size: 10pt;
+	font-family: Arial,Helvetica,Verdana;
+	margin-top: 0pt;
+	margin-bottom: 0pt;
+}
+
+
+OL LI {
+	font-size: 10pt;
+	font-family: Arial,Helvetica,Verdana;
+}
+
+a:link,
+a:visited {
+        color: #193A7D; text-decoration: none;
+}
+
+
+a:active {
+        color: #666666; 
+}
+
+
+a:hover {
+	  color: #2758BD;
+}
+
+TD {
+	font-family: Arial,Helvetica,Verdana;
+	font-size: 10pt;
+}
+
+TH {
+	font-family: Arial,Helvetica,Verdana;
+	font-size: 11pt;
+	font-weight: strong;
+	background-color: #ffffff;
+}
+
+H1 {
+	font-size: 14pt;
+	font-family: Arial,Helvetica,Verdana;
+	font-weight: bold;
+	margin-top: 0pt;
+	margin-bottom: 0pt;
+}
+
+
+
+H2 {
+	font-size: 10pt;
+	font-weight: strong;
+	font-style: normal;
+	background-color: #cccccc;
+}
+
+
+
+H3 {
+	font-size: 10pt;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #eeeeee;
+}
+
+
+.CODE_OUTER {
+	background-color: #84cfff;		
+}
+
+.CODE_CENTER {
+	background-color: #ffffff;		
+}
+
+.CODE_INNER {
+	background-color: #eeeeee;	
+}
+
+
+.HDR_TABLE {
+	background-color: #193A7D;
+}
+
+.HDR_LINK:link,
+.HDR_LINK:visited,
+.HDR_LINK:active {
+        font-family: Arial,Helvetica,Verdana;
+        color: #ffffff;
+        font-style: normal;
+        text-decoration: none;
+}
+
+.HDR_LINK:hover {
+	  color: #99ff99;
+}
+
+.HDR_TITLE {
+	font-size: 13pt;
+	font-weight: bold;
+	font-family: Arial,Helvetica,Verdana;
+	color: #ffffff;
+}
+
+.HDR_CHAPTER {
+	font-size: 12pt;	
+	font-family: Arial,Helvetica,Verdana;
+	color: #ffffff;
+}
+
+.HDR_TDLeft {
+        width: 33%
+} 
+
+.HDR_TDRight {
+        width: 33%
+}
+
+.HDR_TDCenter {
+        width: 34%
+}
+
+.FTR_TABLE {
+	background-color: #193A7D;
+}
+
+.FTR_NAV {
+	font-size: 10pt;	
+	font-family: Arial,Helvetica,Verdana;
+	color: #ffffff;
+}
+
+.FTR_TDLeft {
+        width: 40%
+} 
+
+.FTR_TDRight {
+        width: 40%
+}
+
+.FTR_TDCenter {
+        width: 20%
+}
+
+
+
+.TOC {
+        font-size: 14pt;
+        font-weight: bold;
+        font-family: Arial,Helvetica,Verdana;
+        color: #000000;
+}
+
+
+.TOC_CHAPTER {
+        font-size: 12pt;
+        font-weight: bold;
+        font-family: Arial,Helvetica,Verdana;
+        color: #ccc0cc;
+}

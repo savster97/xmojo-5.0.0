@@ -1,0 +1,568 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>A Sample Model MBean XML file in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;2.3.1&nbsp;Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top">
+                  <pre><font color="#0000ff">&lt;</font><font
+ color="#000000">?xml </font><font color="#0000ff">version</font><font
+ color="#cc00cc">=</font><font color="#006666">"1.0"</font><font
+ color="#0000ff"> encoding</font><font color="#cc00cc">=</font><font
+ color="#006666">"UTF-8"</font><font color="#000000">?</font><font
+ color="#0000ff">&gt;</font><br><font color="#0000ff">&lt;</font><font
+ color="#000000">ModelMBean</font><font color="#0000ff">&gt;<br></font></pre>
+                  <font color="#0000ff">      </font>
+                  <pre><font color="#0000ff">    <font color="#0000ff">&lt;</font><font
+ color="#000000">ModelMBeanDescriptor </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"examples.applications.server.ServerInfo"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"mbean"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerInfoAgent"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                          log</font><font
+ color="#cc00cc">=</font><font color="#006666">"T"</font><font
+ color="#0000ff">  </font><font color="#0000ff">logfile</font><font
+ color="#cc00cc">=</font><font color="#006666">"modelagent.log"</font><font
+ color="#0000ff">  </font><font color="#0000ff">currencyTimeLimit</font><font
+ color="#cc00cc">=</font><font color="#006666">"60"</font><font
+ color="#0000ff">  </font><font color="#0000ff">export</font><font
+ color="#cc00cc">=</font><font color="#006666">"null"</font><font
+ color="#0000ff">  </font><font color="#0000ff">visibility</font><font
+ color="#cc00cc">=</font><font color="#006666">"1"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                          persistPolicy</font><font
+ color="#cc00cc">=</font><font color="#006666">"OnUpdate"</font><font
+ color="#0000ff">  </font><font color="#0000ff">persistLocation</font><font
+ color="#cc00cc">=</font><font color="#006666">"jmxstore"</font><font
+ color="#0000ff">  </font><font color="#0000ff">persistName</font><font
+ color="#cc00cc">=</font><font color="#006666">"ModelMBeanAgent"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                          description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Contains attribute of ModelMBeanAgent group"</font><font
+ color="#0000ff">  </font><font color="#0000ff">presentationString</font><font
+ color="#cc00cc">=</font><font color="#006666">"notValid"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><font
+ color="#0000ff"><br>   &nbsp;<font color="#0000ff">&lt;/</font></font><font
+ color="#000000">ModelMBeanDescriptor</font><font color="#0000ff">&gt;</font></font></pre>
+                  <font color="#0000ff">      </font>
+                  <pre><font color="#0000ff">    <font color="#0000ff">&lt;</font><font
+ color="#000000">attributeDescriptors</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">attribute </font><font
+ color="#0000ff">name</font><font color="#cc00cc">=</font><font
+ color="#006666">"Port"</font><font color="#0000ff">  </font><font
+ color="#0000ff">descriptorType</font><font color="#cc00cc">=</font><font
+ color="#006666">"attribute"</font><font color="#0000ff">  </font><font
+ color="#0000ff">type</font><font color="#cc00cc">=</font><font
+ color="#006666">"int"</font><font color="#0000ff">  </font><font
+ color="#0000ff">description</font><font color="#cc00cc">=</font><font
+ color="#006666">"Port number of the server"</font><font color="#0000ff">  </font><font
+ color="#0000ff">isReadable</font><font color="#cc00cc">=</font><font
+ color="#006666">"T"</font><font color="#0000ff">  </font><font
+ color="#0000ff"><br>                   isWritable</font><font
+ color="#cc00cc">=</font><font color="#006666">"T"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isIs</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"Port"</font><font
+ color="#0000ff">  </font><font color="#0000ff">getMethod</font><font
+ color="#cc00cc">=</font><font color="#006666">"getPort"</font><font
+ color="#0000ff">  </font><font color="#0000ff">setMethod</font><font
+ color="#cc00cc">=</font><font color="#006666">"setPort"</font><font
+ color="#0000ff">  </font><font color="#0000ff">iterable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font>            <br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/attribute</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">attribute </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"RestartCount"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"attribute"</font><font
+ color="#0000ff">  </font><font color="#0000ff">type</font><font
+ color="#cc00cc">=</font><font color="#006666">"int"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Number of times the server is restarted"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   isReadable</font><font
+ color="#cc00cc">=</font><font color="#006666">"T"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isWritable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isIs</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"RestartCount"</font><font
+ color="#0000ff">  </font><font color="#0000ff">getMethod</font><font
+ color="#cc00cc">=</font><font color="#006666">"getRestartCount"</font><font
+ color="#0000ff">  </font><font color="#0000ff">iterable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/attribute</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">attribute </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerId"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"attribute"</font><font
+ color="#0000ff">  </font><font color="#0000ff">type</font><font
+ color="#cc00cc">=</font><font color="#006666">"java.lang.String"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Server ID"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isReadable</font><font
+ color="#cc00cc">=</font><font color="#006666">"T"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   isWritable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isIs</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerId"</font><font
+ color="#0000ff">  </font><font color="#0000ff">getMethod</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerId"</font><font
+ color="#0000ff">  </font><font color="#0000ff">iterable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/attribute</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">attribute </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerName"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"attribute"</font><font
+ color="#0000ff">  </font><font color="#0000ff">type</font><font
+ color="#cc00cc">=</font><font color="#006666">"java.lang.String"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Name of the server"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   isReadable</font><font
+ color="#cc00cc">=</font><font color="#006666">"T"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isWritable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isIs</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerName"</font><font
+ color="#0000ff">  </font><font color="#0000ff">getMethod</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerName"</font><font
+ color="#0000ff">  </font><font color="#0000ff">iterable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/attribute</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">attribute </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerUpTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"attribute"</font><font
+ color="#0000ff">  </font><font color="#0000ff">type</font><font
+ color="#cc00cc">=</font><font color="#006666">"long"</font><font
+ color="#0000ff">  <br>                   </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Indicates the no. of milli seconds passed from the start of the server"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   isReadable</font><font
+ color="#cc00cc">=</font><font color="#006666">"T"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isWritable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isIs</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerUpTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">getMethod</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerUpTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">iterable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/attribute</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">attribute </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"StartTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"attribute"</font><font
+ color="#0000ff">  </font><font color="#0000ff">type</font><font
+ color="#cc00cc">=</font><font color="#006666">"long"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Indicates the server startup time"</font><font
+ color="#0000ff">  <br>                   </font><font color="#0000ff">isReadable</font><font
+ color="#cc00cc">=</font><font color="#006666">"T"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isWritable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">isIs</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"StartTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">getMethod</font><font
+ color="#cc00cc">=</font><font color="#006666">"getStartTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">iterable</font><font
+ color="#cc00cc">=</font><font color="#006666">"F"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/attribute</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">attribute </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerStarted"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"attribute"</font><font
+ color="#0000ff">  </font><font color="#0000ff">type</font><font
+ color="#cc00cc">=</font><font color="#006666">"boolean"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Indicates whether the server is started"</font><font
+ color="#0000ff"><br>                  &nbsp;</font><font
+ color="#0000ff">isReadable</font><font color="#cc00cc">=</font><font
+ color="#006666">"T"</font><font color="#0000ff">  </font><font
+ color="#0000ff">isWritable</font><font color="#cc00cc">=</font><font
+ color="#006666">"F"</font><font color="#0000ff">  </font><font
+ color="#0000ff">isIs</font><font color="#cc00cc">=</font><font
+ color="#006666">"T"</font><font color="#0000ff">  </font><font
+ color="#0000ff">displayName</font><font color="#cc00cc">=</font><font
+ color="#006666">"ServerStarted"</font><font color="#0000ff">  </font><font
+ color="#0000ff">getMethod</font><font color="#cc00cc">=</font><font
+ color="#006666">"isServerStarted"</font><font color="#0000ff">  </font><font
+ color="#0000ff">iterable</font><font color="#cc00cc">=</font><font
+ color="#006666">"F"</font><font color="#0000ff"> </font><font
+ color="#0000ff">&gt;</font> <br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">/attribute</font><font color="#0000ff">&gt;</font><br>    <font
+ color="#0000ff">&lt;</font><font color="#000000">/attributeDescriptors</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff"></font></font></pre>
+                  <font color="#0000ff"><br>
+      </font>
+                  <pre><font color="#0000ff">    <font color="#0000ff">&lt;</font><font
+ color="#000000">operationDescriptors</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">operation </font><font
+ color="#0000ff">name</font><font color="#cc00cc">=</font><font
+ color="#006666">"examples.applications.server.ServerInfo_default_const"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerInfoDefaultConstructor"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"default constructor"</font><font
+ color="#0000ff">  </font><font color="#0000ff">role</font><font
+ color="#cc00cc">=</font><font color="#006666">"constructor"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"examples.applications.server.ServerInfo_4_params"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"ServerInfoConstructorWithFourArguments"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"constructor with four arguments"</font><font
+ color="#0000ff">  <br>                   </font><font color="#0000ff">role</font><font
+ color="#cc00cc">=</font><font color="#006666">"constructor"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"getPort"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"getPort"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Gets the Port number"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   role</font><font
+ color="#cc00cc">=</font><font color="#006666">"getter"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"INFO"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"int"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"setPort"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"setPort"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Sets the Port number"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   role</font><font
+ color="#cc00cc">=</font><font color="#006666">"setter"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"ACTION"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"void"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><br>                <font color="#0000ff">&lt;</font><font
+ color="#000000">param </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"portNumber"</font><font
+ color="#0000ff">  </font><font color="#0000ff">type</font><font
+ color="#cc00cc">=</font><font color="#006666">"int"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><font
+ color="#0000ff">&lt;</font><font color="#000000">/param</font><font
+ color="#0000ff">&gt;</font><br>            <font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"getRestartCount"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"getRestartCount"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Gets the restart count"</font><font
+ color="#0000ff">  <br>                   </font><font color="#0000ff">role</font><font
+ color="#cc00cc">=</font><font color="#006666">"getter"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"INFO"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"int"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerId"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerId"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Gets the server ID"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   role</font><font
+ color="#cc00cc">=</font><font color="#006666">"getter"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"INFO"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"java.lang.String"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerName"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerName"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Gets the server name"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br></font><font
+ color="#0000ff">                   </font><font color="#0000ff">role</font><font
+ color="#cc00cc">=</font><font color="#006666">"getter"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"INFO"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"java.lang.String"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerUpTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"getServerUpTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Gets the server up time" </font><font
+ color="#0000ff"></font><font color="#0000ff">role</font><font
+ color="#cc00cc">=</font><font color="#006666">"getter"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"INFO"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"long"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"getStartTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"getStartTime"</font><font
+ color="#0000ff">  </font><font color="#0000ff"><br>                   description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Gets the server start up time"</font><font
+ color="#0000ff"> </font><font color="#0000ff"></font><font
+ color="#0000ff">role</font><font color="#cc00cc">=</font><font
+ color="#006666">"getter"</font><font color="#0000ff">  </font><font
+ color="#0000ff">impact</font><font color="#cc00cc">=</font><font
+ color="#006666">"INFO"</font><font color="#0000ff">  </font><font
+ color="#0000ff">operResponseType</font><font color="#cc00cc">=</font><font
+ color="#006666">"long"</font><font color="#0000ff"> </font><font
+ color="#0000ff">&gt;</font><br>            <font color="#0000ff">&lt;</font><font
+ color="#000000">params</font><font color="#0000ff">&gt;</font><font
+ color="#0000ff">&lt;</font><font color="#000000">/params</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">/operation</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">operation </font><font
+ color="#0000ff">name</font><font color="#cc00cc">=</font><font
+ color="#006666">"isServerStarted"</font><font color="#0000ff">  </font><font
+ color="#0000ff">descriptorType</font><font color="#cc00cc">=</font><font
+ color="#006666">"operation"</font><font color="#0000ff">  </font><font
+ color="#0000ff">displayName</font><font color="#cc00cc">=</font><font
+ color="#006666">"isServerStarted"</font><font color="#0000ff">  </font><font
+ color="#0000ff"><br>                   description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Checks whether server is started"</font><font
+ color="#0000ff"> </font><font color="#0000ff"></font><font
+ color="#0000ff">role</font><font color="#cc00cc">=</font><font
+ color="#006666">"getter"</font><font color="#0000ff">  </font><font
+ color="#0000ff">impact</font><font color="#cc00cc">=</font><font
+ color="#006666">"INFO"</font><font color="#0000ff">  </font><font
+ color="#0000ff">operResponseType</font><font color="#cc00cc">=</font><font
+ color="#006666">"boolean"</font><font color="#0000ff"> </font><font
+ color="#0000ff">&gt;</font><br>            <font color="#0000ff">&lt;</font><font
+ color="#000000">params</font><font color="#0000ff">&gt;</font><font
+ color="#0000ff">&lt;</font><font color="#000000">/params</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">/operation</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">operation </font><font
+ color="#0000ff">name</font><font color="#cc00cc">=</font><font
+ color="#006666">"startService"</font><font color="#0000ff">  </font><font
+ color="#0000ff">descriptorType</font><font color="#cc00cc">=</font><font
+ color="#006666">"operation"</font><font color="#0000ff">  </font><font
+ color="#0000ff">displayName</font><font color="#cc00cc">=</font><font
+ color="#006666">"startService"</font><font color="#0000ff">  </font><font
+ color="#0000ff">description</font><font color="#cc00cc">=</font><font
+ color="#006666">"Starts the server"</font><font color="#0000ff">  <br></font><font
+ color="#0000ff">                   </font><font color="#0000ff">role</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"ACTION"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"void"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">operation </font><font color="#0000ff">name</font><font
+ color="#cc00cc">=</font><font color="#006666">"stopService"</font><font
+ color="#0000ff">  </font><font color="#0000ff">descriptorType</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">displayName</font><font
+ color="#cc00cc">=</font><font color="#006666">"stopService"</font><font
+ color="#0000ff">  </font><font color="#0000ff">description</font><font
+ color="#cc00cc">=</font><font color="#006666">"Stops the server"</font><font
+ color="#0000ff">  <br></font><font color="#0000ff">                   </font><font
+ color="#0000ff">role</font><font color="#cc00cc">=</font><font
+ color="#006666">"operation"</font><font color="#0000ff">  </font><font
+ color="#0000ff">impact</font><font color="#cc00cc">=</font><font
+ color="#006666">"ACTION"</font><font color="#0000ff">  </font><font
+ color="#0000ff">operResponseType</font><font color="#cc00cc">=</font><font
+ color="#006666">"void"</font><font color="#0000ff"> </font><font
+ color="#0000ff">&gt;</font><br>            <font color="#0000ff">&lt;</font><font
+ color="#000000">params</font><font color="#0000ff">&gt;</font><font
+ color="#0000ff">&lt;</font><font color="#000000">/params</font><font
+ color="#0000ff">&gt;</font><br>        <font color="#0000ff">&lt;</font><font
+ color="#000000">/operation</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">operation </font><font
+ color="#0000ff">name</font><font color="#cc00cc">=</font><font
+ color="#006666">"restart"</font><font color="#0000ff">  </font><font
+ color="#0000ff">descriptorType</font><font color="#cc00cc">=</font><font
+ color="#006666">"operation"</font><font color="#0000ff">  </font><font
+ color="#0000ff">displayName</font><font color="#cc00cc">=</font><font
+ color="#006666">"restart"</font><font color="#0000ff">  </font><font
+ color="#0000ff">description</font><font color="#cc00cc">=</font><font
+ color="#006666">"Restarts the server"</font><font color="#0000ff">  <br></font><font
+ color="#0000ff">                   </font><font color="#0000ff">role</font><font
+ color="#cc00cc">=</font><font color="#006666">"operation"</font><font
+ color="#0000ff">  </font><font color="#0000ff">impact</font><font
+ color="#cc00cc">=</font><font color="#006666">"ACTION"</font><font
+ color="#0000ff">  </font><font color="#0000ff">operResponseType</font><font
+ color="#cc00cc">=</font><font color="#006666">"void"</font><font
+ color="#0000ff"> </font><font color="#0000ff">&gt;</font><br>            <font
+ color="#0000ff">&lt;</font><font color="#000000">params</font><font
+ color="#0000ff">&gt;</font><font color="#0000ff">&lt;</font><font
+ color="#000000">/params</font><font color="#0000ff">&gt;</font><br>        <font
+ color="#0000ff">&lt;</font><font color="#000000">/operation</font><font
+ color="#0000ff">&gt;</font><br>    <font color="#0000ff">&lt;</font><font
+ color="#000000">/operationDescriptors</font><font color="#0000ff">&gt;</font></font></pre>
+                  <pre><font color="#0000ff">    <font color="#0000ff">&lt;</font><font
+ color="#000000">notificationDescriptors</font><font color="#0000ff">&gt;</font><br><font
+ color="#0000ff"></font>    <font color="#0000ff">&lt;</font><font
+ color="#000000">/notificationDescriptors</font><font color="#0000ff">&gt;</font></font></pre>
+                  <font color="#0000ff"> </font>
+                  <pre><font color="#0000ff"><br><font color="#0000ff">&lt;/</font><font
+ color="#000000">ModelMBean</font><font color="#0000ff">&gt;</font></font></pre>
+                  </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="writing_model_mbean.html" class="HDR_LINK">Back</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

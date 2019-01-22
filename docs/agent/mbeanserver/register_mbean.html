@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Registering MBeans in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="mbeanserver.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;3.1.1&nbsp;MBean&nbsp;Registration</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../services/service.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Registering MBeans</h1>
+<br>
+A MBeanServer's primary responsibility is to maintain a registry for MBeans
+in a JMX agent. &nbsp;The MBeans can be registered in any of the following
+two methods:<br>
+<br>
+1) &nbsp;Creating an instance of the MBean and registering it with the MBeanServer
+using the method:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public</font> ObjectInstance
+registerMBean<font color="#ff0000">(</font><font color="#000099">Object</font>
+object, ObjectName name<font color="#ff0000">)</font></code>
+     </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+Here, object is the instance of the MBean created and the name part represents
+a unique identity for the MBean.<br>
+<br>
+2) &nbsp;Using one of the createMBean methods:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public<font
+ color="#000000"> ObjectInstance createMBean</font></font><font
+ color="#ff0000">(</font><font color="#000099">String</font> classname,&nbsp;ObjectName
+name<font color="#ff0000">)<br>
+                  </font><font color="#3333ff">public<font
+ color="#000000"> ObjectInstance createMBean</font></font><font
+ color="#ff0000">(</font><font color="#000099">String</font> classname,&nbsp;ObjectName
+name, ObjectName loader<font color="#ff0000">)<br>
+                  </font><font color="#3333ff">public<font
+ color="#000000"> ObjectInstance createMBean</font></font><font
+ color="#ff0000">(</font><font color="#000099">String</font> classname,&nbsp;ObjectName
+name,&nbsp;<font color="#000099">Object</font><font color="#ff0000">[]</font>
+params, <font color="#000099">String</font><font color="#ff0000">[]</font>
+types<font color="#ff0000">)<br>
+                  </font><font color="#3333ff">public<font
+ color="#000000"> ObjectInstance createMBean</font></font><font
+ color="#ff0000">(</font><font color="#000099">String</font> classname,&nbsp;ObjectName
+name,&nbsp;ObjectName loader, <font color="#000099">Object</font><font
+ color="#ff0000">[]</font> params, <font color="#000099">String</font><font
+ color="#ff0000">[]</font> types<font color="#ff0000">)</font></code>
+    </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+&nbsp;<br>
+The createMBean methods use Java Reflection to create an instance of the
+MBean. &nbsp;For all the createMBean methods, two arguments are common. <br>
+<ol>
+  <li>&nbsp;String classname -- represents the classname of the MBean for
+which an instance has to be created.</li>
+  <li>&nbsp;ObjectName name -- represents the object name with which the
+MBean has to be registered.</li>
+</ol>
+If the two-argument constructor of createMBean is used, the default class
+loader is used to load the MBean class and the MBean is instantiated using
+the default constructor. &nbsp; If the MBean is instantiated, this instance
+is registered with the MBeanServer using the object name provided as the second
+argument. &nbsp;If you want to load the class using some specific class loader
+then the three-argument constructor can be used. &nbsp;The class loader should
+be registered as one of the MBeans with the MBeanServer. &nbsp;The object
+name of the class loader should be passed as the third argument.<br>
+<br>
+While instantiating the class, if any argument has to be passed, then the
+four-argument createMBean method can be used. &nbsp;The last two arguments
+of this createMBean method take the array of Objects (that will be required
+for instantiating the class) and their signatures respectively. &nbsp;If
+the MBean class has to be loaded using some specific class loader, the five-argument
+constructor can be used.
+<h2>&nbsp;Registering Multiple Instances for a Same MBean&nbsp;</h2>
+There may be cases where you might need to monitor ten or so Web servers.
+&nbsp;If the management information is common for all the Web servers, then
+you need not have to write ten MBeans. &nbsp;Instead, just one MBean is sufficient.
+&nbsp;We can create many instances and register each instance with a unique
+object name.<br>
+<br>
+Now comes the importance of using the object names effectively to avoid confusions.<br>
+<br>
+It is obvious that the server port number and the server host name will be
+unique for any server, that is, in a single machine, you cannot run two servers
+at the same port.<br>
+<br>
+So, it would be meaningful to create an object name like
+<table border="0" cellspacing="1" cellpadding="1" class="NOCODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ bgcolor="#ffffff" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" bgcolor="#eeeeee">
+        <tbody>
+          <tr>
+            <td valign="top">Servers:hostName=localhost,portNumber=xxxx
+    </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+&nbsp;<br>
+Suppose one more server starts up in the same machine, then the object name
+would be Servers:hostName=localhost,portNumber=yyyy<br>
+<br>
+Since ObjectName is the unique identity with which the registered MBeans are
+uniquely identified, the multiple instances of the MBean are registered with
+different ObjectNames.<br>
+  <br>
+ ObjectNames are normally differentiated using the key value pairs they contain,
+such as the hostName and portNumber keys and their respective values in a
+Server MBean. Similarly, to identify the likely grouped MBeans, the ObjectNames
+will be populated with the respective Key Value pairs. For example, type=ServerMBean
+denotes that this MBean is of type Server MBean. Hence, the ObjectName value
+Server:type=ServerMBean,hostName=localhost,portNumber=8050 provides easy grouping
+of MBeans spawned for the Server MBean implementation and also provides a
+way to uniquely identify the MBean Instance for the Server running at localhost:8050.<br>
+<br>
+<h3>&nbsp;A Simple Demonstration&nbsp;</h3>
+<br>
+Let the MBean that provides the management information (common for all the
+Web servers) be a dynamic MBean and let the class name be ServerInfo. &nbsp;
+<br>
+Let there be two Web servers running in machineA at ports 8080 and 80. &nbsp;Let
+there be one Web server running in machineB listening at port 8080, and one
+more web server running in machineC listening at port 80. &nbsp;Totally, we
+need to manage these four Web servers. &nbsp;We can make use of the ServerInfo
+class and create four instances to manage each of these Web servers. &nbsp;The
+code snippet for registering the four MBeans is shown below:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code>ServerInfo srvr1 = <font
+ color="#3333ff">new</font>ServerInfo<font color="#ff0000">()</font>;<br>
+ServerInfo srvr2 = <font color="#3333ff">new</font> ServerInfo<font
+ color="#ff0000">()</font>;<br>
+ServerInfo srvr3 = <font color="#3333ff">new</font> ServerInfo<font
+ color="#ff0000">()</font>;<br>
+ServerInfo srvr4 = <font color="#3333ff">new</font> ServerInfo<font
+ color="#ff0000">()</font>;<br>
+                  <br>
+MBeanServer mbs = <font color="#3333ff">null</font>;<br>
+                  <br>
+                  <font color="#3333ff">try</font><br>
+                  <font color="#ff0000">{</font><br>
+&nbsp; &nbsp; mbs = MBeanServerFactory.createMBeanServer<font
+ color="#ff0000">( )</font>;<br>
+&nbsp; &nbsp; mbs.registerMBean<font color="#ff0000">(</font>srvr1,&nbsp;<font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Server:hostName=machineA,portNumber=8080"</font><font
+ color="#ff0000">)</font><font color="#ff0000">)</font>;<br>
+&nbsp; &nbsp; mbs.registerMBean<font color="#ff0000">(</font>srvr2,&nbsp;<font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Server:hostName=machineA,port</font></code><code><font
+ color="#336666">Number</font></code><code><font color="#336666">=80"</font><font
+ color="#ff0000">)</font><font color="#ff0000">)</font>;<br>
+&nbsp; &nbsp; mbs.registerMBean<font color="#ff0000">(</font>srvr3,&nbsp;<font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Server:hostName=machineB,port</font></code><code><font
+ color="#336666">Number</font></code><code><font color="#336666">=8080"</font><font
+ color="#ff0000">)</font><font color="#ff0000">)</font>;<br>
+&nbsp; &nbsp; mbs.registerMBean<font color="#ff0000">(</font>srvr4,&nbsp;<font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Server:hostName=machineC,port</font></code><code><font
+ color="#336666">Number</font></code><code><font color="#336666">=80"</font><font
+ color="#ff0000">)</font><font color="#ff0000">)</font>;<br>
+                  <font color="#ff0000">}<br>
+                  </font></code><code><font color="#3333ff">catch</font>
+                  <font color="#ff0000">(</font><font color="#000099">Exception</font>
+e<font color="#ff0000">)</font><br>
+                  <font color="#ff0000">{</font><br>
+&nbsp; e.printStackTrace<font color="#ff0000">()</font>;<br>
+                  <font color="#ff0000">}</font></code><br>
+            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<br>
+<h2>&nbsp;UnRegistering MBeans&nbsp;</h2>
+MBeans can be unregistered from the MBeanServer using the method:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public void </font>unregisterMBean<font
+ color="#ff0000">(</font>ObjectName name<font color="#ff0000">)</font></code>
+           </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+Here, name is the ObjectName with which the MBean is registered.<br>
+<br>
+After unregistering the MBean, the MBeanServer will not keep any reference
+on the MBean instance.<br>
+<br>
+<h2>&nbsp;Controlling MBeanRegistration&nbsp;</h2>
+JMX defines an interface named MBeanRegistration. &nbsp;The purpose of this
+interface is to allow MBean developers to have some control upon the registering/unregistering
+of the MBean in the MBeanServer. &nbsp; This is achieved in the MBean by
+implementing the javax.management.MBeanRegistration interface. &nbsp;<br>
+<br>
+The MBeanRegistration interface defines the behavior of the registration
+control mechanism. &nbsp;It defines the following four methods:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public&nbsp;</font>ObjectName<font
+ color="#3333ff"> </font>preRegister<font color="#ff0000">(</font>MBeanServer
+mbs, ObjectName name<font color="#ff0000">)</font> <br>
+                  <font color="#3333ff">public void </font>postRegister<font
+ color="#ff0000">(</font><font color="#ff0000">)<br>
+                  </font><font color="#3333ff">public void </font>preDeRegister<font
+ color="#ff0000">(</font><font color="#ff0000">)<br>
+                  </font><font color="#3333ff">public void </font>postDeRegister<font
+ color="#ff0000">(</font><font color="#ff0000">)</font></code>
+ </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+All the above four methods are callback methods, that is, the MBeanServer
+will invoke these methods at appropriate times.<br>
+<br>
+If an MBean implements MBeanRegistration and this MBean is registered, the
+MBeanServer calls the preRegister method before registering the MBean. &nbsp;The
+ObjectName returned by this preRegister method will be used while registering
+the MBean. &nbsp;After successful registration of the MBean, the MBeanServer
+calls the postRegister method.<br>
+<br>
+If the above MBean is deregistered, the MBeanServer calls the preDeRegister
+method before deregistering the MBean and if the deregistration is successful,
+MBeanServer calls the postDeRegister method.<br>
+<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="PTR_OUTER">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="PTR_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="1" cellspacing="1" border="0"
+ class="PTR_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><b>Points to Remember</b><br>
+
+                  <ol>
+                    <li>For a single MBean class, multiple instances can
+be created and each of them can be registered provided the object name given
+while registering the MBean is unique. &nbsp;</li>
+                    <li>Whenever an MBean is registered, a notification of
+type jmx.mbean.created is created by the MBeanServer. &nbsp;The MBeanServerDelegate
+MBean broadcasts this notification to all the registered listeners.</li>
+                    <li>MBeanRegistration interface provides hook points
+to monitor the registration and deregistration process.<br>
+                    </li>
+
+                  </ol>
+            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="mbeanserver.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../services/service.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">MBeanServer</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Agent&nbsp;Services</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

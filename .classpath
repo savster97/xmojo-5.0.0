@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="examples/mbeans/dynamic/src"/>
+	<classpathentry kind="src" path="examples/mbeans/standard/src"/>
+	<classpathentry kind="src" path="tutorials/src"/>
+	<classpathentry kind="lib" path="lib/AdventNetUpdateManager.jar"/>
+	<classpathentry kind="lib" path="lib/crimson.jar"/>
+	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/jaxp.jar"/>
+	<classpathentry kind="lib" path="lib/org.mortbay.jetty.jar"/>
+	<classpathentry kind="lib" path="lib/xalan.jar"/>
+	<classpathentry kind="lib" path="lib/xmojo.jar"/>
+	<classpathentry kind="lib" path="lib/xmojoadaptors.jar"/>
+	<classpathentry kind="lib" path="lib/xmojotools.jar"/>
+	<classpathentry kind="lib" path="lib/xmojoutils.jar"/>
+	<classpathentry kind="lib" path="src/xmojosrc.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="tutorials/classes"/>
+</classpath>

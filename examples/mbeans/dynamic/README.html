@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Dynamic MBean Example in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../docs/styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../standard/README.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;5.2&nbsp;Dynamic&nbsp;MBean&nbsp;Example</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../model/README.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Dynamic MBean: A working Example</h1>
+<br>
+To know about Dynamic MBean, please refer the <a
+ href="../../../docs/instru/mbeans/dynamic/dynamic_mbean.html">DynamicMBean</a>
+section.
+<h2>&nbsp;About the Example&nbsp;</h2>
+In this example, we will see how to dynamically expose the management information
+when some condition is satisfied. &nbsp;Here, we will be using the following
+resources:<br>
+<ol>
+  <li>A dynamic MBean for managing a Web server information -- <a
+ href="src/examples/mbeans/dynamic/DynamicServerInfo.java">DynamicServerInfo.java</a>
+and the actual class that contains the management information -- <a
+ href="src/examples/applications/server/ServerInfo.java">ServerInfo.java</a></li>
+  <li>A dynamic MBean for configuring a logger -- <a
+ href="src/examples/mbeans/dynamic/DynamicLogConfig.java">DynamicLogConfig.java</a></li>
+  <li>A simple JMX agent for registering the above-mentioned dynamic MBeans
+and adaptors -- <a href="src/examples/agent/RunDynamicAgent.java">RunDynamicAgent.java</a></li>
+  <li>A class that acts as a NotificationListener -- <a
+ href="src/examples/mbeans/dynamic/ServerStateChangeListener.java">ServerStateChangeListener.java</a><br>
+  </li>
+</ol>
+<h3>&nbsp;DynamicServerInfo&nbsp;</h3>
+This class implements the DynamicMBean interface. &nbsp;The MBean information
+is obtained from the getMBeanInfo method. &nbsp;This MBeanInfo is dynamic.
+&nbsp;Initially, this MBean exposes four attributes and four operations.
+&nbsp;The attributes are ServerName, ServerId, ServerStarted, and ServerPort.
+&nbsp;The operations are startService, stopService, showDetails, and hideDetails.
+&nbsp;When the operation showDetails is invoked, the MBeanInfo changes. &nbsp;Now,
+seven attributes and five operations will be exposed. &nbsp;The additional
+three attributes are StartTime, ServerUpTime, and RestartCount. &nbsp;The
+additional operation is restart. &nbsp;The original management information
+that is exposed initially can be obtained by invoking the hideDetails operation.<br>
+<br>
+The DynamicServerInfo class does not provides any implementation for obtaining
+the management information. &nbsp;The implementation details of Web server
+management is available in the class ServerInfo. &nbsp;DynamicServerInfo makes
+use of the ServerInfo class (package: examples.applications.server) and thus,
+provides a DynamicMBean as a wrapper for the ServerInfo.<br>
+<br>
+Whenever the startService or the stopService operation is performed, a notification
+of type server.started or server.stopped will be sent respectively. &nbsp;This
+notification is handled in the handleNotification method defined in the ServerStateChangeListener
+class.
+<h3>&nbsp;DynamicLogConfig&nbsp;</h3>
+This class is also a dynamic MBean since it implements the DynamicMBean interface.
+&nbsp;Initially, the MBeanInfo returned by the getMBeanInfo method contains
+five attributes and one operation. &nbsp;All the five attributes will be
+readOnly and their names are LogLevel, LogFileName, LogDirectory, MaxLines,
+and RotationLimit. &nbsp;The operation name is stopLogging. &nbsp;<br>
+<br>
+When the operation stopLogging is invoked, the existing stopLogging operation
+will be removed, a new operation startLogging will be added, and all the
+five attributes will become readWrite, so that they can be modified. &nbsp;For
+example, LogLevel can be modified from INFO to DEBUG. &nbsp;For the changes
+to take effect, startLogging has to be performed. &nbsp;On invoking startLogging,
+all the attributes become readOnly and the operation stopLogging replaces
+the startLogging operation.<br>
+<br>
+<h2>&nbsp;Running the Example&nbsp;</h2>
+<h3>&nbsp;For Windows OS&nbsp;</h3>
+<ol>
+  <li>Change your working directory to <i>%XMOJO_HOME%</i>/examples/mbeans/dynamic
+directory.</li>
+  <li>Execute the build.bat (This batch file compiles the Java files under
+the src directory and the output class files will be stored in the classes
+directory).</li>
+    <li>Execute the run.bat&nbsp; (This batch file executes the RunDynamicAgent
+class).</li>
+</ol>
+The JMX Agent will be started. &nbsp;RMI Server will be started at port 1099.
+&nbsp;HTML Server will be started at port 8030. &nbsp;For testing the example,
+refer the section Testing the Agent given below.
+<h3>&nbsp;For Unix OS&nbsp;</h3>
+<ol>
+  <li>Change your working directory to <i>$XMOJO_HOME</i>/examples/mbeans/dynamic
+directory.</li>
+  <li>Execute the build.sh (This script file compiles the Java files under
+the src directory and the output class files will be stored in the classes
+directory).</li>
+    <li>Execute the run.sh&nbsp; (This script file executes the RunDynamicAgent
+class).</li>
+</ol>
+The JMX Agent will be started. &nbsp;RMI Server will be started at port 1099.
+&nbsp;HTML Server will be started at port 8030. &nbsp;For testing the example,
+refer to the section, Testing the Agent given below:<br>
+<br>
+<h2>&nbsp;Testing the Agent&nbsp;</h2>
+<h3>&nbsp;Using the RMI Client&nbsp;</h3>
+Start the MBeanBrowser tool by executing the mbeanbrowser.bat/mbeanbrowser.sh
+file under <i>XMOJO_HOME</i>/bin directory.<br>
+Connect to the RMI Server. &nbsp;(In the menu bar, choose Settings &gt;&gt;
+Client Settings. &nbsp;Configure the HostName and PortNumber; here, HostName
+is the machine name where the RMI Server is running. &nbsp;After configuring
+the client settings, choose Operations &gt;&gt; Connect). &nbsp;This will
+establish a connection with the RMI Server.<br>
+<br>
+The registered MBeans will be listed in the left frame. <br>
+<br>
+<b>Testing the DynamicServerMBean</b> <br>
+Under the domain MyDynMBean, an MBean with the name name=localhost,type=server
+is present. &nbsp;Under this MBean node, click <b>Attributes</b>. It lists
+three read only attributes, one read write attribute. &nbsp;Click <b>Operations</b>.
+&nbsp;It lists four operations. &nbsp;Click the operation showDetails. &nbsp;Now,
+once again click <b>Attributes</b>.&nbsp; Three more attributes are added.
+&nbsp;Also, in the operations, one more operation restartServer will be added.
+&nbsp;In the Menu bar, choose view &gt;&gt; Notifications. &nbsp;This opens
+the notification dialog. &nbsp;Click <b>Operations</b>. &nbsp;Invoke the operation
+stopService. &nbsp;Now, a notification of type server.stopped with the message<b>Server
+stopped</b> will be sent by the DynamicMBean. &nbsp;This notification will
+be broadcasted to all the listeners. &nbsp;You can find the print statements
+in the agent side, and the notification will be shown in the notification
+dialog.<br>
+<br>
+<b>Testing the DynamicLoggerMBean</b><br>
+Under the domain MyDynMBean, an MBean with the name id=1,type=logger is present.
+&nbsp;Under this MBean node, click <b>Attributes</b>. &nbsp;Five read only
+attributes are listed. &nbsp;Click <b>Operations</b>. &nbsp;Only one operation
+with the name stopLogging is listed. &nbsp;Invoke this operation. &nbsp;Now,
+once again click <b>Attributes</b>. &nbsp;All the read only attributes will
+have write access now. &nbsp;Also, the operation stopLogging would be replaced
+with startLogging. &nbsp;Modify some of the attributes. &nbsp;Click <b>Operations</b>.
+&nbsp;Invoke the operation startLogging. &nbsp;Now, the attributes would have
+changed to read only.<br>
+<br>
+<h3>&nbsp;Using the Web Browser&nbsp;</h3>
+Open any Web browser and type the URL http://localhost:8030. &nbsp;If you
+are testing from a remote machine, then enter the URL http://hostName:8030.
+&nbsp;Here hostName is the machine name where the JMX agent is running. &nbsp;If
+the HTML Adaptor is listening at some other port, then replace the 8030 with
+the appropriate port number in the above URL.<br>
+<br>
+The index page lists the various domains and some useful links for viewing
+notifications, searching the MBeans, customizing MBean views, etc.. &nbsp;Click
+the MyDynMBean link under Domains. &nbsp;Two MBeans will be listed. &nbsp;
+<ol>
+  <li>Click the link MyDynMBean:name=localhost,type=server. &nbsp;It lists
+one read write attribute and three read only attributes. &nbsp;The read write
+attribute is Port with the value 8072. &nbsp;The read only attributes are
+ServerName, ServerId, and ServerStarted with the values test-server, test-server_1,
+and true respectively. &nbsp;&nbsp;Click on the image with the name Operations.
+&nbsp;Four operations, startService, stopService, showDetails, and hideDetails,
+are listed. &nbsp;Invoke the showDetails method. &nbsp;Click the <b>Continue</b>
+button. &nbsp;An additional operation <b>restart</b> is exposed. &nbsp;Click
+the link MyDynMBean:name=localhost,type=server. &nbsp;Additional three read
+only attributes, StartTime, ServerUpTime, and RestartCount, are exposed for
+management. &nbsp;Click on the image with the name Operations. &nbsp;Invoke
+the operation stopService. &nbsp;Click the link Home. &nbsp;Click the link
+View Notifications. &nbsp;A notification of type server.stopped with the message
+    <b>Server stopped</b> is displayed.</li>
+  <li>Click the link MyDynMBean:id=1,type=logger. &nbsp;It lists five read
+only attributes. &nbsp;The read only attributes are LogLevel, LogFileName,
+LogDirectory, MaxLines, and RotationLimit and their values are INFO, test.log,
+C:\mylogs, 1000, and 10 respectively. &nbsp;Click on the image with the name
+Operations. &nbsp;Only one operation stopLogging is listed. &nbsp;Invoke
+the stopLogging operation. &nbsp;Click the&nbsp;<b>Continue</b> button. &nbsp;The
+operation stopLogging will not be exposed, instead, a new operation startLogging
+will be exposed. &nbsp;Click the link&nbsp;MyDynMBean:id=1,type=logger. &nbsp;You
+will find all the read only attributes now have write permissions also. &nbsp;Modify
+some of the attributes. &nbsp;Click the <b>Save Values</b> button. Click on
+the image with the name Operations. &nbsp;Invoke the operation startLogging.
+&nbsp;Click the&nbsp;<b>Continue</b> button. &nbsp;Click the link
+MyDynMBean:id=1,type=logger. &nbsp;The five attributes now become read only attributes.</li>
+</ol>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../standard/README.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../docs/index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../model/README.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Standard&nbsp;MBean&nbsp;Example</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Model&nbsp;MBean&nbsp;Example</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

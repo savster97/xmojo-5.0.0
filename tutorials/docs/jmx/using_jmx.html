@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Adding_JMX_Manageability_to_existing_application</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+    <link rel="STYLESHEET" href="../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+   class="HDR_TABLE">
+    <tbody>
+      <tr>
+        <td valign="top" align="center" rowspan="1" colspan="3"><font
+   class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="left" class="HDR_TDLeft"><a
+   href="../application/shopping_cart.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a>
+        </td>
+        <td valign="top" align="center" class="HDR_TDCenter"><font
+   class="HDR_CHAPTER">3.&nbsp;Adding JMX Manageability</font></td>
+        <td valign="top" align="right" class="HDR_TDRight"><a
+   href="../mbean/mbean_customer.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+      </tr>
+
+    </tbody>
+</table>
+<br>
+<h2>&nbsp;Adding JMX Manageability to the Shopping Cart</h2>
+<p>You can manage the Shopping Cart from two perspectives.<br>
+</p>
+<ol>
+  <li>Customer</li>
+  <li>Shop keeper</li>
+</ol>
+A customer would be interested in adding items to his cart, updating the items,
+removing the items from the cart. &nbsp;A customer would also like to know
+the total items purchased and the total price of the purchased items.<br>
+<br>
+A shop keeper would be interested in managing the inventory level of the
+items. &nbsp;If the inventory level of a item decreases, the shop keeper
+would like to add some more items of that category.<br>
+<br>
+To provide JMX manageability to the Shopping Cart application, you need to
+define two MBeans. One MBean for customer perspective management and the
+other MBean for shop keeper perspective management.<br>
+<br>
+Both these MBeans should be capable of communicating with the shopping cart
+application and getting the required information.<br>
+<br>
+In this tutorial, you will see how the ShoppingCart application can be managed
+from both the perspectives. &nbsp;For this, you will go through the following
+steps:
+<ol>
+  <li>Creating an MBean which contains details required by a customer --
+CartMBean</li>
+  <li>Creating an MBean which contains details required by a shop keeper
+-- InventoryMBean</li>
+  <li>Creating a JMX agent</li>
+  <li>Running and Testing the agent</li>
+</ol>
+<br><br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE" >
+  <tbody>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><a href="../application/shopping_cart.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+      <td valign="top" align="center" class="FTR_TDCenter"><a href="../contents.html" class="HDR_LINK">Home</a></td>
+      <td valign="top" align="right" class="FTR_TDRight"><a href="../mbean/mbean_customer.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+    </tr>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">About the Shopping Cart Application</font></td>
+      <td valign="top" align="center" class="FTR_TDCenter"></td>
+      <td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Customer MBean Creation</font></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

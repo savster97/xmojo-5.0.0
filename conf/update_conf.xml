@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<properties>
+	<property name="ProductName" value="XMOJO"/>
+	<property name="SubProductName" value="SP_XMOJO"/>
+	<property name="ProductVersion" value="5.0.0"/>
+	<property name="HelpXmlFilePath" value="docs/updatehelp.xml"/>
+	<property name="HelpHtmlFilePath" value="docs/updatehelp.html"/>
+	<!-- Update manager resources -->
+	<property name="PropertiesFileName" value="conf/UpdateManagerResources"/>
+</properties>

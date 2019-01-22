@@ -1,0 +1,12 @@
+com.adventnet.adaptors
+com.adventnet.adaptors.clients.rmi
+com.adventnet.adaptors.html
+com.adventnet.adaptors.rmi
+com.adventnet.jmx
+com.adventnet.jmx.utils
+javax.management
+javax.management.loading
+javax.management.modelmbean
+javax.management.monitor
+javax.management.relation
+javax.management.timer

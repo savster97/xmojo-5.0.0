@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>AttributeName Overloading in Standard MBean</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="writing_standard_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;2.1.2&nbsp;Attribute&nbsp;Name&nbsp;Overloading</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../dynamic/dynamic_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>AttributeName Overloading</h1>
+<br>
+We have already seen in the Standard MBean section that attribute names cannot
+be overloaded, that is, there cannot be two setters or getter and setter
+pair for the same name that operates on different types. Let us see this with
+some examples.<br>
+<br>
+Consider a simple MBean implementation class Server which implements the interface
+ServerMBean.
+<h2>&nbsp;Case 1&nbsp;</h2>
+Two setters overloaded:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top"><code><font color="#3333ff">public class</font><font>&nbsp;Server
+                 </font><font color="#3333ff">implements</font><font>&nbsp;ServerMBean<br>
+                  </font><font color="#ff0000">{</font><font><br>
+                  <br>
+&nbsp; .......<br>
+                  <br>
+&nbsp; </font><font color="#3333ff">public void</font><font> setState</font><font
+ color="#ff0000">(</font><font color="#3333ff">int</font><font> state</font><font
+ color="#ff0000">)</font><font><br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of setState</font><font><br>
+&nbsp; </font><font color="#ff0000">}</font><font><br>
+                  <br>
+&nbsp;&nbsp;</font><font color="#3333ff">public void</font><font> setState</font><font
+ color="#ff0000">(</font><font color="#3333ff">boolean</font><font> flag</font><font
+ color="#ff0000">)</font><font>&nbsp;<br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of setState</font><font><br>
+&nbsp;&nbsp;</font><font color="#ff0000">}</font><font><br>
+                  </font><font color="#ff0000">}</font></code>
+       							</td>
+                  						</tr>
+
+              </tbody>
+            </table>
+                  			</td>
+                  		</tr>
+
+        </tbody>
+      </table>
+            </td>
+        </tr>
+
+  </tbody>
+</table>
+<br>
+For the above case, we have two overloaded setter methods. It is not possible
+to determine whether the attribute State is of type int or boolean. Hence,
+the above class is not a valid MBean.
+<h2>&nbsp;Case 2&nbsp;</h2>
+A getter and setter pair for the same name operating on different types:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top"><code><font color="#3333ff">public class</font><font>&nbsp;Server
+                 </font><font color="#3333ff">implements</font><font>&nbsp;ServerMBean<br>
+                  </font><font color="#ff0000">{</font><font><br>
+                  <br>
+&nbsp; .......<br>
+                  <br>
+&nbsp; </font><font color="#3333ff">public&nbsp;</font><font
+ color="#3333ff">int</font><font> getState</font><font color="#ff0000">(</font><font
+ color="#ff0000">)</font><font><br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of getState</font><font><br>
+&nbsp; </font><font color="#ff0000">}</font><font><br>
+                  <br>
+&nbsp;&nbsp;</font><font color="#3333ff">public void</font><font> setState</font><font
+ color="#ff0000">(</font><font color="#3333ff">boolean</font><font> flag</font><font
+ color="#ff0000">)</font><font> &nbsp;<br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of setState</font><font><br>
+&nbsp;&nbsp;</font><font color="#ff0000">}</font><font><br>
+                  </font><font color="#ff0000">}</font></code>
+       							</td>
+                  						</tr>
+
+              </tbody>
+            </table>
+                  			</td>
+                  		</tr>
+
+        </tbody>
+      </table>
+            </td>
+        </tr>
+
+  </tbody>
+</table>
+<br>
+For the above case, it is not possible to determine whether State is a readOnly
+attribute of type int or a writeOnly attribute of type boolean. Hence, the
+above class is not a valid MBean.
+<h2>&nbsp;Special Cases&nbsp;</h2>
+Also possible are the below cases which are valid.
+<h3>&nbsp;Case 1&nbsp;</h3>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top"><code><font color="#3333ff">public class</font><font>&nbsp;Server
+                 </font><font color="#3333ff">implements</font><font>&nbsp;ServerMBean<br>
+                  </font><font color="#ff0000">{</font><font><br>
+                  <br>
+&nbsp; .......<br>
+                  <br>
+&nbsp; </font><font color="#3333ff">public void</font><font> setState</font><font
+ color="#ff0000">(</font><font color="#3333ff">int</font><font> state</font><font
+ color="#ff0000">)</font><font><br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of setState</font><font><br>
+&nbsp; </font><font color="#ff0000">}</font><font><br>
+                  <br>
+&nbsp;&nbsp;</font><font color="#3333ff">public void</font><font> setState</font><font
+ color="#ff0000">(</font><font color="#3333ff">boolean</font><font> flag,&nbsp;</font><font
+ color="#3333ff">int</font><font> state</font><font color="#ff0000">)</font><font>
+&nbsp;<br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of setState</font><font><br>
+&nbsp;&nbsp;</font><font color="#ff0000">}</font><font><br>
+                  </font><font color="#ff0000">}</font></code>
+       							</td>
+                  						</tr>
+
+              </tbody>
+            </table>
+                  			</td>
+                  		</tr>
+
+        </tbody>
+      </table>
+            </td>
+        </tr>
+
+  </tbody>
+</table>
+<br>
+<br>
+For the above case, State is a attribute of type int. The setState method
+that takes two arguments will be exposed as one of the operations.
+<h3>&nbsp;Case 2&nbsp;</h3>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top"><code><font color="#3333ff">public class</font><font>&nbsp;Server
+                 </font><font color="#3333ff">implements</font><font>&nbsp;ServerMBean<br>
+                  </font>                  <font color="#ff0000">{</font><font><br>
+                  <br>
+&nbsp; .......<br>
+                  <br>
+&nbsp; </font>                                    <font color="#3333ff">public&nbsp;</font><font
+ color="#3333ff">int</font><font> getState</font><font color="#ff0000">(</font><font
+ color="#ff0000">)</font><font><br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of getState</font><font><br>
+&nbsp; </font><font color="#ff0000">}</font><font><br>
+                  <br>
+&nbsp;&nbsp;</font>                  <font color="#3333ff">public&nbsp;</font><font
+ color="#3333ff">int</font><font> getState</font><font color="#ff0000">(</font><font
+ color="#3333ff">boolean</font><font> flag</font><font color="#ff0000">)</font><font>
+&nbsp;<br>
+&nbsp; </font><font color="#ff0000">{</font><font><br>
+&nbsp; &nbsp; </font><font color="#009900">// implementation of getState</font><font><br>
+&nbsp;&nbsp;</font><font color="#ff0000">}</font><font><br>
+                  </font>                  <font color="#ff0000">}</font></code>
+                  							</td>
+                  						</tr>
+
+              </tbody>
+            </table>
+                  			</td>
+                  		</tr>
+
+        </tbody>
+      </table>
+            </td>
+        </tr>
+
+  </tbody>
+</table>
+<br>
+For the above case, State is an attribute of type int. The getState method
+that takes a boolean argument will be exposed as one of the operations.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="writing_standard_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../dynamic/dynamic_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Writing&nbsp;Standard&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Dynamic&nbsp;MBean</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

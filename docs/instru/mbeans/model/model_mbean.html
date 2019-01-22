@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Model MBean in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="../dynamic/writing_dynamic_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;2.3&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a href="writing_model_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<h1>Model MBean</h1>
+<br>
+A Model MBean is a Dynamic MBean, but it is more flexible than the Dynamic
+MBeans. The main difference between a Model MBean and a Dynamic MBean
+is that you do not develop the MBean class, since any JMX implementation
+should provide a default implementation of the ModelMBean interface,
+called RequiredModelMBean.<br>
+<h2>&nbsp;Advantages of Model MBeans over Dynamic MBeans&nbsp;</h2>
+<ol>
+  <li>A default implementation of ModelMBean (RequiredModelMBean) has to
+be provided by the JMX implementation.</li>
+  <li>While creating DynamicMBeans, the managed resource (object which contains
+the Implementation details of the DynamicMBean) has to be specified. In
+case of ModelMBeans, the managed resource can be set dynamically using the
+setManagedResource method available in the RequiredModelMBean class. (More
+details about setManagedResource are provided in the RequiredModelMBean section
+in this topic.)</li>
+  <li>In DynamicMBeans, all the required management information has to be
+known in advance. Out of these management information, some information alone
+can be exposed dynamically. In ModelMBeans, the management information
+itself can be dynamically configured using the setModelMBeanInfo method.</li>
+  <li>Additional data about the behavior of the attributes and operations
+can be specified by using the Descriptors. (More information is provided
+in the Descriptors section in this topic.)</li>
+  <li>Custom Descriptors can be added.</li>
+  <li>Translation of MBean data and data models into other management technologies
+and their data models are possible using the protocolMap descriptor.</li>
+  <li>Value added services, such as persistence, caching, attribute change
+notifications, and logging are provided. Another important feature
+is that these services can be customizable for each attribute and operation.</li>
+  <li>The management information of a ModelMBean can be specified using a
+file format, such as XML. This reduces a lot of coding.</li>
+</ol>
+<h2>&nbsp;ModelMBean metadata classes&nbsp;</h2>
+The attributes, operations, and notifications, that is, the management information
+for the Model MBean, are exposed using the ModelMBeanInfo interface. The
+ModelMBeanAttributeInfo object describes an attribute of the ModelMBean. Similarly,
+the ModelMBeanOperationInfo, ModelMBeanConstructorInfo, and ModelMBeanNotificationInfo
+describe an operation, constructor, and notification of the ModelMBean. The
+classes that describe the management information of a ModelMBean are called
+ModelMBean metadata classes. The ModelMBean metadata classes are<br>
+<ol>
+  <li>ModelMBeanAttributeInfo -- describes an attribute</li>
+  <li>ModelMBeanOperationInfo -- describes the signature of an operation</li>
+  <li>ModelMBeanConstructorInfo -- describes the signature of a constructor</li>
+  <li>ModelMBeanNotificationInfo -- describes a notification</li>
+  <li>DescriptorSupport -- provides additional information about an attribute,
+operation, constructor, and notification<br>
+  </li>
+</ol>
+<h2>&nbsp;RequiredModelMBean&nbsp;</h2>
+JMX implementations provide a default implementation of the ModelMBean interface
+called RequiredModelMBean. This model MBean implementation is intended
+to provide ease of use and extensive default management behavior for the
+instrumentation. A model MBean can be created by extending the RequiredModelMBean
+and can be overridden if necessary.<br>
+<br>
+The RequiredModelMBean can be instantiated using the no argument constructor.
+This constructs a RequiredModelMBean with an empty ModelMBeanInfo. The RequiredModelMBean's
+MBeanInfo and Descriptors can be customized using the <code>setModelMBeanInfo<font
+ color="#ff0000">(</font>javax.management.modelmbean.ModelMBeanInfo<font
+ color="#ff0000">)</font></code> method. After the RequiredModelMBean's MBeanInfo
+and Descriptors are customized, the RequiredModelMBean can be registered with
+the MBeanServer. The managed resource (i.e. the instance handle of
+the object against which all methods in this ModelMBean management interface
+are executed) can be set to RequiredModelMBean, by the <code>setManagedResource<font
+ color="#ff0000">(</font>java.lang.Object, String<font color="#ff0000">)</font></code>
+method which takes the actual managed object and its type, i.e. it can be
+"ObjectReference", "Handle", "EJBHandle", "IOR" (Interoperable Object Reference),
+or "RMIReference".<br>
+<br>
+<h2>&nbsp;Descriptors&nbsp;</h2>
+Descriptors classes implement the Descriptor interface and are used in the
+Model MBean metadata to add behavioral policies, such as caching, persistence,
+and logging for the management interface defined in the MBeanInfo to the managed
+bean.<br>
+<br>
+Descriptors are a list of name-value pairs (each has String as name and Object
+as value) that provide additional information about behavior of attributes,
+operations, and notifications. While defining the management interface for
+an MBean attribute, it is possible to add a descriptor that describes the
+behavioral policies for the attribute. The Model MBean implementation will
+then try to adapt to match the required behavior. The behavioral descriptors
+can also be changed via a management application or by the managed resource
+at run time.
+<br><br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="../dynamic/writing_dynamic_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a href="writing_model_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Writing&nbsp;a&nbsp;Dynamic&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"></td>
+			<td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

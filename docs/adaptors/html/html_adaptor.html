@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>HTML Adaptor in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../adaptors.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;4.1&nbsp;HTML&nbsp;Adaptor</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../rmi/rmi_adaptor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>HTML Adaptor</h1>
+<br>
+HTML Adaptor enables application clients and managers to connect to a JMX
+agent through HTTP. One of the main advantages for having an HTML adaptor
+is that there is no need to write a separate client for communicating with
+the HTML adaptor.
+<h2>&nbsp;Communication Mechanism&nbsp;</h2>
+The Web browser sends a request to the Web server which will be running at
+port XXXX. The request will generally be like <br>
+<br>
+<b>http://</b><i>hostname</i><b>:</b><i>htmlPort</i><b>/jmx_dynamic?fname=index.html</b><br>
+<br>
+On receiving this HTTP request, the Web server forwards the request to the
+appropriate Servlet (that is, jmx_dynamic). The Servlet with the help of HTML
+Adaptor forms the response. The HTML Adaptor is capable of communicating with
+the MBeanServer and hence the MBean information can be obtained. The response
+is sent back to the Web browser via Web server. The Web browser displays
+the received response object in a human readable format.<br>
+<br>
+The image representation of the Communication Mechanism using HTML Adaptor
+is shown below:<br>
+<br>
+<img src="../../images/htmladaptor.jpg" alt="HTML_Adaptor" width="360"
+ height="478"><br>
+<br>
+<h2>&nbsp;HTML adaptor as an MBean&nbsp;</h2>
+The HTML adaptor itself is implemented as a Dynamic MBean. It exposes four
+attributes and two operations. The attributes are Port, State, Active, and
+ObjectName. Here Port is a read write attribute and the rest three are read
+only attributes. The Operations are startService and stopService. Since HTML
+adaptor itself is implemented as an MBean, it can be managed like other MBeans.
+<h2>&nbsp;Registering HTML Adaptor&nbsp; </h2>
+Registering HTML Adaptor requires only a few lines of code. The following
+code snippet shows how to register an HTML Adaptor instance with the MBeanServer:<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">import</font> com.adventnet.adaptors.html.HtmlAdaptor;<br>
+                  <font color="#3333ff">import</font> com.adventnet.adaptors.html.HtmlAdaptorServerImpl;<br>
+                  <font color="#3333ff">import</font>&nbsp;javax.management.ObjectName;<br>
+                  <font color="#3333ff">import</font>&nbsp;javax.management.MBeanServer;<br>
+                  <font color="#3333ff">import</font>&nbsp;javax.management.MBeanServerFactory;<br>
+                  <br>
+MBeanServer mbs = <font color="#3333ff">null</font>;<br>
+ObjectName name =&nbsp;<font color="#3333ff">null</font>;<br>
+                  <font color="#3333ff">private int</font> htmlPort = 8030;<br>
+                  <br>
+                  <font color="#3333ff">private void</font> registerHTMLAdaptor<font
+ color="#ff0000">()</font><br>
+                  <font color="#ff0000">{</font><br>
+                  <br>
+                  <font color="#3333ff">try</font><br>
+                  <font color="#ff0000">{</font><br>
+                  <font color="#009900">&nbsp; // create an instance of MBeanServer</font><br>
+&nbsp; mbs = MBeanServerFactory.createMBeanServer<font color="#ff0000">()</font>;<br>
+                  <br>
+                  <font color="#009900">&nbsp; // create a new object name</font><br>
+&nbsp; name = <font color="#ff0000"><font color="#3333ff">new </font></font>ObjectName<font
+ color="#ff0000">(</font><font color="#336666">"Adaptors:type=HTMLAdaptor,port="</font>
++ htmlPort<font color="#ff0000">)</font>;<br>
+                  <br>
+&nbsp; HtmlAdaptor htmladaptor = <font color="#3333ff">new</font> HtmlAdaptor<font
+ color="#ff0000">()</font>;<br>
+&nbsp; htmladaptor.addHttpServerInterface<font color="#ff0000">(<font
+ color="#3333ff">new </font><font color="#000000">HtmlAdaptorServerImpl</font>()</font><font
+ color="#ff0000">)</font>;<br>
+&nbsp; mbs.registerMBean<font color="#ff0000">(</font>htmladaptor, name<font
+ color="#ff0000">)</font>;<br>
+                  <code>&nbsp; htmladaptor.setParentDir<font
+ color="#ff0000">(</font><font color="#336666">"."</font><font
+ color="#ff0000">)</font>;</code></code><code><br>
+                  <font color="#ff0000">}</font><br>
+                  <font color="#3333ff">catch</font> <font
+ color="#ff0000">(</font><font color="#000099">Exception</font> e<font
+ color="#ff0000">)</font><br>
+                  <font color="#ff0000">{</font><br>
+&nbsp; e.printStackTrace<font color="#ff0000">()</font>;<br>
+                  <font color="#ff0000">}</font><br><br><font color="#ff0000">}</font></code>
+                  </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<h2>&nbsp;How HTML Adaptor Exposes Notifications ?&nbsp;</h2>
+The notifications broadcasted by the MBeans registered with the MBeanServer
+are available to HTMLAdaptor since HTMLAdaptor is a notification listener
+to all the registered MBeans. The HTMLAdaptor stores the received notifications
+in a serialized form and the fileName for storing the notifications can be
+configured.<br>
+<br>
+When the HTMLAdaptor receives a request for exposing notifications, it reads
+the serialized notifications from the file and sends them back in human-readable
+format.<br>
+<h2>&nbsp;Plugging in Your Own Web Server&nbsp;</h2>
+The sample HTML Adaptor uses Jetty 3.2.4 Web server by default. You can plug
+in any other Web server instead of the Jetty server. This facility of plugging
+in a Web server has been enabled by providing the HttpServerInterface. All
+you have to do to plug in your own Web server is to perform the two steps
+given below:<br>
+<ol>
+  <li>Implement the HttpServerInterface</li>
+  <li>Add your Web server</li>
+</ol>
+<h3>&nbsp;Implementing the HttpServerInterface&nbsp;</h3>
+The interface defines four methods that are mentioned below, which should
+be implemented by your class.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public void</font>
+startHttpServer<font color="#ff0000">(</font><font color="#ff0000">)</font>
+                  <font color="#3333ff">throws</font> <font
+ color="#000099">java.lang.Exception<br>
+                  </font><i>This method is to start the Web server initially.</i><br>
+                  <br>
+                  <font color="#3333ff">public void</font> stopHttpServer<font
+ color="#ff0000">(</font><font color="#ff0000">)</font>
+                 <font color="#3333ff">throws</font> <font
+ color="#000099">java.lang.Exception<br>
+                  </font><i>This method is to stop the Web server.</i><br>
+                  <br>
+                  <font color="#3333ff">public void</font> restartHttpServer<font
+ color="#ff0000">(</font><font color="#ff0000">)</font>
+                 <font color="#3333ff">throws</font> <font
+ color="#000099">java.lang.Exception<br>
+                  </font><i>This method is to restart the Web server.</i><br>
+                  <br>
+                  <font color="#3333ff">public void</font> setConfigFileName<font
+ color="#ff0000">(</font><font color="#000099">String                   </font>configFileName<font
+ color="#ff0000">)</font><font color="#000099"><br>
+                  </font><i>This method is a setter for the configuration
+file name.</i><br>
+                  <br>
+                  <font color="#3333ff">public&nbsp;<font
+ color="#000099">String</font></font> getConfigFileName<font
+ color="#ff0000">(</font><font color="#ff0000">)</font><font
+ color="#000099"><br>
+                  </font><i>This method gets the configuration file name by
+which the server is running.</i><br>
+                  <font color="#000099"></font></code></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<h3>&nbsp;Adding Your Web Server&nbsp;</h3>
+Custom Web server can be plugged in as described below, so that the HTML
+Adaptor can use that.<br>
+<br>
+Before registering the HTML Adaptor, the instance of the class which implements
+the HttpServerInterface and wraps your Web server should be added. For example,
+if XyzServerImpl is the implementation and wrapper for "Xyz web server" then
+it can be added like following:<br>
+<br>
+<code>htmladaptor.addHttpServerInterface<font color="#ff0000">(<font
+ color="#3333ff">new </font><font color="#000000">XyzServerImpl</font>()</font><font
+ color="#ff0000">)</font>;<br>
+<br>
+</code>
+<h3>&nbsp;How to Test HTML Adaptor ?&nbsp;</h3>
+The HTML adaptor can be tested by starting the agent with HTML adaptor running.
+Open any Web browser and type the URL "http://&lt;&lt;server_name&gt;&gt;:&lt;&lt;port&gt;&gt;".
+Here, server_name is the machine name where the HTML Adaptor is running and
+port is the Port number at which the HTML Adaptor is listening. This brings
+up the HTML front end which can be used to manage the application via JMX.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../adaptors.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../rmi/rmi_adaptor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Adaptors&nbsp;Level</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">RMI&nbsp;Adaptor</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

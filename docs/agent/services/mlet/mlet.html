@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>M-Let Service in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../monitor/string/string_monitor.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;3.2.3&nbsp;M-Let&nbsp;Service</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../../../adaptors/adaptors.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>M-Let Service</h1>
+<br>
+The M-Let service allows you to instantiate and register in the MBeanServer,
+one or several MBeans coming from a remote URL. The M-Let service itself
+is implemented as a StandardMBean and registered as one of the MBeans in the
+MBeanServer. So, it can be used by other MBeans, agent applications, or remote
+management applications.<br>
+<br>
+The classes of the M-Let service are members of the javax.management.loading
+package. javax.management.loading.MLet class implements the MLetMBean
+and also extends the java.net.URLClassLoader. Thus, M-Let is a StandardMBean
+and also a class loader.
+<h2>&nbsp;Instantiating and Registering MBeans from a Remote URL&nbsp;</h2>
+The M-Let service loads an m-let text file which contains information about
+the MBeans that have to be registered. The information on each MBean
+is specified in an XML-like tag, called the MLET tag. The location of
+the m-let text file is specified by a URL. When an m-let text file is
+loaded, all classes specified in MLET tags are downloaded, and an instance
+of each MBean specified in the file is created and registered with the MBeanServer.<br>
+<br>
+The M-Let service is depicted pictorially below to give you a better understanding
+about how this service works:<br>
+<br>
+<img src="../../../images/m-let-service.gif"
+ alt="How MLet Service works" width="385" height="300"><br>
+<br>
+The MLet class has a method called getMBeansfromURL. The two overloaded
+versions of this method take the URL argument as a String or as a java.net.URL
+object. In this URL argument, the location of the m-let text file is
+specified so that the MBeans specified in the MLET tags are instantiated and
+registered, if all the resources are available and the m-let text file has
+proper MLET tags.
+<h2>&nbsp;The MLET Tag&nbsp;</h2>
+The general syntax of a MLET tag is shown below:
+<table border="0" cellspacing="1" cellpadding="1" class="NOCODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ bgcolor="#ffffff" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" bgcolor="#eeeeee">
+        <tbody>
+          <tr>
+            <td valign="top"><font color="#3333ff">&lt;MLET</font> &nbsp;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; CODE = class | OBJECT = serfile
+                  <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ARCHIVE = "archiveList" &nbsp;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font color="#ff0000">[CODEBASE
+= codebaseURL]</font><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font color="#ff0000">[NAME = MBeanName]</font><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font color="#ff0000">[VERSION =
+version]</font><br>
+                  <font color="#3333ff">&gt;</font><br>
+                  <font color="#ff0000">[argList]</font><br>
+                  <font color="#3333ff">&lt;/MLET&gt;</font><br>
+            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+The m-let text file may contain any number of MLET tags, each for instantiating
+a different MBean in a JMX agent.
+<h3>&nbsp;Mandatory Fields&nbsp;</h3>
+<ul>
+  <li>Either the CODE or the OBJECT field should be present in an MLET tag.
+CODE specifies the full Java class name, including package name of
+the MBean to be obtained. OBJECT specifies the .ser file that contains a
+serialized representation of the MBean to be obtained. The .class or
+.ser file must be contained in one of the JAR files specified in the ARCHIVE
+field.</li>
+  <li>ARCHIVE field specifies one or more JAR files. All the JAR files
+should be enclosed within double quotes (<b>"</b>) and each JAR file should
+be separated using a comma (<b>,</b>)</li>
+</ul>
+<h3>&nbsp;Optional Fields&nbsp;</h3>
+<ul>
+  <li>CODEBASE specifies the code base URL that contains the JAR files specified
+by the ARCHIVE field. If the CODEBASE is not specified, the base URL
+of the m-let text file is taken as the code base URL.</li>
+  <li>NAME specifies the String representation of ObjectName with which the
+MBean has to be registered.</li>
+  <li>VERSION specifies the version of the MBean and associated JAR files
+to be obtained. It is represented as a series of non-negative decimal
+numbers each separated by a dot (<b>.</b>)</li>
+  <li>argList specifies a list of one or more arguments to pass to the constructor
+of the MBean to be instantiated. Each item in the argList corresponds
+to an argument in the constructor. The syntax to be followed is</li>
+</ul>
+<table border="0" cellspacing="1" cellpadding="1" class="NOCODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ bgcolor="#ffffff" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" bgcolor="#eeeeee">
+        <tbody>
+          <tr>
+            <td valign="top"><font color="#3333ff">&nbsp; &lt;ARG TYPE=argumentType
+VALUE=argumentValue&gt; &nbsp;</font><br>
+            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+where :<br>
+argumentType is the class of the argument<br>
+argumentValue is the string representation of the value of the argument<br>
+<h2>&nbsp;A Sample M-Let File&nbsp;</h2>
+A Sample m-let text file with only one MLET tag is shown below :<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="NOCODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ bgcolor="#ffffff" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" bgcolor="#eeeeee">
+        <tbody>
+          <tr>
+            <td valign="top">&nbsp; <font color="#3333ff">&lt;MLET </font>&nbsp;CODE=ServerInfo
+ARCHIVE="mbeans.jar"<font color="#ff0000"> CODEBASE=http://localhost:8080/test_mlet
+NAME=MyMBean:type=Dynamic</font>&nbsp;<font color="#3333ff">&gt;</font><br>
+&nbsp; <font color="#ff0000">&lt;ARG TYPE=java.lang.String VALUE=localhost&gt;</font><br>
+&nbsp; <font color="#ff0000">&lt;ARG TYPE=java.lang.Integer VALUE=8080&gt;</font><br>
+&nbsp; <font color="#3333ff">&lt;/MLET&gt;</font>            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+If the getMBeansfromURL method is invoked by passing the location URL of the
+above m-let text file, the MLet tries to load the class named ServerInfo from
+the mbeans.jar present in the URL http://localhost:8080/test_mlet. On
+successful loading of the ServerInfo class, the MLet tries to instantiate
+the class by invoking the constructor which takes two arguments in the order
+String, Integer, i.e, it tries to create an instance of ServerInfo using
+the constructor ServerInfo("localhost" , new Integer(8080) ). On successful
+instantiation, the MLet class tries to register this instance specifying
+the object name as MyMBean:type=Dynamic. It uses the registerMBean(Object
+object, ObjectName name) method of the MBeanServer.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="PTR_OUTER">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="PTR_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="1" cellspacing="1" border="0"
+ class="PTR_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><b>Points to Remember</b><br>
+
+                  <ol>
+                    <li>MLet is implemented as a StandardMBean and registered
+with the MBeanServer of a JMX agent.</li>
+                    <li>MLet extends java.net.URLClassLoader and hence it
+is a class loader.</li>
+                    <li>Using the M-Let service, dynamic registration of MBeans
+from a remote URL is possible.<br>
+                    </li>
+
+                  </ol>
+            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../monitor/string/string_monitor.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../../../adaptors/adaptors.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">String&nbsp;Monitor&nbsp;Service</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Adaptors&nbsp;Level</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

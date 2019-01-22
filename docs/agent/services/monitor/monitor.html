@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Monitor Service in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="../timer/timer.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;3.2.2&nbsp;Monitor&nbsp;Service</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a href="counter/counter_monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<h1>Monitor Service</h1>
+<br>
+One of the essential activities for a management application is monitoring.
+&nbsp;JMX provides a set of monitoring services, each capable of observing
+attributes of specific Java types. &nbsp;Any number of attributes can be monitored.
+&nbsp;For each attribute, an instance of a monitor service has to be used.
+&nbsp;If the specified condition satisfies, the monitor service triggers
+notification. &nbsp;The manager application, in turn, receiving this notification
+can take appropriate actions (if required). &nbsp;It is essential to know
+about these notifications (monitor notifications) so that each of the monitor
+services can be explained easily.<br>
+<br>
+<h1>Monitor Notifications</h1>
+<br>
+MonitorNotification class is a sub-class of Notification class. &nbsp;The
+MonitorNotification class provides definitions of the notifications sent by
+monitor MBeans, and all the monitoring services use this class. &nbsp;<br>
+<br>
+This notification is used to report one of the following cases:<br>
+<ol>
+  <li>One of the trigger conditions of a monitor is detected.</li>
+  <li>An error occurs during an observation of the attribute.</li>
+</ol>
+The list of notifications fired by the monitor MBeans is described below:<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0" width="90%">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#cccccc"><b>Notification Type<br>
+      </b></td>
+      <td valign="top" bgcolor="#cccccc"><b>Reason for occurrence<br>
+      </b></td>
+      <td valign="top" bgcolor="#cccccc"><b>Triggered By<br>
+      </b></td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.error.mbean<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Observed MBean is not registered
+in the MBean Server.<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Counter, Gauge, and String Monitor<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.error.attribute</td>
+      <td valign="top" bgcolor="#eeeeee">Observed attribute is not present
+in the observed MBean.<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Counter, Gauge, and String Monitor</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.error.type</td>
+      <td valign="top" bgcolor="#eeeeee">Type of the observed attribute is
+not correct.<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Counter, Gauge, and String Monitor</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.error.runtime</td>
+      <td valign="top" bgcolor="#eeeeee">A non-predefined error type has occurred
+when trying to get the value of the observed attribute.<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Counter, Gauge, and String Monitor</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.error.threshold</td>
+      <td valign="top" bgcolor="#eeeeee">Type of the threshold, offset, or
+modulus is not correct.<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Counter and Gauge Monitor<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.counter.threshold<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Observed attribute has exceeded the
+threshold value.</td>
+      <td valign="top" bgcolor="#eeeeee">Counter Monitor<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.gauge.high<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Observed attribute has exceeded the
+high threshold value.<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Gauge Monitor<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.gauge.low</td>
+      <td valign="top" bgcolor="#eeeeee">Observed attribute has exceeded the
+low threshold value.</td>
+      <td valign="top" bgcolor="#eeeeee">Gauge Monitor</td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.string.matches<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">Observed attribute has matched the
+"string to compare" value.<br>
+      </td>
+      <td valign="top" bgcolor="#eeeeee">String Monitor<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#eeeeee">jmx.monitor.string.differs</td>
+      <td valign="top" bgcolor="#eeeeee">Observed attribute has differed from
+the "string to compare" value.</td>
+      <td valign="top" bgcolor="#eeeeee">String Monitor</td>
+    </tr>
+
+  </tbody>
+</table>
+&nbsp;<br>
+<h1>Types of Monitors</h1>
+<ol>
+  <li>Counter Monitor</li>
+  <li>Gauge Monitor</li>
+  <li>String Monitor</li>
+</ol>
+Each of the monitors is dealt with in separate topics.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="../timer/timer.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a href="counter/counter_monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Timer&nbsp;Service</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"></td>
+			<td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Counter&nbsp;Monitor&nbsp;Service</font></td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Counter Monitor Service in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../monitor.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;3.2.2.1&nbsp;Counter&nbsp;Monitor&nbsp;Service</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../gauge/gauge_monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Counter Monitor</h1>
+<br>
+CounterMonitor is a class capable of observing attributes of Java integer
+types (Byte, Integer, Short, and Long) which behave like a counter, that
+is, their value is always greater than or equal to zero, and they can only
+be incremented. Some examples for counters are server up time (number
+of hours a Web server is running) and number of requests processed by the
+server.<br>
+<br>
+A counter monitor sends a notification of type jmx.monitor.counter.threshold
+when the value of the counter (observed attribute) reaches or exceeds the
+comparison value. This comparison value is called threshold value.<br>
+<br>
+The Counter Monitor service is depicted pictorially below to give you a better
+understanding about how this service works:<br>
+<br>
+<img src="../../../../images/counter_monitor.gif"
+ alt="How CounterMonitor works" width="560" height="390"><br>
+<br>
+To monitor an attribute Name of type counter in some MBean, an instance of
+counter monitor has to be created. For this counter monitor instance,
+the required details, such as the MBean name, the attribute that has to be
+observed, the time interval, the threshold condition, and offset value have
+to be specified.<br>
+<h2>&nbsp;Creating a Counter Monitor&nbsp;</h2>
+For better understanding, this section is split up into steps:<br>
+<br>
+Step 1 : Creating an instance of the CounterMonitor class<br>
+CounterMonitor can be instantiated by using the no argument constructor. <br>
+<br>
+Step 2 : Configuring the monitor details for the created CounterMonitor
+instance<br>
+The required details are configured in this step. Some of the methods
+provided in the CounterMonitor class are listed below:<br>
+<ul>
+  <li>setObservedObject -- takes an ObjectName as a parameter. The
+object name of the MBean under observation has to be passed in this method.</li>
+  <li>setObservedAttribute -- takes a string as a parameter. The attribute
+name of the MBean that is going to be observed has to be passed in this method.</li>
+  <li>setGranulityPeriod -- takes a long value as a parameter. The interval
+in milliseconds (for observing the attribute) has to be passed.</li>
+  <li>setThreshold -- takes an Integer value as a parameter. This value
+represents the threshold value, that is, if the observed attribute reaches
+or exceeds this threshold value, a notification of type jmx.monitor.counter.threshold
+will be triggered by the CounterMonitor.</li>
+  <li>setOffset -- takes an Integer value as a parameter. When the
+observed attribute value equals or exceeds the threshold value, the threshold
+value will be increased to observed value + offset.</li>
+  <li>setNotify -- takes a boolean value as a parameter. For receiving
+notification, this value has to be passed true.<br>
+  </li>
+</ul>
+Step 3 : Registering the CounterMonitor instance with the MBeanServer<br>
+<br>
+Step 4 : Registering the NotificationListeners so that the Notifications
+sent by the CounterMonitor MBean can be handled.<br>
+<br>
+Step 5 : Activating the CounterMonitor service so that it starts observing
+the attribute.<br>
+<h3>&nbsp;A Sample Code snippet&nbsp;</h3>
+Let us assume that there is an mbean which represents an instance of a thermometer.
+The thermometer MBean is defined with an attribute called Temperature,
+and we assume that the temperature value increases over a period, that is,
+the Temperature attribute acts like a counter. The below code snippet
+shows how to create a counter monitor instance for observing the Temperature
+attribute in the Thermometer MBean with the Threshold value -- 100, Offset
+value -- 5, Granularity Period -- 5 seconds and DifferenceMode -- false.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">import</font>  javax.management.monitor.CounterMonitor;&nbsp;
+                  <br>
+                  <br>
+CounterMonitor cm = <font color="#3333ff">new</font> CounterMonitor<font
+ color="#ff0000">()</font>;<br>
+                  <br>
+                  <font color="#3333ff">try</font><br>
+                  <font color="#ff0000">{</font>&nbsp; &nbsp;<br>
+&nbsp; cm.setObservedObject<font color="#ff0000">(</font><font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Thermometer:unit=Fahrenheit<font color="#336666">"</font><font
+ color="#ff0000">))</font></font></code><code>;</code><code><br>
+&nbsp; cm.setObservedAttribute<font color="#ff0000">(</font><font
+ color="#336666">"Temperature<font color="#336666">"</font><font
+ color="#ff0000">)</font></font></code><code>;</code><code><br>
+&nbsp; cm.setGranularityPeriod<font color="#ff0000">(</font>5000<font
+ color="#ff0000">)</font>;&nbsp;<br>
+&nbsp; cm.setDifferenceMode<font color="#ff0000">(</font><font
+ color="#3333ff">false</font><font color="#ff0000">)</font>;&nbsp;<br>
+&nbsp; cm.setThreshold<font color="#ff0000">(</font><font
+ color="#3333ff">new</font> Integer<font color="#ff0000">(</font>100<font
+ color="#ff0000">))</font>;&nbsp;<br>
+&nbsp; cm.setOffset<font color="#ff0000">(</font><font color="#3333ff">new</font>
+Integer<font color="#ff0000">(</font>5<font color="#ff0000">))</font>; <br>
+&nbsp; cm.setNotify<font color="#ff0000">(</font><font color="#3333ff">true</font><font
+ color="#ff0000">)</font>;<br>
+&nbsp; server.registerMBean<font color="#ff0000">(</font>cm,&nbsp;<font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Services:type=CounterMonitor,name=CounterMonitor_0"</font><font
+ color="#ff0000">))</font>;&nbsp;<br>
+&nbsp; server.addNotificationListener<font color="#ff0000">(</font><font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Services:type=CounterMonitor,name=CounterMonitor_0"</font><font
+ color="#ff0000">)</font>, notifImpl, <font color="#3333ff">null</font>,
+                  <font color="#3333ff">new</font> Object<font
+ color="#ff0000">()</font><font color="#ff0000">)</font>;&nbsp;<br>
+&nbsp; cm.start<font color="#ff0000">()</font>;<br>
+                  <font color="#ff0000">}</font><br>
+                  </code><code><font color="#3333ff">catch</font>
+          <font color="#ff0000">(</font><font color="#000099">Exception</font>
+e<font color="#ff0000">)</font><br>
+                  <font color="#ff0000">{</font><br>
+&nbsp; e.printStackTrace<font color="#ff0000">()</font>;<br>
+                  <font color="#ff0000">}</font></code></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<h3><b>&nbsp;How the Above Code Works&nbsp;</b></h3>
+The CounterMonitor MBean observes the Temperature attribute of the Thermometer
+MBean for every 5 seconds. Let us assume the initial Temperature value
+as 40. Also, let this Temperature value gradually increase from 40 to
+95 after an interval of 40 seconds. During this 40 seconds interval,
+the CounterMonitor MBean would have observed the value for 8 times (approximately).
+It checks whether the value is greater than the threshold value (100).
+Since the value does not exceed the threshold value, no notification
+will be sent.<br>
+<br>
+Let the Temperature value reach 101 when the CounterMonitor observes it next
+time. Since the value exceeded 100, a notification of type jmx.monitor.counter.threshold
+will be triggered by the CounterMonitor MBean. Once the notification
+is triggered, the CounterMonitor MBean checks if any Offset value is specified.
+In the above case, it is specified as 5. If Offset value
+is specified, the CounterMonitor MBean updates the threshold value with the
+new value (Observed value + Offset value). The threshold value will
+be increased to 106 (101 + 5).<br>
+<br>
+Let the Temperature value remain at 101 itself for 30 seconds and suddenly
+the Temperature value reaches the value 138. If the CounterMonitor observes
+the Temperature value at this instant, a notification of type jmx.monitor.counter.threshold
+will be triggered and the new threshold value now becomes 143 (138 + 5).<br>
+<br>
+<h3>&nbsp;Modulus&nbsp;</h3>
+The CounterMonitor class defines a field called Modulus. This Modulus
+defines the maximum value that can be set to the threshold.<br>
+<br>
+Let us consider the above example. Whenever the value of the temperature
+reaches or exceeds the threshold value, a new threshold value will be set.
+Even if the temperature reaches 1200, the new threshold value will be
+1205. We can restrict this and can define a maximum value up to which
+threshold can be set. This is achieved by defining the Modulus field
+of the CounterMonitor class. <br>
+<br>
+To define the Modulus field, the setModulus method can be used. In the
+above example, let us add the following line of code in configuring the counter
+monitor details:<br>
+<code>cm.setModulus<font color="#ff0000">(</font>150<font color="#ff0000">)</font>;</code><br>
+<br>
+If the temperature exceeds 150 then the threshold value rolls back and sets
+to the initial value with which the threshold is configured, i.e, 100.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../monitor.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../gauge/gauge_monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Monitor&nbsp;Service</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Gauge&nbsp;Monitor&nbsp;Service</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

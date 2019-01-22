@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>How to write Standard MBean in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="standard_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;2.1.1&nbsp;Writing&nbsp;a&nbsp;Standard&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a href="attrName_overloading.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<h1>Writing Your Own Standard MBean</h1>
+<br>
+Let us create a standard MBean to manage the details of a Web server.<br>
+<br>
+The following details can be exposed as attributes:<br>
+<ol>
+  <li><b>ServerName:</b> The name of the machine where the server is running.</li>
+  <li><b>ServerId:</b> An identifier for the Server. In a same machine,
+multiple servers may run at different ports.</li>
+  <li><b>ServerStarted:</b> To check whether the server is alive.</li>
+  <li><b>Port:</b> The port at which the server is listening.</li>
+</ol>
+The following details can be exposed as operations:<br>
+<ol>
+  <li><b>startService:</b> To start the server</li>
+  <li><b>stopService:</b> To stop the server</li>
+</ol>
+For an MBean to be of type standard MBean, it should implement its own corresponding
+MBean interface.
+<br><br>
+First, we will define the interface for this standard MBean. Let our
+standard MBean be ServerInfo. So, our management interface should be
+ServerInfoMBean (following the lexical naming pattern for standard MBean definition
+defined in JMX specifications).
+<br><br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font color="#3333ff">public </font><font
+ color="#3333ff">abstract </font>                  <font color="#3333ff">interface</font>
+ServerInfoMBean<br>
+                  <font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#000099">String</font> getServerName<font color="#ff0000">( )</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#000099">String</font> getServerId<font color="#ff0000">( )</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#3333ff">boolean</font> isServerStarted<font color="#ff0000">( )</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#3333ff">int</font> getPort<font color="#ff0000">( )</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#3333ff">void</font> setPort<font color="#ff0000">(</font><font
+ color="#3333ff">int</font> port<font color="#ff0000">)</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public void</font> startService<font
+ color="#ff0000">( )</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public void</font> stopService<font
+ color="#ff0000">( )</font>;<br>
+                  <font color="#ff0000">}</font></code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+From the above interface we designed, the MBean has get methods for the attributes
+ServerName, ServerId, ServerStarted, and Port. The set methods are
+available only for the attribute Port. So, ServerName, ServerId, and
+ServerStarted form the read only attributes, and Port is a read write attribute.<br>
+<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font color="#3333ff">public</font> <font
+ color="#3333ff">class</font> ServerInfo <font color="#3333ff">implements</font>
+ServerInfoMBean &nbsp;<br>
+                  <font color="#ff0000">{</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">private</font> <font
+ color="#000099">String</font> serverName = <font color="#3333ff">null</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#3333ff">private</font> <font
+ color="#000099">String </font>serverId =&nbsp;<font color="#3333ff">null</font>;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#3333ff">private</font>&nbsp;<font
+ color="#3333ff">boolean</font> serverStarted;<br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#3333ff">private</font>&nbsp;<font
+ color="#3333ff">int</font> port;<br>
+                  <br>
+&nbsp;&nbsp; &nbsp;&nbsp; <font color="#009900">// At least one public constructor
+is required</font><br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<font color="#3333ff">public</font> ServerInfo<font
+ color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; serverName = <font
+ color="#336666">"test-server"</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; serverId = <font
+ color="#336666">"test-server_1"</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; serverStarted = <font
+ color="#3333ff">true</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; port = 8072;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp;&nbsp; &nbsp;&nbsp; <font color="#009900">// overloaded public constructor</font><br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<font color="#3333ff">public</font> ServerInfo<font
+ color="#ff0000">(</font><font color="#000099">String</font> serverName,&nbsp;<font
+ color="#000099">String </font>serverId,&nbsp;<font color="#3333ff">boolean</font>
+serverStarted,&nbsp;<font color="#ff0000"> </font><font color="#3333ff">int</font>
+port<font color="#ff0000">)</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">this</font>.serverName
+= serverName ;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <font color="#3333ff">this</font>.serverId
+= serverId ;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <font color="#3333ff">this</font>.serverStarted
+= serverStarted ;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <font color="#3333ff">this</font>.port
+= port ;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}<br>
+                  </font><br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// Implementating the ServerInfoMBean</font><br>
+                  <br>
+&nbsp; &nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#000099">String</font> getServerName<font color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// get
+the ServerName</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; return serverName;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#000099">String</font> getServerId<font color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// get
+the ServerIdentifier</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; return serverId;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#3333ff">boolean</font> isServerStarted<font color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// check
+whether the Server is Started</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; return serverStarted;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#3333ff">int</font> getPort<font color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// get
+the ServerPort</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; return port;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public</font> <font
+ color="#3333ff">void</font> setPort<font color="#ff0000">(</font><font
+ color="#3333ff">int</font> port<font color="#ff0000">)</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// Stop
+the server. &nbsp;Set the ServerPort. &nbsp;Start the server.</font><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; stopService<font color="#ff0000">( )</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">this</font>.port
+= port;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; startService<font color="#ff0000">( )</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public void</font> startService<font
+ color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<font color="#ff0000">{<br>
+                  </font>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; System.out.println</code><code><font
+ color="#ff0000">(</font></code><font color="#336666"><code>"Starting server.....
+"</code></font><code><font color="#ff0000">)</font></code><code>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// start
+the Server</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; System.out.println</code><code><font
+ color="#ff0000">(</font></code><font color="#336666"><code>"Server started
+successfully. "</code></font><code><font color="#ff0000">)</font></code><code>;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; serverStarted =<font color="#3333ff">true</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public void</font> stopService<font
+ color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; System.out.println</code><code><font
+ color="#ff0000">(</font></code><font color="#336666"><code>"Stopping server.....
+"</code></font><code><font color="#ff0000">)</font></code><code>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; <font color="#009900">// stop
+the Server</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; System.out.println</code><code><font
+ color="#ff0000">(</font></code><font color="#336666"><code>"Server stopped
+"</code></font><code><font color="#ff0000">)</font></code><code>;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; serverStarted =<font color="#3333ff">false</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <br>
+&nbsp; &nbsp; &nbsp; &nbsp;<font color="#009900">// Additional methods not
+exposed for management</font><br>
+                  <br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#3333ff">public void</font> restart<font
+ color="#ff0000">( )</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">{</font><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; stopService<font
+ color="#ff0000">( )</font>;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; startService<font color="#ff0000">( )</font>;<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <font color="#ff0000">}</font><br>
+                  <font color="#ff0000">}</font></code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+In the above MBean, the method restart will not be exposed since it is not
+defined in the management interface.
+<br><br>
+To see a working example of the above Standard MBean, <a
+ href="../../../../examples/mbeans/standard/README.html">try out this example</a>.
+<br><br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="standard_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a href="attrName_overloading.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Standard&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"></td>
+			<td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Attribute&nbsp;Name&nbsp;Overloading</font></td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

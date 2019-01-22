@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Standard MBean in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+  <tbody>
+    <tr>
+      <td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+    </tr>
+    <tr>
+      <td valign="top" align="left" class="HDR_TDLeft"><a href="../../instru_level.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+      <td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;2.1&nbsp;Standard&nbsp;MBean</font></td>
+      <td valign="top" align="right" class="HDR_TDRight"><a href="writing_standard_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h1>Standard MBean</h1>
+<br>
+A class that implements its own MBean interface is called Standard MBean.
+This is the simplest type of instrumentation available when developing
+new JMX-manageable resources. Standard MBeans are most appropriate for static
+management information. (The attributes and operations that are exposed
+for management will be static)
+<h2>&nbsp;Semantics for a Standard MBean&nbsp;</h2>
+<ul>
+  <li>A Standard MBean should be a concrete (non-abstract) Java class.</li>
+  <li>A Standard MBean should have at least one public constructor.</li>
+  <li>A Standard MBean should implement its own corresponding MBean interface.</li>
+  <li>The name of the interface the Standard MBean implement must follow the
+lexical pattern &lt;<i>implementing_class</i>&gt;MBean. If the MBean
+name is Library, its management interface will be LibraryMBean.</li>
+</ul>
+In Standard MBeans, the attributes and operations are obtained by introspecting
+the MBean interface.
+<h2>&nbsp;Attributes&nbsp;</h2>
+Attributes are the fields or properties of the MBean, and they are present
+in the management interface of MBeans. Attributes represent the data
+available for management. Any Java object can be represented as an attribute.
+For a Java object to be represented as an attribute, there are some
+semantics to be followed in the code.
+<h3>&nbsp;Semantics for Attribute&nbsp;</h3>
+To define a read write attribute with the name "Name" of Java datatype String,
+the management interface should define the getter and setter methods as mentioned
+below:<br>
+<br>
+<code><font color="#3333ff">public</font> <font color="#000099">String</font>
+getName<font color="#ff0000">()</font>;<br>
+<font color="#3333ff">public void</font> setName<font color="#ff0000">(</font><font
+ color="#000099">String</font> some_name<font color="#ff0000">)</font>;</code><br>
+<br>
+From the above method prototype, one can observe the following things:<br>
+<ol>
+  <li>There are two public methods, getName and setName.</li>
+  <li>getName does not take any arguments and returns a object of type String.</li>
+  <li>setName takes only one argument, and returns nothing. Further,
+the argument is an object of type String that is the return data type of
+the getName method.</li>
+</ol>
+If the management interface defines only the getName method, the attribute
+Name will be a<i> read only</i> attribute.<br>
+If the management interface defines only the setName method, the attribute
+Name will be a <i>write only</i> attribute.<br>
+<br>
+The general semantics for defining a read write attribute in the management
+interface is: <br>
+<br>
+<code><font color="#3333ff">public</font> AttributeType get<i>&lt;AttributeName&gt;</i><font
+ color="#ff0000">()</font>;<br>
+<font color="#3333ff">public void</font> set<i>&lt;AttributeName&gt;</i><font
+ color="#ff0000">(</font>AttributeType obj<font color="#ff0000">)</font>;</code><br>
+<br>
+Here, <code>AttributeType</code> can be of any Java type, including array
+types.<br>
+<br>
+For boolean type attributes, the getter method can also be defined using the
+prototype:<br>
+<br>
+<code><font color="#3333ff">public boolean</font> is&lt;<i>AttributeName</i>&gt;<font
+ color="#ff0000">()</font>;<br>
+<br>
+instead of <font color="#3333ff">public boolean</font> get&lt;<i>AttributeName</i>&gt;<font
+ color="#ff0000">()</font>;</code><br>
+<br>
+Attribute Names cannot be overloaded, that is, there cannot be two setters
+or getter and setter pair for the same name that operates on different types.
+We will see more about this attribute name overloading with some sample
+code snippets in the next topic. An object with overloaded attribute
+names is not a compliant MBean.
+<h2>&nbsp;Operations&nbsp;</h2>
+Operations are the actions that a JMX-manageable resource makes available
+to management applications. Any method in the management interface that
+is not identified as attribute will be exposed as an operation. The
+name of the operation is the name of the corresponding method.<br>
+<br>
+An operation can be defined with any number of arguments of any type and can
+return value of any type.<br>
+<br>
+For example, <code><font color="#3333ff">public void</font> destroy<font
+ color="#ff0000">()</font>;</code> is exposed as an operation with the name
+destroy.<br>
+<br>
+<table class="PTR_OUTER" border="0" cellspacing="1" cellpadding="1">
+    <tbody>
+		<tr>
+			<td valign="top">
+      		    <table class="PTR_CENTER" border="0" cellspacing="1" cellpadding="1">
+					<tbody>
+						<tr>
+							<td valign="top">
+                            	<table class="PTR_INNER" border="0" cellspacing="1" cellpadding="1">
+									<tbody>
+										<tr>
+											<td valign="top">
+											<b>Points to Remember</b><br>
+
+                  <ol>
+                    <li>Standard MBean must be a concrete class having at
+least one public constructor and should implement its own interface.</li>
+                    <li>In a Standard MBean, the attributes and operations
+are formed by MBean introspection.</li>
+                    <li>AttributeNames cannot be overloaded.</li>
+                    <li>A boolean attribute can follow the lexical design
+pattern <b>is</b>&lt;<i>AttributeName</i>&gt;. It can be represented
+by either of the patterns <b>is</b>&lt;<i>AttributeName</i>&gt; or <b>get</b>&lt;<i>AttributeName</i>&gt;
+but not both in the same MBean.<br>
+                    </li>
+                  </ol>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE" >
+  <tbody>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><a href="../../instru_level.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+      <td valign="top" align="center" class="FTR_TDCenter"><a href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+      <td valign="top" align="right" class="FTR_TDRight"><a href="writing_standard_mbean.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+    </tr>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Instrumentation&nbsp;Level</font></td>
+      <td valign="top" align="center" class="FTR_TDCenter"></td>
+      <td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Writing&nbsp;a&nbsp;Standard&nbsp;MBean</font></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

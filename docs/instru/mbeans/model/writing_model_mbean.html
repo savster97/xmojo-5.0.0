@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>How to write Model MBean in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="model_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;2.3.1&nbsp;Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a href="../../notification/notification_model.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<h1>Writing Your Own Model MBean</h1>
+<br>
+We have seen in our ModelMBean section, that any JMX implementation should
+provide a default implementation of the ModelMBean interface, called RequiredModelMBean.
+A model MBean can be created with just a few lines of code by using
+this RequiredModelMBean.<br>
+<br>
+The RequiredModelMBean class provides two constructors:<br>
+<br>
+<code>RequiredModelMBean<font color="#ff0000">()</font></code> -- A constructor taking no arguments. This constructs
+a RequiredModelMBean with an empty ModelMBeanInfo. If this constructor
+is used, setModelMBeanInfo has to be used to construct the model MBean information.<br>
+<code>RequiredModelMBean<font color="#ff0000">(</font>ModelMBeanInfo mbi<font color="#ff0000">)</font></code> -- This constructs a RequiredModelMBean
+object using the ModelMBeanInfo passed in.<br>
+<br>
+The following section discusses how to create this ModelMBeanInfo object
+so that it can be passed in the RequiredModelMBean constructor and a RequiredModelMBean
+object can be obtained. Once the RequiredModelMBean object is obtained,
+the managed resource can be set using the method setManagedResource available
+in the RequiredModelMBean class.<br>
+<h2>&nbsp;Creation of ModelMBeanInfo Object&nbsp;</h2>
+There are two options to create a ModelMBeanInfo object:<br>
+<ol>
+  <li>Constructing the ModelMBeanInfo using the available API.</li>
+  <li>Writing an XML file and converting this XML file into a ModelMBeanInfo
+using some utility method.</li>
+</ol>
+<h3>&nbsp;Using the available API&nbsp;</h3>
+In this option, a lot of coding is required. For every attribute, operation,
+constructor, and so on, Descriptor object has to be created. A sample
+code snippet is available which explains how this approach can be achieved.
+The sample code snippet creates a ModelMBeanInfo for managing the information
+of a web server. <a href="mgmt_info_modelmbean.html">View the management
+information</a> the ModelMBean exposes.<br>
+<br>
+Since the code snippet is large, it is provided in a separate HTML file. The
+link for the HTML file is <a href="code_to_create_ModelMBeanInfo.html">View
+the code snippet<br>
+<br>
+</a>The getMBeanInfo method in the code snippet returns the ModelMBeanInfo
+object, which can be passed in the RequiredModelMBean constructor to obtain
+a RequiredModelMBean object.<a href="code_to_create_ModelMBeanInfo.html"><br>
+</a>
+<h3>&nbsp;Writing an XML file&nbsp;</h3>
+This option saves a lot of time when you write more model MBeans. Write
+a simple XML file which contains all the management information details,
+such as attributes, operations, notifications, and so on, including the Descriptor
+fields for each of the management information. Use the convertXMLToModelMBeanInfo
+utility method, which converts the XML file into a ModelMBeanInfo object.
+This utility method  is available in com.adventnet.agent.utilities.common.Utilities
+class.<br>
+<br>
+<a href="ServerInfo_xml.html">View the xml file</a><br>
+<br>
+The following code snippet describes converting the XML file into a ModelMBeanInfo
+object using the utility method and creating a RequiredModelMBean object out
+of the ModelMBeanInfo returned by the utility method.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font color="#3333ff">import <font
+ color="#000000">com.adventnet.agent.utilities.common.Utilities;<br>
+                  </font></font><font color="#3333ff">import <font
+ color="#000000">javax.management.modelmbean.RequiredModelMBean;</font></font><br>
+                  <font color="#3333ff">import <font color="#000000">javax.management.modelmbean.ModelMBeanInfo;</font></font><br>
+                  <br>
+ModelMBeanInfo mbi = <font color="#3333ff">null</font>;<br>
+                  <br>
+                  mbi = Utilities.convertXMLToModelMBeanInfo<font color="#ff0000">(</font> path_to_xml_file <font
+ color="#ff0000">)</font>;<br>
+                  <br>
+RequiredModelMBean rmm = <font color="#3333ff">new</font> RequiredModelMBean<font color="#ff0000">(</font>mbi<font
+ color="#ff0000">)</font>;</code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<h2>&nbsp;Setting the Managed Resource&nbsp;</h2>
+Once the Required Model MBean is created, the managed resource is set using
+the setManagedResource method.<br>
+<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><font color="#3333ff">import <font
+ color="#000000">examples.application.server.ServerInfo;</font></font><font
+ color="#3333ff"><font color="#000000"></font></font><br>
+                  <br>
+rmm.setManagedResource<font
+ color="#ff0000">(</font><font color="#3333ff">new</font> ServerInfo<font color="#ff0000">()</font>,
+ <font color="#336666">"ObjectReference"</font><font color="#ff0000">)</font>;</code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+In the above code snippet, rmm is the RequiredModelMBean obtained by passing
+a ModelMBeanInfo. ServerInfo is the class that contains the required
+implementation details for exposing the management information.<br>
+<br>
+To see a working example of a model MBean, <a
+ href="../../../../examples/mbeans/model/README.html">try out the example</a>.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="model_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a href="../../notification/notification_model.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Model&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"></td>
+			<td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Notification&nbsp;Model</font></td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,630 @@
+<html>
+<head>
+  <title>A Sample Dynamic MBean in XMOJO @ Free JMX Implementation</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body bgcolor="#ffffff">
+<table cellpadding="2" cellspacing="2" border="0" width="100%" class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="writing_dynamic_mbean.html">Back</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font class="HDR_CHAPTER">Chapter&nbsp;2.2.2&nbsp;Writing&nbsp;a&nbsp;Dynamic&nbsp;MBean</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a href="writing_dynamic_mbean.html">Back</a></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER" align="center">
+	<tbody>
+		<tr>
+			<td valign="top">
+				<table border="0" cellspacing="1" cellpadding="1" class="CODE_CENTER" align="center">
+					<tbody>
+						<tr>
+							<td valign="top">
+								<table cellpadding="2" cellspacing="2" border="0" width="100%" class="CODE_INNER">
+									<tbody>
+										<tr>
+											<td valign="top">
+<code><PRE>
+<FONT COLOR="#0000ff">package</FONT> examples.mbeans.dynamic;
+<FONT COLOR="#0000ff">import</FONT> javax.management.DynamicMBean;
+<FONT COLOR="#0000ff">import</FONT> javax.management.MBeanInfo;
+<FONT COLOR="#0000ff">import</FONT> javax.management.MBeanAttributeInfo;
+<FONT COLOR="#0000ff">import</FONT> javax.management.MBeanOperationInfo;
+<FONT COLOR="#0000ff">import</FONT> javax.management.MBeanParameterInfo;
+<FONT COLOR="#0000ff">import</FONT> javax.management.MBeanConstructorInfo;
+<FONT COLOR="#0000ff">import</FONT> javax.management.MBeanNotificationInfo;
+<FONT COLOR="#0000ff">import</FONT> javax.management.Attribute;
+<FONT COLOR="#0000ff">import</FONT> javax.management.AttributeList;
+<FONT COLOR="#0000ff">import</FONT> javax.management.AttributeNotFoundException;
+<FONT COLOR="#0000ff">import</FONT> javax.management.MBeanException;
+<FONT COLOR="#0000ff">import</FONT> javax.management.ReflectionException;
+<FONT COLOR="#0000ff">import</FONT> javax.management.InvalidAttributeValueException;
+<FONT COLOR="#0000ff">import</FONT> javax.management.RuntimeOperationsException;
+<FONT COLOR="#0000ff">import</FONT> java.lang.reflect.Method;
+<FONT COLOR="#0000ff">import</FONT> java.util.Date;
+
+<FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">class</FONT> DynamicServerInfo <FONT COLOR="#0000ff">implements</FONT> DynamicMBean {
+        <FONT COLOR="#009900">// Variables declaration</FONT>
+
+        <FONT COLOR="#0000ff">private</FONT> <FONT COLOR="#0000ff">static</FONT> <FONT COLOR="#0000ff">boolean</FONT> log = <FONT COLOR="#650099">false</FONT>;
+
+        <FONT COLOR="#0000ff">private</FONT> String serverName = <FONT COLOR="#650099">null</FONT>;
+
+        <FONT COLOR="#0000ff">private</FONT> String serverId = <FONT COLOR="#650099">null</FONT>;
+
+        <FONT COLOR="#0000ff">private</FONT> <FONT COLOR="#0000ff">boolean</FONT> serverStarted = <FONT COLOR="#650099">true</FONT>;
+
+        <FONT COLOR="#0000ff">private</FONT> <FONT COLOR="#0000ff">int</FONT> port = 8080;
+
+        <FONT COLOR="#0000ff">private</FONT> Date startTime = <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Date</FONT>();
+
+        <FONT COLOR="#0000ff">private</FONT> <FONT COLOR="#0000ff">long</FONT> serverUpTime;
+
+        <FONT COLOR="#0000ff">private</FONT> <FONT COLOR="#0000ff">int</FONT> restartCount;
+
+        <FONT COLOR="#0000ff">private</FONT> <FONT COLOR="#0000ff">boolean</FONT> flag = <FONT COLOR="#650099">false</FONT>;
+
+        MBeanAttributeInfo[] attribInfoArray = <FONT COLOR="#650099">null</FONT>;
+
+        MBeanOperationInfo[] opInfoArray = <FONT COLOR="#650099">null</FONT>;
+
+        MBeanParameterInfo[] paramInfoArray = <FONT COLOR="#650099">null</FONT>;
+
+        MBeanConstructorInfo[] consInfoArray = <FONT COLOR="#650099">null</FONT>;
+
+        MBeanNotificationInfo[] notifInfoArray = <FONT COLOR="#650099">null</FONT>;
+
+        <FONT COLOR="#009900">// DynamicMBean implementation for getMBeanInfo</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> MBeanInfo <FONT COLOR="#000000">getMBeanInfo</FONT>() {
+                <FONT COLOR="#0000ff">if</FONT> (log) {
+                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Constructing getMBeanInfo&quot;</FONT>);
+                }
+                MBeanInfo minfo = <FONT COLOR="#650099">null</FONT>;
+
+                <FONT COLOR="#0000ff">try</FONT> {
+                        <FONT COLOR="#009900">// constructing MBean constructors</FONT>
+                        <FONT COLOR="#000000">constructConstructors</FONT>();
+
+                        <FONT COLOR="#009900">// constructing MBean attributes</FONT>
+                        <FONT COLOR="#000000">constructAttributes</FONT>();
+
+                        <FONT COLOR="#009900">// constructing MBean operations</FONT>
+                        <FONT COLOR="#000000">constructOperations</FONT>();
+
+                        <FONT COLOR="#009900">// construct MBean Notifications</FONT>
+                        <FONT COLOR="#000000">constructNotifications</FONT>();
+
+                        <FONT COLOR="#009900">// constructing the MBean information</FONT>
+                        minfo = <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanInfo</FONT>(<FONT COLOR="#006666">&quot;DynamicServerInfo&quot;</FONT>, <FONT COLOR="#006666">&quot;Dynamic MBean for managing the web-server&quot;</FONT>,
+                                attribInfoArray, consInfoArray,
+                                opInfoArray, notifInfoArray);
+
+                } <FONT COLOR="#0000ff">catch</FONT> (IllegalArgumentException ex) {
+                        ex.<FONT COLOR="#000000">printStackTrace</FONT>();
+                }
+
+                <FONT COLOR="#0000ff">return</FONT> minfo;
+        }
+
+        <FONT COLOR="#009900">// DynamicMBean implementation for getAttribute</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> Object <FONT COLOR="#000000">getAttribute</FONT>(String attrName)
+                <FONT COLOR="#0000ff">throws</FONT> AttributeNotFoundException , MBeanException ,
+        ReflectionException {
+                <FONT COLOR="#0000ff">if</FONT> (log) {
+                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Inside getAttribute(&quot;</FONT>+
+                                attrName + <FONT COLOR="#006666">&quot;)&quot;</FONT>);
+                }
+
+                <FONT COLOR="#0000ff">try</FONT> {
+                        <FONT COLOR="#0000ff">if</FONT> (flag) {
+                                <FONT COLOR="#0000ff">if</FONT> (log) {
+                                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;The value of flag inside getAttribute is : {&quot;</FONT>+
+                                                flag + <FONT COLOR="#006666">&quot;}&quot;</FONT>);
+                                }
+
+                                <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;StartTime&quot;</FONT>)) {
+                                        <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#000000">getStartTime</FONT>();
+                                }
+                                <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;ServerUpTime&quot;</FONT>)) {
+                                        <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Long</FONT>(<FONT COLOR="#000000">getServerUpTime</FONT>());
+                                }
+                                <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;RestartCount&quot;</FONT>)) {
+                                        <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Integer</FONT>(
+                                                <FONT COLOR="#000000">getRestartCount</FONT>());
+                                }
+                        }
+
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;The value of flag inside getAttribute is : {&quot;</FONT>+
+                                        flag + <FONT COLOR="#006666">&quot;}&quot;</FONT>);
+                        }
+
+                        <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;ServerName&quot;</FONT>)) {
+                                <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#000000">getServerName</FONT>();
+                        }
+                        <FONT COLOR="#0000ff">else</FONT> <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;ServerId&quot;</FONT>)) {
+                                <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#000000">getServerId</FONT>();
+                        }
+                        <FONT COLOR="#0000ff">else</FONT> <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;ServerStarted&quot;</FONT>)) {
+                                <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Boolean</FONT>(<FONT COLOR="#000000">isServerStarted</FONT>());
+                        }
+                        <FONT COLOR="#0000ff">else</FONT> <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;ServerPort&quot;</FONT>)) {
+                                <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Integer</FONT>(<FONT COLOR="#000000">getPort</FONT>());
+                        }
+                        <FONT COLOR="#0000ff">else</FONT> {
+                                <FONT COLOR="#0000ff">if</FONT> (log) {
+                                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Attribute : [&quot;</FONT>+
+                                                attrName + <FONT COLOR="#006666">&quot;] does not exist&quot;</FONT>);
+                                }
+                                <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">AttributeNotFoundException</FONT>(<FONT COLOR="#006666">&quot;The specified attribute does not exist&quot;</FONT>);
+                        }
+                } <FONT COLOR="#0000ff">catch</FONT> (RuntimeException e) {
+                        <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">RuntimeOperationsException</FONT>(e,
+                                e.<FONT COLOR="#000000">getMessage</FONT>());
+                }
+                <FONT COLOR="#0000ff">catch</FONT> (Exception e) {
+                        e.<FONT COLOR="#000000">printStackTrace</FONT>();
+                }
+                <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#650099">null</FONT>;
+        }
+
+        <FONT COLOR="#009900">// Dynamic MBean implementation for setAttribute</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">setAttribute</FONT>(Attribute attrib)
+                <FONT COLOR="#0000ff">throws</FONT> AttributeNotFoundException ,
+        InvalidAttributeValueException , MBeanException ,
+        ReflectionException {
+                String attrName = attrib.<FONT COLOR="#000000">getName</FONT>();
+                Object attrValue = attrib.<FONT COLOR="#000000">getValue</FONT>();
+
+                <FONT COLOR="#0000ff">if</FONT> (log) {
+                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Inside setAttribute(new Attribute(&quot;</FONT>+
+                                attrName + <FONT COLOR="#006666">&quot;, &quot;</FONT>+attrValue + <FONT COLOR="#006666">&quot;))&quot;</FONT>);
+                }
+
+                <FONT COLOR="#0000ff">try</FONT> {
+                        <FONT COLOR="#0000ff">if</FONT> (attrName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;ServerPort&quot;</FONT>)) {
+                                <FONT COLOR="#0000ff">if</FONT> (attrValue <FONT COLOR="#0000ff">instanceof</FONT> java.lang.Integer) {
+                                        <FONT COLOR="#000000">setPort</FONT>( ((Integer) attrValue).
+                                                <FONT COLOR="#000000">intValue</FONT>());
+                                } <FONT COLOR="#0000ff">else</FONT> {
+                                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;setPort is invoked with improper argument&quot;</FONT>);
+                                        }
+                                        <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">InvalidAttributeValueException</FONT>(
+                                                <FONT COLOR="#006666">&quot;The attribute value does not match properly&quot;</FONT>);
+                                }
+                        }
+                        <FONT COLOR="#0000ff">else</FONT> {
+                                <FONT COLOR="#0000ff">if</FONT> (log) {
+                                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Attribute : [&quot;</FONT>+
+                                                attrName + <FONT COLOR="#006666">&quot;] does not exist&quot;</FONT>);
+                                }
+                                <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">AttributeNotFoundException</FONT>(<FONT COLOR="#006666">&quot;The specified attribute : [&quot;</FONT>+
+                                        attrName + <FONT COLOR="#006666">&quot;] does not exist&quot;</FONT>);
+                        }
+                } <FONT COLOR="#0000ff">catch</FONT> (RuntimeException e) {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;RuntimeException caught while invoking setAttribute(&quot;</FONT>+
+                                        attrName + <FONT COLOR="#006666">&quot;, &quot;</FONT>+attrValue + <FONT COLOR="#006666">&quot;)) and exception is re-thrown&quot;</FONT>);
+                        }
+                        <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">RuntimeOperationsException</FONT>(e,
+                                e.<FONT COLOR="#000000">getMessage</FONT>());
+                }
+                <FONT COLOR="#0000ff">catch</FONT> (Exception e) {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Exception caught while invoking setAttribute(&quot;</FONT>+
+                                        attrName + <FONT COLOR="#006666">&quot;, &quot;</FONT>+attrValue + <FONT COLOR="#006666">&quot;))&quot;</FONT>);
+                        }
+                        e.<FONT COLOR="#000000">printStackTrace</FONT>();
+                }
+        }
+
+        <FONT COLOR="#009900">// Dynamic MBean implementation for getAttributes</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> AttributeList <FONT COLOR="#000000">getAttributes</FONT>(String[] attribs) {
+                <FONT COLOR="#0000ff">if</FONT> (log) {
+                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Inside getAttributes&quot;</FONT>);
+                }
+
+                AttributeList attribList = <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">AttributeList</FONT>();
+
+                <FONT COLOR="#0000ff">for</FONT> (<FONT COLOR="#0000ff">int</FONT> index = 0; index &lt; attribs.length ; index ++) {
+                        <FONT COLOR="#0000ff">try</FONT> {
+                                Object obj = <FONT COLOR="#000000">getAttribute</FONT>(attribs[index]);
+                                Attribute a = <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Attribute</FONT>(attribs[index],
+                                        obj);
+                                attribList.<FONT COLOR="#000000">add</FONT>(a);
+                        } <FONT COLOR="#0000ff">catch</FONT> (Exception e) {
+                                <FONT COLOR="#009900">// Exception should not be thrown to the caller.</FONT>
+                                <FONT COLOR="#0000ff">if</FONT> (log) {
+                                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Exception occured while performing getAttributes&quot;</FONT>);
+                                }
+                        }
+                }
+
+                <FONT COLOR="#0000ff">return</FONT> attribList;
+        }
+
+        <FONT COLOR="#009900">// Dynamic MBean implementation for setAttributes</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> AttributeList <FONT COLOR="#000000">setAttributes</FONT>(AttributeList attribList) {
+                <FONT COLOR="#0000ff">if</FONT> (log) {
+                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Inside setAttributes&quot;</FONT>);
+                }
+
+                AttributeList newList = <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">AttributeList</FONT>();
+
+                <FONT COLOR="#0000ff">for</FONT> (<FONT COLOR="#0000ff">int</FONT> index = 0; index &lt; attribList.<FONT COLOR="#000000">size</FONT>(); index ++) {
+                        <FONT COLOR="#0000ff">try</FONT> {
+                                Attribute attr =
+                                        (Attribute) attribList.<FONT COLOR="#000000">get</FONT>(index);
+                                <FONT COLOR="#000000">setAttribute</FONT>(attr);
+                                newList.<FONT COLOR="#000000">add</FONT>(attr);
+                        } <FONT COLOR="#0000ff">catch</FONT> (Exception e) {
+                                <FONT COLOR="#009900">// Exception should not be thrown to the caller.</FONT>
+                                <FONT COLOR="#0000ff">if</FONT> (log) {
+                                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Exception occured while performing setAttributes&quot;</FONT>);
+                                }
+                        }
+                }
+
+                <FONT COLOR="#0000ff">return</FONT> newList;
+        }
+
+        <FONT COLOR="#009900">// Dynamic MBean implementation for invoke</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> Object <FONT COLOR="#000000">invoke</FONT>(String actionName, Object[] params,
+                String[] signature) <FONT COLOR="#0000ff">throws</FONT> MBeanException ,
+        ReflectionException {
+                <FONT COLOR="#0000ff">if</FONT> (log) {
+                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Inside invoke and actionName is : [&quot;</FONT>+
+                                actionName + <FONT COLOR="#006666">&quot;]&quot;</FONT>);
+                }
+
+                Method m = <FONT COLOR="#650099">null</FONT>;
+
+                <FONT COLOR="#0000ff">int</FONT> len = 0;
+
+                <FONT COLOR="#0000ff">if</FONT> (signature != <FONT COLOR="#650099">null</FONT>) {
+                        len = signature.length;
+                }
+
+                Class[] sig = <FONT COLOR="#0000ff">new</FONT> Class[len];
+
+                <FONT COLOR="#0000ff">try</FONT> {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Inside try block of invoke ##&quot;</FONT>);
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;  ## [&quot;</FONT>+
+                                        actionName + <FONT COLOR="#006666">&quot;] ~~ Going to apply conditions&quot;</FONT>);
+                        }
+                        <FONT COLOR="#0000ff">for</FONT> (<FONT COLOR="#0000ff">int</FONT> index = 0; index &lt; len; index ++) {
+                                sig[index] =
+                                        Class.<FONT COLOR="#000000">forName</FONT>(signature[index]);
+                        }
+
+                        <FONT COLOR="#0000ff">if</FONT> (! flag &amp;&amp; actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;restart&quot;</FONT>)) {
+                                <FONT COLOR="#0000ff">if</FONT> (log) {
+                                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;  ## [&quot;</FONT>+
+                                                actionName + <FONT COLOR="#006666">&quot;] ~~ cannot be performed without invoking showDetails&quot;</FONT>);
+                                }
+                                <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">RuntimeOperationsException</FONT>(
+                                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">RuntimeException</FONT>(<FONT COLOR="#006666">&quot;Specified operation is not found.&quot;</FONT>)
+                                        , <FONT COLOR="#006666">&quot;The restart is hidden.  Invoke the showDetails first so that restart can be enabled&quot;</FONT>);
+                        }
+                        <FONT COLOR="#0000ff">if</FONT> (actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;startService&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;stopService&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;showDetails&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;hideDetails&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;getServerName&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;getServerId&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;isServerStarted&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;getPort&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;setPort&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;getStartTime&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;restart&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;getServerUpTime&quot;</FONT>) ||
+                                actionName.<FONT COLOR="#000000">equals</FONT>(<FONT COLOR="#006666">&quot;getRestartCount&quot;</FONT>)) {
+                                m = DynamicServerInfo.<FONT COLOR="#0000ff">class</FONT>.<FONT COLOR="#000000">getMethod</FONT>(
+                                        actionName, sig);
+
+                                <FONT COLOR="#0000ff">if</FONT> (m == <FONT COLOR="#650099">null</FONT>) {
+                                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;  ## Unable to invoke [&quot;</FONT>+
+                                                        actionName + <FONT COLOR="#006666">&quot;] using Java Reflection&quot;</FONT>);
+                                        }
+                                        <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">ReflectionException</FONT>(
+                                                <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Exception</FONT>(<FONT COLOR="#006666">&quot;Exception occured while invoking the method&quot;</FONT>)
+                                                , <FONT COLOR="#006666">&quot;Method signature not specified properly&quot;</FONT>);
+                                } <FONT COLOR="#0000ff">else</FONT> {
+                                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;  ## [&quot;</FONT>+
+                                                        actionName + <FONT COLOR="#006666">&quot;] to be invoked&quot;</FONT>);
+                                        }
+                                        <FONT COLOR="#0000ff">return</FONT> m.<FONT COLOR="#000000">invoke</FONT>(<FONT COLOR="#650099">this</FONT>, params);
+                                }
+                        } <FONT COLOR="#0000ff">else</FONT> {
+                                <FONT COLOR="#0000ff">if</FONT> (log) {
+                                        System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;  ## [&quot;</FONT>+
+                                                actionName + <FONT COLOR="#006666">&quot;] No matches found&quot;</FONT>);
+                                }
+                                <FONT COLOR="#0000ff">throw</FONT> <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">RuntimeOperationsException</FONT>(
+                                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">RuntimeException</FONT>(<FONT COLOR="#006666">&quot;Specified action is not found.&quot;</FONT>)
+                                        , <FONT COLOR="#006666">&quot;Kindly check the actionName string passed&quot;</FONT>);
+                        }
+                } <FONT COLOR="#0000ff">catch</FONT> (Exception e) {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;  ## Exception caught inside catch block of invoke&quot;</FONT>);
+                        }
+                        e.<FONT COLOR="#000000">printStackTrace</FONT>();
+                }
+
+                <FONT COLOR="#0000ff">return</FONT> <FONT COLOR="#650099">null</FONT>;
+        }
+
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">constructConstructors</FONT>()
+                <FONT COLOR="#0000ff">throws</FONT> IllegalArgumentException {
+                consInfoArray = <FONT COLOR="#0000ff">new</FONT> MBeanConstructorInfo[2];
+
+                consInfoArray[0] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanConstructorInfo</FONT>(<FONT COLOR="#006666">&quot;DynamicServerInfo&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;Default public constructor&quot;</FONT>, <FONT COLOR="#650099">null</FONT>);
+
+                <FONT COLOR="#009900">// constructing the parameters of the constructor</FONT>
+
+                paramInfoArray = <FONT COLOR="#0000ff">new</FONT> MBeanParameterInfo[4];
+
+                paramInfoArray[0] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanParameterInfo</FONT>(<FONT COLOR="#006666">&quot;server_name&quot;</FONT>, <FONT COLOR="#006666">&quot;java.lang.String&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;Name of the server&quot;</FONT>);
+
+                paramInfoArray[1] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanParameterInfo</FONT>(<FONT COLOR="#006666">&quot;server_id&quot;</FONT>, <FONT COLOR="#006666">&quot;java.lang.String&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;Identifier for the server&quot;</FONT>);
+
+                paramInfoArray[2] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanParameterInfo</FONT>(<FONT COLOR="#006666">&quot;started&quot;</FONT>, <FONT COLOR="#006666">&quot;boolean&quot;</FONT>, <FONT COLOR="#006666">&quot;A boolean flag to check whether the server is active&quot;</FONT>);
+
+                paramInfoArray[3] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanParameterInfo</FONT>(<FONT COLOR="#006666">&quot;port&quot;</FONT>, <FONT COLOR="#006666">&quot;int&quot;</FONT>, <FONT COLOR="#006666">&quot;Port at which the server is listening&quot;</FONT>);
+
+                consInfoArray[1] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanConstructorInfo</FONT>(<FONT COLOR="#006666">&quot;DynamicServerInfo&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;Three argument constructor&quot;</FONT>, paramInfoArray);
+
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">constructAttributes</FONT>() <FONT COLOR="#0000ff">throws</FONT> IllegalArgumentException {
+                <FONT COLOR="#0000ff">if</FONT> (flag) {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Constructing Attributes ~~ [7] attributes&quot;</FONT>);
+                        }
+                        attribInfoArray = <FONT COLOR="#0000ff">new</FONT> MBeanAttributeInfo[7];
+                } <FONT COLOR="#0000ff">else</FONT> {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Constructing Attributes ~~ [4] attributes&quot;</FONT>);
+                        }
+                        attribInfoArray = <FONT COLOR="#0000ff">new</FONT> MBeanAttributeInfo[4];
+                }
+
+                attribInfoArray[0] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanAttributeInfo</FONT>(<FONT COLOR="#006666">&quot;ServerName&quot;</FONT>, <FONT COLOR="#006666">&quot;java.lang.String&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;The name of the server&quot;</FONT>, <FONT COLOR="#650099">true</FONT>, <FONT COLOR="#650099">false</FONT>, <FONT COLOR="#650099">false</FONT>);
+
+                attribInfoArray[1] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanAttributeInfo</FONT>(<FONT COLOR="#006666">&quot;ServerId&quot;</FONT>, <FONT COLOR="#006666">&quot;java.lang.String&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;The server identity&quot;</FONT>, <FONT COLOR="#650099">true</FONT>, <FONT COLOR="#650099">false</FONT>, <FONT COLOR="#650099">false</FONT>);
+
+                attribInfoArray[2] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanAttributeInfo</FONT>(<FONT COLOR="#006666">&quot;ServerStarted&quot;</FONT>, <FONT COLOR="#006666">&quot;boolean&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;To check the server status&quot;</FONT>, <FONT COLOR="#650099">true</FONT>, <FONT COLOR="#650099">false</FONT>, <FONT COLOR="#650099">true</FONT>);
+
+                attribInfoArray[3] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanAttributeInfo</FONT>(<FONT COLOR="#006666">&quot;ServerPort&quot;</FONT>, <FONT COLOR="#006666">&quot;int&quot;</FONT>, <FONT COLOR="#006666">&quot;The port at which the server is listening&quot;</FONT>,
+                        <FONT COLOR="#650099">true</FONT>, <FONT COLOR="#650099">true</FONT>, <FONT COLOR="#650099">false</FONT>);
+
+                <FONT COLOR="#0000ff">if</FONT> (flag) {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Additional [3] attributes constructed&quot;</FONT>);
+                        }
+
+                        attribInfoArray[4] =
+                                <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanAttributeInfo</FONT>(<FONT COLOR="#006666">&quot;StartTime&quot;</FONT>, <FONT COLOR="#006666">&quot;java.util.Date&quot;</FONT>,
+                                <FONT COLOR="#006666">&quot;The start time of the server&quot;</FONT>, <FONT COLOR="#650099">true</FONT>,
+                                <FONT COLOR="#650099">false</FONT>, <FONT COLOR="#650099">false</FONT>);
+
+                        attribInfoArray[5] =
+                                <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanAttributeInfo</FONT>(<FONT COLOR="#006666">&quot;ServerUpTime&quot;</FONT>,
+                                <FONT COLOR="#006666">&quot;long&quot;</FONT>, <FONT COLOR="#006666">&quot;The server uptime&quot;</FONT>, <FONT COLOR="#650099">true</FONT>,
+                                <FONT COLOR="#650099">false</FONT>, <FONT COLOR="#650099">false</FONT>);
+
+                        attribInfoArray[6] =
+                                <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanAttributeInfo</FONT>(<FONT COLOR="#006666">&quot;RestartCount&quot;</FONT>,
+                                <FONT COLOR="#006666">&quot;int&quot;</FONT>, <FONT COLOR="#006666">&quot;The number of times the server restarted&quot;</FONT>,
+                                <FONT COLOR="#650099">true</FONT>, <FONT COLOR="#650099">false</FONT>, <FONT COLOR="#650099">false</FONT>);
+
+                }
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">constructOperations</FONT>() <FONT COLOR="#0000ff">throws</FONT> IllegalArgumentException {
+                <FONT COLOR="#0000ff">if</FONT> (flag) {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Constructing Operations ~~ [5] operations&quot;</FONT>);
+                        }
+                        opInfoArray = <FONT COLOR="#0000ff">new</FONT> MBeanOperationInfo[5];
+                } <FONT COLOR="#0000ff">else</FONT> {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Constructing Operations ~~ [4] operations&quot;</FONT>);
+                        }
+                        opInfoArray = <FONT COLOR="#0000ff">new</FONT> MBeanOperationInfo[4];
+                }
+
+                opInfoArray[0] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanOperationInfo</FONT>(<FONT COLOR="#006666">&quot;startService&quot;</FONT>, <FONT COLOR="#006666">&quot;To start the server&quot;</FONT>,
+                        <FONT COLOR="#650099">null</FONT>, <FONT COLOR="#006666">&quot;void&quot;</FONT>, MBeanOperationInfo.ACTION);
+
+                opInfoArray[1] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanOperationInfo</FONT>(<FONT COLOR="#006666">&quot;stopService&quot;</FONT>, <FONT COLOR="#006666">&quot;To stop the server&quot;</FONT>,
+                        <FONT COLOR="#650099">null</FONT>, <FONT COLOR="#006666">&quot;void&quot;</FONT>, MBeanOperationInfo.ACTION);
+
+                opInfoArray[2] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanOperationInfo</FONT>(<FONT COLOR="#006666">&quot;showDetails&quot;</FONT>, <FONT COLOR="#006666">&quot;To show additional details&quot;</FONT>,
+                        <FONT COLOR="#650099">null</FONT>, <FONT COLOR="#006666">&quot;void&quot;</FONT>, MBeanOperationInfo.ACTION);
+
+                opInfoArray[3] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanOperationInfo</FONT>(<FONT COLOR="#006666">&quot;hideDetails&quot;</FONT>, <FONT COLOR="#006666">&quot;To hide additional details&quot;</FONT>,
+                        <FONT COLOR="#650099">null</FONT>, <FONT COLOR="#006666">&quot;void&quot;</FONT>, MBeanOperationInfo.ACTION);
+
+                <FONT COLOR="#0000ff">if</FONT> (flag) {
+                        <FONT COLOR="#0000ff">if</FONT> (log) {
+                                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Additional [1] operation constructed&quot;</FONT>);
+                        }
+                        opInfoArray[4] =
+                                <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanOperationInfo</FONT>(<FONT COLOR="#006666">&quot;restart&quot;</FONT>, <FONT COLOR="#006666">&quot;To restart the server&quot;</FONT>,
+                                <FONT COLOR="#650099">null</FONT>, <FONT COLOR="#006666">&quot;void&quot;</FONT>, MBeanOperationInfo.ACTION);
+                }
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">constructNotifications</FONT>()
+                <FONT COLOR="#0000ff">throws</FONT> IllegalArgumentException {
+                notifInfoArray = <FONT COLOR="#0000ff">new</FONT> MBeanNotificationInfo[1];
+
+                String[] notifTypes = <FONT COLOR="#0000ff">new</FONT> String[]{<FONT COLOR="#006666">&quot;server.started&quot;</FONT>, <FONT COLOR="#006666">&quot;server.stopped&quot;</FONT>};
+
+                notifInfoArray[0] =
+                        <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">MBeanNotificationInfo</FONT>(notifTypes, <FONT COLOR="#006666">&quot;ServerNotification&quot;</FONT>,
+                        <FONT COLOR="#006666">&quot;Notification information&quot;</FONT>);
+        }
+
+        <FONT COLOR="#009900">// Constructor definitions</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#000000">DynamicServerInfo</FONT>() {
+                serverName = <FONT COLOR="#006666">&quot;test-server&quot;</FONT>;
+                serverId = <FONT COLOR="#006666">&quot;test-server_1&quot;</FONT>;
+                serverStarted = <FONT COLOR="#650099">true</FONT>;
+                port = 8072;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#000000">DynamicServerInfo</FONT>(String serverName, String serverId,
+                <FONT COLOR="#0000ff">boolean</FONT> serverStarted, <FONT COLOR="#0000ff">int</FONT> port) {
+                <FONT COLOR="#650099">this</FONT>.serverName = serverName ;
+                <FONT COLOR="#650099">this</FONT>.serverId = serverId ;
+                <FONT COLOR="#650099">this</FONT>.serverStarted = serverStarted ;
+                <FONT COLOR="#650099">this</FONT>.port = port ;
+        }
+
+        <FONT COLOR="#009900">// Methods definitions for the default exposed attributes and operations</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> String <FONT COLOR="#000000">getServerName</FONT>() {
+                <FONT COLOR="#0000ff">return</FONT> serverName;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> String <FONT COLOR="#000000">getServerId</FONT>() {
+                <FONT COLOR="#0000ff">return</FONT> serverId;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">boolean</FONT> <FONT COLOR="#000000">isServerStarted</FONT>() {
+                <FONT COLOR="#0000ff">return</FONT> serverStarted;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">int</FONT> <FONT COLOR="#000000">getPort</FONT>() {
+                <FONT COLOR="#0000ff">return</FONT> port;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">setPort</FONT>(<FONT COLOR="#0000ff">int</FONT> port) {
+                <FONT COLOR="#000000">stopService</FONT>();
+                port = <FONT COLOR="#650099">this</FONT>.port;
+                <FONT COLOR="#000000">startService</FONT>();
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">startService</FONT>() {
+                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Starting server..... &quot;</FONT>);
+                <FONT COLOR="#009900">// start the Server</FONT>
+                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Server started successfully. &quot;</FONT>);
+                serverStarted = <FONT COLOR="#650099">true</FONT>;
+                startTime = <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Date</FONT>();
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">stopService</FONT>() {
+                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Stopping server..... &quot;</FONT>);
+                <FONT COLOR="#009900">// stop the Server</FONT>
+                System.out.<FONT COLOR="#000000">println</FONT>(<FONT COLOR="#006666">&quot;Server stopped &quot;</FONT>);
+                serverStarted = <FONT COLOR="#650099">false</FONT>;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">showDetails</FONT>() {
+                flag = <FONT COLOR="#650099">true</FONT>;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">hideDetails</FONT>() {
+                flag = <FONT COLOR="#650099">false</FONT>;
+        }
+
+        <FONT COLOR="#009900">// Methods exposed during runtime when showDetails is invoked.</FONT>
+
+        <FONT COLOR="#0000ff">public</FONT> Date <FONT COLOR="#000000">getStartTime</FONT>() {
+                <FONT COLOR="#0000ff">return</FONT> startTime;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">long</FONT> <FONT COLOR="#000000">getServerUpTime</FONT>() {
+                <FONT COLOR="#0000ff">return</FONT> (System.<FONT COLOR="#000000">currentTimeMillis</FONT>() - startTime.<FONT COLOR="#000000">getTime</FONT>());
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">int</FONT> <FONT COLOR="#000000">getRestartCount</FONT>() {
+                <FONT COLOR="#0000ff">return</FONT> restartCount;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">restart</FONT>() {
+                <FONT COLOR="#000000">stopService</FONT>();
+                <FONT COLOR="#000000">startService</FONT>();
+                restartCount ++;
+                startTime = <FONT COLOR="#0000ff">new</FONT> <FONT COLOR="#000000">Date</FONT>();
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">static</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">enableLog</FONT>() {
+                log = <FONT COLOR="#650099">true</FONT>;
+        }
+
+        <FONT COLOR="#0000ff">public</FONT> <FONT COLOR="#0000ff">static</FONT> <FONT COLOR="#0000ff">void</FONT> <FONT COLOR="#000000">disableLog</FONT>() {
+                log = <FONT COLOR="#650099">false</FONT>;
+        }
+}
+</PRE></code>
+                  							</td>
+                  						</tr>
+                  					</tbody>
+                  				</table>
+                  			</td>
+                  		</tr>
+                  	</tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="writing_dynamic_mbean.html">Back</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a href="../../../index_no_frames.html">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a href="writing_dynamic_mbean.html">Back</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font class="FTR_NAV">Writing&nbsp;a&nbsp;Dynamic&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"></td>
+			<td valign="top" align="right" class="FTR_TDRight"><font class="FTR_NAV">Writing&nbsp;a&nbsp;Dynamic&nbsp;MBean</font></td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

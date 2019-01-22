@@ -1,0 +1,71 @@
+<!--
+========================================================================
+ Copyright (c) 2003 AdventNet, Inc. All rights reserved.
+ $Id: build.xml,v 1.2 2003/06/26 17:23:50 lokesh Exp $
+========================================================================
+ This build file specifies how to build xmojo jar using ANT, the build 
+ tool from the Apache/Jakarta project.
+  <http://ant.apache.org>
+========================================================================
+
+The default target is "compile", which will compile modified javax sources 
+and builds xmojo jar.
+
+Other targets:
+
+  checkdir         - Checks for javax source directory.
+  check_for_src    - Checks for javax sources and Fails if not found.
+
+-->
+
+<!-- ======================================================================
+     START OF XMOJO BUILD
+     ====================================================================== -->
+
+<project name="xmojo build" default="compile" basedir=".">
+
+<!-- ======================================================================
+     CHECK FOR SOURCE DIR 
+     ====================================================================== -->
+	<target name="checkdir" description="Checks for source directory in the current working directory.">
+		<condition property="xmojo.src.dir">
+			<and>
+				<available file="${basedir}/javax" type="dir"/>
+				<available file="${basedir}/com" type="dir"/>
+			</and>
+		</condition>
+	</target>
+
+	<target name="check_for_src" depends="checkdir" unless="xmojo.src.dir">
+		<fail>
+		************************************************************
+		  Source directory not found !!!  		 
+		  Please extract xmojosrc.jar under ${basedir} and proceed.
+		*************************************************************
+		</fail>
+	</target>
+	
+<!-- ======================================================================
+     COMPILES MODIFIED SOURCE AND GENERATES XMOJO JAR 
+     ====================================================================== -->
+	<target name="compile" depends="check_for_src" if="xmojo.src.dir">
+		<description>
+			Compilation of modified sources and xmojo jar creation.
+		</description>
+		<mkdir dir="${basedir}/classes"/>
+		<javac srcdir="${basedir}"
+			includes="com/adventnet/jmx/** javax/**"
+			destdir="${basedir}/classes"
+		    classpath="../lib/xmojoutils.jar;../lib/org.mortbay.jetty.jar"/>
+
+		<mkdir dir="${basedir}/build"/>		
+        <jar destfile="${basedir}/build/xmojo.jar"
+		     basedir="${basedir}/classes"/>
+
+       	<delete dir="${basedir}/classes"/>
+	</target>
+</project>
+
+<!-- ======================================================================
+     END OF XMOJO BUILD
+     ====================================================================== -->

@@ -1,0 +1,95 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure 1.1//EN" "configure_1_1.dtd">
+
+<!--
+This is a Jetty HTTP server configuration file.  This configuration
+uses the generic org.mortbay.xml.XmlConfiguration class to call
+the normal org.mortbay.jetty.Server configuration API from
+within an XML script.
+
+The format of this file is described in the configure.dtd file.
+
+The API that can be called by this file is described in the
+Javadoc for Jetty.
+
+The following concepts must be understood when configuring
+a server:
+
+Listener: is a network interface object that
+accepts HTTP requests for the server. SocketListeners accept
+normal requests, while JsseListeners accept SSL requests.
+The threading model of the server is controlled by the
+listener parameters.
+
+WebApplication: is a bundled collection of resources,
+servlets and configuration that can provide a unified
+WWW application.  It is part of the 2.2 servlet standard.
+The contents of the application are configured by the
+web.xml deployment descriptor within the application.
+The configuration of the application within Jetty requires
+on the context of the application to be set.
+
+Context: is a grouping of server resources that share
+the same URL path prefix, class path and resource base.
+A Web application is an example of a specific context.
+Generic contexts may have arbitrary request handlers
+added to them.  All contexts have a path specification
+(frequently the default "/") and an option virtual
+host alias.
+
+Handler:  Handlers are the objects that actually
+service the HTTP requests. Examples of Handlers include
+ServletHandler, ResourceHandler and NotFoundHandler.
+Handlers are contained within Contexts, which provide
+conveniance methods for the common handlers so
+that servlet and file serving may be configured for
+a context without explicit creation of a Handler.
+
+This file configures the demo server and is equivalent
+to the org.mortbay.jetty.Demo class.
+
+$Id: JarConfig.xml,v 1.2 2003/06/18 14:22:31 gjayakumar Exp $
+-->
+
+<Configure class="org.mortbay.jetty.Server">
+
+ <Call name="addListener">
+    <Arg>
+      <New class="org.mortbay.http.SocketListener">
+        <Set name="Port"><SystemProperty name="jetty.port" default="8030"/></Set>
+        <Set name="Port">8030</Set>
+        <Set name="MinThreads">5</Set>
+        <Set name="MaxThreads">255</Set>
+        <Set name="MaxIdleTimeMs">60000</Set>
+        <Set name="MaxReadTimeMs">60000</Set>
+        <Set name="LowResourcePersistTimeMs">5000</Set>
+      </New>
+    </Arg>
+  </Call>
+
+ 
+  <Call name="addContext">
+    <Arg>/</Arg>
+   
+   <Set name="ResourceBase"><SystemProperty name="jetty.home" default="."/>/conf/http/ssi/</Set>
+  <!--   <Set name="ResourceBase"><SystemProperty name="jetty.home" default="."/>/</Set>-->
+    <Set name="ServingResources">TRUE</Set>
+    <Call name="addHandler">
+      <Arg type="int">0</Arg>
+      <Arg>
+        <New class="org.mortbay.http.handler.ForwardHandler">
+          <Arg>index.html</Arg>
+        </New>
+      </Arg>
+    </Call>
+    <Set name="DynamicServletPathSpec">/*</Set>
+    <Get name="ServletHandler">
+      <Set name="ServeDynamicSystemServlets" type="boolean">TRUE</Set>
+    </Get>
+   <Set name="ClassPath"><SystemProperty name="jetty.home" default="."/>/servlets/</Set>
+     </Call>
+
+
+</Configure>
+

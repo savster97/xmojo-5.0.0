@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ModelMBean>
+    <ModelMBeanDescriptor name="examples.applications.server.ServerInfo"  descriptorType="mbean"  displayName="ServerInfoAgent"  log="T"  logfile="modelagent.log"  currencyTimeLimit="60"  export="null"  visibility="1"  persistPolicy="OnUpdate"  persistLocation="jmxstore"  persistName="ModelMBeanAgent"  description="Contains attribute of ModelMBeanAgent group"  presentationString="notValid" ></ModelMBeanDescriptor>
+    <attributeDescriptors>
+        <attribute name="Port"  descriptorType="attribute"  type="int"  description="Port number of the server"  isReadable="T"  isWritable="T"  isIs="F"  displayName="Port"  getMethod="getPort"  setMethod="setPort"  iterable="F" >            
+        </attribute>
+        <attribute name="RestartCount"  descriptorType="attribute"  type="int"  description="Number of times the server is restarted"  isReadable="T"  isWritable="F"  isIs="F"  displayName="RestartCount"  getMethod="getRestartCount"  iterable="F" >
+        </attribute>
+        <attribute name="ServerId"  descriptorType="attribute"  type="java.lang.String"  description="Server ID"  isReadable="T"  isWritable="F"  isIs="F"  displayName="ServerId"  getMethod="getServerId"  iterable="F" >        
+        </attribute>
+        <attribute name="ServerName"  descriptorType="attribute"  type="java.lang.String"  description="Name of the server"  isReadable="T"  isWritable="F"  isIs="F"  displayName="ServerName"  getMethod="getServerName"  iterable="F" >     
+        </attribute>
+        <attribute name="ServerUpTime"  descriptorType="attribute"  type="long"  description="Indicates the no. of milli seconds passed from the start of the server"  isReadable="T"  isWritable="F"  isIs="F"  displayName="ServerUpTime"  getMethod="getServerUpTime"  iterable="F" >            
+        </attribute>
+        <attribute name="StartTime"  descriptorType="attribute"  type="long"  description="Indicates the server startup time"  isReadable="T"  isWritable="F"  isIs="F"  displayName="StartTime"  getMethod="getStartTime"  iterable="F" >            
+        </attribute>
+        <attribute name="ServerStarted"  descriptorType="attribute"  type="boolean"  description="Indicates whether the server is started"  isReadable="T"  isWritable="F"  isIs="T"  displayName="ServerStarted"  getMethod="isServerStarted"  iterable="F" >            
+        </attribute>
+    </attributeDescriptors>
+    <operationDescriptors>
+        <operation name="examples.applications.server.ServerInfo_default_const"  descriptorType="operation"  displayName="ServerInfoDefaultConstructor"  description="default constructor"  role="constructor" >
+            <params></params>
+        </operation>
+        <operation name="examples.applications.server.ServerInfo_4_params"  descriptorType="operation"  displayName="ServerInfoConstructorWithFourArguments"  description="constructor with four arguments"  role="constructor" >
+            <params></params>
+        </operation>
+        <operation name="getPort"  descriptorType="operation"  displayName="getPort"  description="Gets the Port number"  role="getter"  impact="INFO"  operResponseType="int" >
+            <params></params>
+        </operation>
+        <operation name="setPort"  descriptorType="operation"  displayName="setPort"  description="Sets the Port number"  role="setter"  impact="ACTION"  operResponseType="void" >
+            <params>
+                <param name="portNumber"  type="int" ></param>
+            </params>
+        </operation>
+        <operation name="getRestartCount"  descriptorType="operation"  displayName="getRestartCount"  description="Gets the restart count"  role="getter"  impact="INFO"  operResponseType="int" >
+            <params></params>
+        </operation>
+        <operation name="getServerId"  descriptorType="operation"  displayName="getServerId"  description="Gets the server ID"  role="getter"  impact="INFO"  operResponseType="java.lang.String" >
+            <params></params>
+        </operation>
+        <operation name="getServerName"  descriptorType="operation"  displayName="getServerName"  description="Gets the server name"  role="getter"  impact="INFO"  operResponseType="java.lang.String" >
+            <params></params>
+        </operation>
+        <operation name="getServerUpTime"  descriptorType="operation"  displayName="getServerUpTime"  description="Gets the server up time"  role="getter"  impact="INFO"  operResponseType="long" >
+            <params></params>
+        </operation>
+        <operation name="getStartTime"  descriptorType="operation"  displayName="getStartTime"  description="Gets the server start up time"  role="getter"  impact="INFO"  operResponseType="long" >
+            <params></params>
+        </operation>
+        <operation name="isServerStarted"  descriptorType="operation"  displayName="isServerStarted"  description="Checks whether server is started"  role="getter"  impact="INFO"  operResponseType="boolean" >
+            <params></params>
+        </operation>
+        <operation name="startService"  descriptorType="operation"  displayName="startService"  description="Starts the server"  role="operation"  impact="ACTION"  operResponseType="void" >
+            <params></params>
+        </operation>
+        <operation name="stopService"  descriptorType="operation"  displayName="stopService"  description="Stops the server"  role="operation"  impact="ACTION"  operResponseType="void" >
+            <params></params>
+        </operation>
+        <operation name="restart"  descriptorType="operation"  displayName="restart"  description="Restarts the server"  role="operation"  impact="ACTION"  operResponseType="void" >
+            <params></params>
+        </operation>
+    </operationDescriptors>
+    <notificationDescriptors>
+        <notification name="ServerStarted"  descriptorType="notification"  description="Server started"  notifTypes="com.adventnet.traps.scalarNotifications"  severity="4"  messageText="scalarNotifications" ></notification>
+        <notification name="ServerStopped"  descriptorType="notification"  description="Server stopped"  notifTypes="com.adventnet.traps.scalarNotifications"  severity="4"  messageText="scalarNotifications" ></notification>
+    </notificationDescriptors>
+</ModelMBean>

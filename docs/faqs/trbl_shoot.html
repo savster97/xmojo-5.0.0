@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Trouble Shooting in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a href="faq.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;7.&nbsp;Trouble&nbsp;Shooting</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../release_notes/ki.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Trouble Shooting</h1>
+<br>
+&nbsp;Some of the most common errors that are observed are documented here.<br><br>
+<font class="TRBL_Qn">When I try to register a MBean, I am getting ObjectName already
+exists exception </font><br><br>
+<font class="TRBL_Ans">The reason for the above exception is that the MBeanServer already contains
+a MBean registered with the provided ObjectName. &nbsp;Modify the ObjectName
+and register.</font><br>
+<br>
+<font class="TRBL_Qn">When the HTML Adaptor is initialized, I am getting the below
+stackTrace: </font><br>
+<font class="TRBL_Exception">Exception in thread "main" java.lang.NoClassDefFoundError:
+org/w3c/dom/Node<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.adaptors.html.HtmlAdaptorInitializer.initialize(HtmlAdaptorInitializer.java:55)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.adaptors.html.HtmlAdaptorInitializer.&lt;init&gt;(HtmlAdaptorInitializer.java:43)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.adaptors.html.HtmlAdaptor.&lt;init&gt;(HtmlAdaptor.java:126)</font><br>
+<br>
+<font class="TRBL_Ans">The reason for the above exception is that the crimson.jar is not available
+in the classpath. &nbsp;Kindly include the crimson.jar in the classpath. &nbsp;This
+JAR is bundled with this project and is available under XMOJO_HOME/lib directory.</font><br><br>
+<font class="TRBL_Qn">When the HTML Adaptor is initialized, I am getting the below
+stackTrace: </font><br>
+<font class="TRBL_Exception">Exception in thread "main" java.lang.NoClassDefFoundError:
+org/mortbay/http/HttpServer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.registerHtmlAdaptor(RunStandardAgent.java:79)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.registerAdaptors(RunStandardAgent.java:53)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.main(RunStandardAgent.java:112)</font><br>
+<br>
+<font class="TRBL_Ans">The reason for the above exception is that the org.mortbay.jetty.jar is not
+available in the classpath. &nbsp;Kindly include the&nbsp;org.mortbay.jetty.jar
+in the classpath. &nbsp;This JAR file is bundled with this project and is
+available under XMOJO_HOME/lib directory.</font><br><br>
+<font class="TRBL_Qn">When starting the HTML Adaptor, I am getting the below nested
+exception: </font><br>
+<font class="TRBL_Exception">javax.management.MBeanRegistrationException: C:\XMOJO\examples\mbeans\standard\conf\http\etc\JettyConfig.xml
+(The system cannot find the path specified); nested exception is:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.jmx.MBeanServerImpl.registerMBean(MBeanServerImpl.java:637)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.registerHtmlAdaptor(RunStandardAgent.java:81)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.registerAdaptors(RunStandardAgent.java:53)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.main(RunStandardAgent.java:112)<br>
+java.io.FileNotFoundException: C:\XMOJO\examples\mbeans\standard\conf\http\etc\JettyConfig.xml
+(The system cannot find the path specified)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at java.io.FileInputStream.open(Native
+Method)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:64)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:69)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:133)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at java.net.URL.openStream(URL.java:798)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.apache.crimson.parser.InputEntity.init(InputEntity.java:209)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.apache.crimson.parser.Parser2.parseInternal(Parser2.java:470)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.apache.crimson.parser.Parser2.parse(Parser2.java:304)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.apache.crimson.parser.XMLReaderImpl.parse(XMLReaderImpl.java:433)<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at javax.xml.parsers.SAXParser.parse(SAXParser.java:346)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at javax.xml.parsers.SAXParser.parse(SAXParser.java:232)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.mortbay.xml.XmlParser.parse(XmlParser.java:110)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.mortbay.xml.XmlConfiguration.&lt;init&gt;(XmlConfiguration.java:97)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.mortbay.jetty.Server.&lt;init&gt;(Server.java:82)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at org.mortbay.jetty.Server.&lt;init&gt;(Server.java:57)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.adaptors.html.JettyHtmlServer.startHttpServer(JettyHtmlServer.java:417)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.adaptors.html.HtmlAdaptor.startHttpServer(HtmlAdaptor.java:1170)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.adaptors.html.HtmlAdaptor.preRegister(HtmlAdaptor.java:674)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at com.adventnet.jmx.MBeanServerImpl.registerMBean(MBeanServerImpl.java:620)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.registerHtmlAdaptor(RunStandardAgent.java:81)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.registerAdaptors(RunStandardAgent.java:53)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at examples.mbeans.standard.RunStandardAgent.main(RunStandardAgent.java:112)</font>
+<br>
+<br>
+<font class="TRBL_Ans">Jetty Web server requires the configuration file JettyConfig.xml to instantiate.
+&nbsp;By default it searches for the JettyConfig.xml under /conf/http/etc
+directory.</font><br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a href="faq.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../release_notes/ki.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Frequently&nbsp;Asked&nbsp;Questions</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Known&nbsp;Issues</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

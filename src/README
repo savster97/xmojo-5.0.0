@@ -1,0 +1,11 @@
+QUICK START
+===========
+
+You must install ANT 1.5 to run xmojo build. This is 
+available from http://ant.apache.org.  Ant requires 
+at least JDK 1.2.2 and above. 
+
+SET ANT_HOME and JAVA_HOME
+
+Execute "ant" from the current working directory
+

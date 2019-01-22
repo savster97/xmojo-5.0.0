@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Timer Service in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../service.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;3.2.1&nbsp;Timer&nbsp;Service</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../monitor/monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Timer Service</h1>
+<br>
+The timer service triggers notifications at specific dates and times; it
+may also trigger notifications repeatedly at a constant interval. The timer
+service itself is implemented as an MBean and can be managed. The timer service
+is capable of sending notification instances of its specific TimerNotification
+class.<br>
+<br>
+The Timer service is depicted pictorially below to give you a better understanding
+about how this service works: <br>
+<br>
+<img src="../../../images/timer_service.gif"
+ alt="How Timer Service Works" width="244" height="272"><br>
+<br>
+<h1>Timer Notifications</h1>
+<br>
+The timer service manages notifications in two different ways:<br>
+<ol>
+  <li>Notifications that are triggered only once.</li>
+  <li>Notifications that are repeated with a definite period and/or number
+of occurrences.</li>
+</ol>
+If a notification has to be triggered from a timer service, that notification
+has to be added to the list of notifications in the timer service. When a
+notification is added to the timer service, a unique identifier number will
+be assigned to that notification.
+<h2>&nbsp;Adding Timer Notification&nbsp;</h2>
+The timer service maintains an internal list of the dated notifications that
+it has been asked to send. Notifications can be added to this list using the
+Timer class addNotification methods. The addNotification method is overloaded.
+All the addNotification methods take the following notification parameters
+and a date object:<br>
+<ol>
+  <li>type -- The notification type string</li>
+  <li>message -- The notification message string</li>
+  <li>userData -- The notification's user data object</li>
+  <li>date -- The date when the notification will occur</li>
+</ol>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public</font> <font
+ color="#000099">Integer</font> addNotification <font color="#ff0000">(</font>
+                  <font color="#000099">String</font> type,&nbsp;<font
+ color="#000099">String</font> message, <font color="#000099">Object</font>
+userData, <font color="#000099">Date</font> date <font color="#ff0000">)</font>
+                  <font color="#3333ff">throws</font> <font
+ color="#000099">IllegalArgumentException</font><br>
+                  <font color="#3333ff">public</font> <font
+ color="#000099">Integer</font> addNotification <font color="#ff0000">(</font>
+                  <font color="#000099">String</font> type,&nbsp;<font
+ color="#000099">String</font> message, <font color="#000099">Object</font>
+userData, <font color="#000099">Date</font> date , <font color="#3333ff">long</font>
+period <font color="#ff0000">)</font> <font color="#3333ff">throws</font>
+                  <font color="#000099">IllegalArgumentException</font><font
+ color="#ff0000"> </font><font color="#ff0000">&nbsp;<br>
+                  </font><font color="#3333ff">public</font> <font
+ color="#000099">Integer</font> addNotification <font color="#ff0000">(</font>
+                  <font color="#000099">String</font> type,&nbsp;<font
+ color="#000099">String</font> message, <font color="#000099">Object</font>
+userData, <font color="#000099">Date</font> date , <font color="#3333ff">long</font>
+period , <font color="#3333ff">long </font>nbOccurences <font
+ color="#ff0000">)</font> <font color="#3333ff">throws</font> <font
+ color="#000099">IllegalArgumentException</font> <br>
+                  <font color="#3333ff">public</font> <font
+ color="#000099">Integer</font> addNotification <font color="#ff0000">(</font>
+                  <font color="#000099">String</font> type,&nbsp;<font
+ color="#000099">String</font> message, <font color="#000099">Object</font>
+userData, <font color="#000099">Date</font> date , <font color="#3333ff">long</font>
+period , <font color="#3333ff">long </font>nbOccurences , <font
+ color="#3333ff">boolean</font> fireImmediate <font color="#ff0000">)</font>
+                  <font color="#3333ff">throws</font> <font
+ color="#000099">IllegalArgumentException</font></code></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+The overloaded methods, in addition to the notification parameters and date,
+may take the following optional parameters:<br>
+<ol>
+  <li>period -- The interval in milliseconds between notification occurrences.
+If this is zero or null, the notifications will not repeat.</li>
+  <li>nbOccurences -- The total number of times the notification will occur.
+If this is zero or null, and if period is not null or non-zero, then notification
+will repeat indefinitely.</li>
+  <li>fireImmediate -- If this flag is set true, the first notification will
+occur at once the notification is added to the timer's list. If this flag
+is set false, then the first notification will be delayed by the period value
+specified after the notification is added to the timer's list.<br>
+  </li>
+</ol>
+IllegalArgumentException will be thrown either if the date is null, period
+or nbOccurences is specified with negative values. There are some special
+cases wherein IllegalArgumentException will be thrown:
+<h3>&nbsp;Case 1&nbsp;</h3>
+If the date is less than the current date, and if the period is specified
+zero or null, IllegalArgumentException will be thrown.
+<h3>&nbsp;Case 2&nbsp;</h3>
+If the date is less than the current date and period is not null. If nbOccurences
+is specified, the timer updates the date value for every nbOccurence. If
+the date value does not exceed the current date in the specified number of
+nbOccurences, IllegalArgumentException will be thrown.<br>
+<br>
+The addNotification method returns the identifier of the new timer notification.
+This identifier can be used to retrieve information about the notification
+from the timer or to remove the notification from the timer's list of notifications.
+However, after a notification has been added to the list of notifications,
+its associated parameters cannot be updated.
+<h3>&nbsp;A Sample code Snippet&nbsp;</h3>
+The following code snippet creates a Timer Notification with the following
+attributes :<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0">
+  <tbody>
+    <tr>
+      <td valign="top">Timer Type</td>
+      <td valign="top"><b>&nbsp;: </b><br>
+      </td>
+      <td valign="top">Register<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Timer Message<br>
+      </td>
+      <td valign="top"><b>&nbsp;: </b></td>
+      <td valign="top">Testing timer service<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Timer Date<br>
+      </td>
+      <td valign="top"><b>&nbsp;: </b></td>
+      <td valign="top">Apr 11, 2002<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Timer Interval<br>
+      </td>
+      <td valign="top"><b>&nbsp;: </b></td>
+      <td valign="top">5 seconds<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">No. of Occurrence<br>
+      </td>
+      <td valign="top"><b>&nbsp;: </b></td>
+      <td valign="top">2<br>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">import </font>javax.management.timer.Timer;<br>
+....<br>
+....<br>
+                  <br>
+Timer timer = <font color="#3333ff">new</font> Timer <font
+ color="#ff0000">( )</font>;<br>
+                  <br>
+server.registerMBean <font color="#ff0000">(&nbsp;</font>timer ,&nbsp;<font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Services:type=Timer"<font color="#ff0000">)</font></font><font
+ color="#ff0000"> )</font>;<br>
+server.addNotificationListener <font color="#ff0000">( </font><font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Services:type=Timer"<font color="#ff0000">) </font></font>,
+notifImpl , <font color="#3333ff">null</font> ,&nbsp;<font
+ color="#3333ff">new</font> <font color="#000099">Object</font><font
+ color="#ff0000">( )</font><font color="#ff0000"> )</font>;<br>
+                  <br>
+timer.addNotification <font color="#ff0000">(&nbsp;</font><font
+ color="#336666">"Register"</font> , <font color="#336666">"Testing timer
+service"</font> , <font color="#3333ff">new </font><font color="#000099">String</font><font
+ color="#ff0000">( )</font> , <font color="#3333ff">new </font><font
+ color="#000099">Date</font><font color="#ff0000">( <font
+ color="#000000">1029244438000L</font> )</font> , 5000 , 2<font
+ color="#ff0000"> )</font>;<br>
+timer.setSendPastNotifications  <font color="#ff0000">( <font
+ color="#3333ff">false</font> )</font>;<br>
+timer.start <font color="#ff0000">( )</font>;<br>
+                  <font color="#000099"></font></code></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+In the above code snippet, notifImpl represents a NotificationListener.<br>
+<br>
+After the above notification is registered, the Timer Service sends two notifications
+to all registered listeners with an interval of five seconds from the date
+and time specified.
+<h2>&nbsp;Receiving Timer Notification&nbsp;</h2>
+If a class has to receive timer notifications, it has to register itself as
+one of the listeners to the timer MBean which is also a notification broadcaster.
+When the timer is active and the date of a timer notification is due, the
+timer service broadcasts this notification to all the listeners registered
+with it. The broadcasted notification contains the notification type, message,
+userdata, and the notification's identifier within the timer.
+<h2>&nbsp;Removing Timer Notification&nbsp;</h2>
+When a notification is not repeating or when it has completed its number
+of occurrences, it is removed from the timer's list of notifications. The
+notification can also be removed explicitly by calling any of the below methods
+in the Timer class:<br>
+<ol>
+  <li>removeNotification(integer) -- The notification identifier number has
+to be specified. The particular notification matching the identifier number
+alone will be removed from the list.</li>
+  <li>removeNotifications(type) -- The notification type has to be specified.
+All notifications matching the specified type will be removed from the timer's
+list.</li>
+  <li>removeAllNotifications -- Empties the timer's list of notifications.</li>
+</ol>
+<h2>&nbsp;Starting and Stopping the Timer Service&nbsp;</h2>
+The timer service is activated using the start method and deactivated using
+the stop method. When the timer server is inactive or stopped, no notification
+will be triggered even if the specified date and time occurs. By setting
+the sendPastNotifications to true, these lost notifications can be obtained
+when the timer service is restarted, that is, when it becomes active.<br>
+<br>
+You can determine whether the timer is running or not by invoking the timer
+method isActive( ). This method returns true, if the timer is running.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="PTR_OUTER">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="PTR_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="1" cellspacing="1" border="0"
+ class="PTR_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><b>Points to Remember</b><br>
+
+                  <ol>
+                        <li>Notifications can be triggered at specified date
+and time using timer service. Repeated notifications can also be triggered.</li>
+                    <li>Timer service is implemented as a standard MBean and
+can be managed by registering it with the MBeanServer.<br>
+                    </li>
+                        <li>Before the timer service is started and after
+the timer service is stopped, no notifications will be triggered.</li>
+                    <li>Notifications that are lost when the timer service
+is inactive can be obtained by setting the sendPastNotifications to true.<br>
+                    </li>
+
+                  </ol>
+            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../service.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../monitor/monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Agent&nbsp;Services</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Monitor&nbsp;Service</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Gauge Monitor Service in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../counter/counter_monitor.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;3.2.2.2&nbsp;Gauge&nbsp;Monitor&nbsp;Service</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../string/string_monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Gauge Monitor</h1>
+<br>
+GaugeMonitor is a class capable of observing attributes of Java floating point
+types (Float, Double) which behave as a gauge (arbitrarily increasing and
+decreasing). This class can also be used to monitor attributes of Java integer
+types. &nbsp;The gauge monitor has both a high and low threshold, each of
+which can trigger a distinct notification.<br>
+<br>
+A gauge monitor sends a notification of type jmx.monitor.gauge.high when
+the value of the observed attribute reaches or exceeds the high comparison
+value. This comparison value is called high threshold value. A gauge monitor
+sends a notification of type jmx.monitor.gauge.low when the value of the
+observed attribute reaches or exceeds the low comparison value. This comparison
+value is called low threshold value.<br>
+<br>
+The Gauge Monitor service is depicted pictorially below to give you a better
+understanding about how this service works:<br>
+<br>
+<img src="../../../../images/gauge_monitor.gif"
+ alt="How Gauge Monitor works" width="600" height="390"><br>
+<br>
+To monitor an attribute Name of type gauge in some MBean, an instance of
+gauge monitor has to be created. For this gauge monitor instance, the required
+details, such as the MBean name, the attribute that has to be observed, the
+time interval, the high threshold condition, the low threshold condition,
+andnotify flags have to be specified.<br>
+<h2>&nbsp;Creating a Gauge Monitor&nbsp;</h2>
+For better understanding, this section is split into steps:<br>
+<br>
+Step 1 : Creating an instance of the GaugeMonitor class<br>
+GaugeMonitor can be instantiated by using the no argument constructor. <br>
+<br>
+Step 2 : Configuring the monitor details for the created GaugeMonitor instance<br>
+The required details are configured in this step. Some of the methods provided
+in the GaugeMonitor class are listed below: <br>
+<ul>
+  <li>setObservedObject -- Takes an ObjectName as a parameter. The object
+name of the MBean under observation has to be passed to this method.</li>
+  <li>setObservedAttribute -- Takes a string as a parameter. The attribute
+name of the MBean that is going to be observed has to be passed to this method.</li>
+  <li>setGranulityPeriod -- Takes a long value as a parameter. The time interval
+in milliseconds (for observing the attribute) has to be passed.</li>
+  <li>setThresholds -- Takes two Integer value as parameters. This first value
+represents the high threshold value and the second value represents the low
+threshold value. If the observed attribute reaches or exceeds the high threshold
+value, a notification of type jmx.monitor.gauge.high will be triggerred by
+the GaugeMonitor. If the observed attribute reaches or exceeds the low threshold
+value, a notification of type jmx.monitor.gauge.low will be triggerred by
+the GaugeMonitor.</li>
+  <li>setNotifyHigh -- Takes a boolean value as a parameter. For receiving
+high notification, this value has to be passed true.<br>
+  </li>
+  <li>setNotifyLow -- Takes a boolean value as a parameter. For receiving
+low notification, this value has to be passed true.</li>
+</ul>
+Step 3 : Registering the GaugeMonitor instance with the MBeanServer.<br>
+<br>
+Step 4 : Registering the NotificationListeners with the GaugeMonitor MBean
+so that the emitted Notifications can be handled.<br>
+<br>
+Step 5 : Activating the GaugeMonitor service so that it starts observing
+the attribute.<br>
+<h3>&nbsp;A Sample Code Snippet&nbsp;</h3>
+Let us assume that there exists an MBean which represents an instance of
+a StepDown Transformer. The transformer MBean is defined with a attribute
+called Voltage, and we also assume that the Voltage value fluctuates over
+a range of values, that is, the Voltage attribute acts like a gauge. The
+below given code snippet shows how to create a gauge monitor instance for
+observing the Voltage attribute in the Transformer MBean with the High Threshold
+Value -- 300, Low Threshold Value -- 150, Granularity Period -- 5 seconds,
+and DifferenceMode -- false. <br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">import</font>  javax.management.monitor.GaugeMonitor;&nbsp;
+                  <br>
+                  <br>
+GaugeMonitor gm = <font color="#3333ff">new</font> GaugeMonitor<font
+ color="#ff0000">()</font>;<br>
+                  <br>
+                  <font color="#3333ff">try</font><br>
+                  <font color="#ff0000">{</font>&nbsp; &nbsp;<br>
+&nbsp; gm.setObservedObject<font color="#ff0000">(</font><font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Transformer:model=StepDown<font color="#336666">"</font><font
+ color="#ff0000">))</font></font></code><code>;</code><code> <br>
+&nbsp; gm.setObservedAttribute<font color="#ff0000">(</font><font
+ color="#336666">"Voltage<font color="#336666">"</font><font
+ color="#ff0000">)</font></font></code><code>;</code><code><br>
+&nbsp; gm.setGranularityPeriod<font color="#ff0000">(</font>5000<font
+ color="#ff0000">)</font>;&nbsp;<br>
+&nbsp; gm.setDifferenceMode<font color="#ff0000">(</font><font
+ color="#3333ff">false</font><font color="#ff0000">)</font>; <br>
+&nbsp; gm.setNotifyHigh<font color="#ff0000">(</font><font
+ color="#3333ff">true</font><font color="#ff0000">)</font>;<br>
+&nbsp; gm.setNotifyLow<font color="#ff0000">(</font><font
+ color="#3333ff">true</font><font color="#ff0000">)</font>;<br>
+&nbsp; gm.setThresholds<font color="#ff0000">(</font><font
+ color="#3333ff">new</font> Integer<font color="#ff0000">(</font>300<font
+ color="#ff0000">)</font>,                   <font color="#3333ff">new</font>
+Integer<font color="#ff0000">(</font>150<font color="#ff0000">)</font><font
+ color="#ff0000">)</font>;&nbsp;<br>
+&nbsp; server.registerMBean<font color="#ff0000">(</font>gm,&nbsp;<font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Services:type=GaugeMonitor,name=GaugeMonitor_0"</font><font
+ color="#ff0000">))</font>;&nbsp;<br>
+&nbsp; server.addNotificationListener<font color="#ff0000">(</font><font
+ color="#3333ff">new</font> ObjectName<font color="#ff0000">(</font><font
+ color="#336666">"Services:type=GaugeMonitor,name=GaugeMonitor_0"</font><font
+ color="#ff0000">)</font>, notifImpl, <font color="#3333ff">null</font>,
+                 <font color="#3333ff">new</font> Object<font
+ color="#ff0000">()</font><font color="#ff0000">)</font>;&nbsp;<br>
+&nbsp; gm.start<font color="#ff0000">()</font>;<br>
+                  <font color="#ff0000">}<br>
+                  </font></code><code><font color="#3333ff">catch</font>
+                 <font color="#ff0000">(</font><font color="#000099">Exception</font>
+e<font color="#ff0000">)</font><br>
+                  <font color="#ff0000">{</font><br>
+&nbsp; e.printStackTrace<font color="#ff0000">()</font>;<br>
+                  <font color="#ff0000">}</font></code><br>
+                  </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<h3><b>&nbsp;How Does the Above Code Work ?&nbsp;</b></h3>
+When the GaugeMonitor is activated, it starts observing the Voltage attribute
+of the Transformer MBean. Let the initial value of the Voltage attribute
+be 220. The GaugeMonitor observes the Voltage attribute value every 5 seconds.
+Let us assume that the value of the Voltage attribute fluctuates between 151
+and 299 for some time period (say 30 seconds). During this period, no notification
+will be emitted by the GaugeMonitor, because the value is within the comparison
+range.<br>
+<br>
+Let the value of the Voltage attribute be 300 when the GaugeMonitor observes
+it next time. Since this value is equal to the high threshold value, a notification
+of type jmx.monitor.gauge.high will be triggered by the GaugeMonitor. Let
+the value of the Voltage attribute be still increased to a higher value (say
+400). No notification will be triggered. Even if the value of the Voltage
+attribute is decreased to a value below the high threshold and above the low
+threshold, (say 160), no notification will be triggered. If the value of
+the Voltage attribute is decreased to a value below or equal to the low threshold
+value, a notification of type jmx.monitor.gauge.low will be triggered by
+the GaugeMonitor.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../counter/counter_monitor.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../string/string_monitor.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Counter&nbsp;Monitor&nbsp;Service</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">String&nbsp;Monitor&nbsp;Service</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

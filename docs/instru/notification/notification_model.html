@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Notification Model in XMOJO @ Free JMX Implementation</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../mbeans/model/writing_model_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">Chapter&nbsp;2.4&nbsp;Notification&nbsp;Model</font></td>
+			<td valign="top" align="right" class="HDR_TDRight"><a
+ href="../../agent/agent_level.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+
+  </tbody>
+</table>
+<br>
+<h1>Notifications</h1>
+<br>
+Generally, the communication between a manager <i>(a manager can be a protocol
+adaptor or another MBean listening for notification)</i>, JMX agent (JMX
+agent is explained in the next topic Agent Level), and the managed resource,
+will be :<br>
+<br>
+Step 1 : Manager asks for a request <br>
+Step 2 : JMX agent forwards the request to the managed resource and obtains
+the information from the managed resource<br>
+Step 3 : JMX agent sends back the response received to the manager<br>
+<br>
+There may be some special scenarios, where a JMX agent sends some information
+to the manager when some events occur. &nbsp;These events are termed Notifications.
+<h2>&nbsp;javax.management.Notification Class&nbsp;</h2>
+The Notification Class represents a notification emitted by an MBean. &nbsp;The
+Notification object contains the below fields:<br>
+<ol>
+  <li>Type -- A String expressed in a dot notation. For example, Server.started</li>
+  <li>SequenceNumber -- A long value expresses a serial number identifying
+a particular instance of notification in the context of the notification
+broadcaster</li>
+  <li>TimeStamp -- A time stamp indicating when the notification was generated</li>
+  <li>Message -- A String representing the explanation for the notification</li>
+  <li>UserData --&nbsp; A hash table representing the additional data that
+the notification broadcaster wishes to communicate to its listeners<br>
+  </li>
+</ol>
+<h2>&nbsp;Sending Notification&nbsp;</h2>
+An MBean or a Java class capable of sending notifications is termed as Notification
+Broadcaster. &nbsp;Any type of MBean, such as Standard, Dynamic, or Model
+MBean, can broadcast notification. &nbsp;For an MBean or Java class to broadcast
+notification, it must implement the NotificationBroadcaster interface. &nbsp;Another
+easier approach is that the MBean or Java class can extend the NotificationBroadcasterSupport.
+&nbsp;The NotificationBroadcasterSupport implements the NotificationBroadcaster
+and also provides a method called sendNotification, which takes a object of
+type javax.management.Notification. &nbsp;Notification can be broadcasted
+by calling this sendNotification method. &nbsp;When this sendNotification
+method is called, Notification will be sent to all the registered listeners.<br>
+<h2>&nbsp;Registering Listeners&nbsp;</h2>
+A listener can be an MBean or any other object which implements the NotificationListener
+interface.&nbsp;&nbsp;<br>
+ Any number of listeners can be registered to a Notification Broadcaster.
+A listener is registered to the broadcaster by invoking the addNotificationListener
+method on the broadcaster. &nbsp;The method syntax is<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public</font> <font
+ color="#3333ff">void</font>&nbsp;addNotificationListener<font
+ color="#ff0000">(</font>NotificationListener listener, NotificationFilter
+filter, Object handback<font color="#ff0000">)</font></code>            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+When the above method is invoked, the listener object or the listener MBean
+is registered to the broadcaster as one of the listeners. &nbsp;The Object
+handback that is used while registering the listener MBean will be sent unmodified
+along with the Notification when sendNotification is invoked. &nbsp;We will
+see more about NotificationFilter in the section Filtering Notification. &nbsp;<br>
+<br>
+A listener can be registered only once with a broadcaster. &nbsp;For registering
+it more than once with the same broadcaster, then the Object handback passed
+while invoking the addNotificationListener should be different.<br>
+<h2>&nbsp;Receiving Notification&nbsp;</h2>
+Any object or MBean can receive the notification sent by any MBeans. &nbsp;To
+achieve this, the object or MBean should <br>
+<ol>
+  <li>Register itself as one of the listeners to the MBean or Java class
+from which Notification has to be received.</li>
+  <li>Implement the NotificationListener interface.</li>
+</ol>
+To register the object or MBean as one of the listeners, refer to the section
+Registering Listeners provided above.<br>
+<br>
+<b>Implementing the NotificationListener Interface:</b><br>
+<br>
+The NotificationListener interface has only one method called handleNotification.
+&nbsp;The method syntax is<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public</font> <font
+ color="#3333ff">void</font>&nbsp;handleNotification<font
+ color="#ff0000">(</font>Notification notif, Object handback<font
+ color="#ff0000">)</font></code>            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+This handleNotification is a call back method. &nbsp;When sendNotification
+is invoked, the broadcaster sends a notification to all the registered listeners,
+and the handleNotification is method is invoked on each of the listeners.
+&nbsp;The handback Object obtained will be the one which have been used in
+the addNotificationListener method.<br>
+<h2>&nbsp;Filtering Notification&nbsp;</h2>
+When a notification listener is registered itself to the notification broadcaster,
+then any notification sent by the broadcaster will be received. &nbsp;There
+may be scenarios where the listener wants to receive only specific notification
+from the broadcaster. &nbsp;<br>
+<br>
+This is achieved by defining a notification filter and passing it while registering
+the listener to the notification broadcaster. &nbsp;Any object that implements
+the NotificationFilter interface acts as a notification filter. &nbsp;The
+NotificationFilter interface defines a unique method isNotificationEnabled
+and the method syntax is<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">public</font> <font
+ color="#3333ff">boolean</font>&nbsp;isNotificationEnabled<font
+ color="#ff0000">(</font>Notification notif<font color="#ff0000">)</font>
+                  </code>            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+Easier approach for creating a NotificationFilter is to extend NotificationFilterSupport
+Class. &nbsp;NotificationFilterSupport has defined methods like disableType(String
+type) and enableType(String type). &nbsp;So, by invoking disableType("Server.restart")
+on the NotificationFilter object, the notification of type Server.restart
+will not be received.<br>
+<h2>&nbsp;Notification Mechanism&nbsp;</h2>
+<ol>
+  <li>A notification is generated by calling the sendNotification method
+on the notification broadcaster MBean.</li>
+  <li>The notification broadcaster checks the list of listeners registered
+with it.</li>
+  <li>For each listener registered, it checks whether any filter is applied,
+&nbsp;i.e, it invokes the isNotificationEnabled(Notification notif).</li>
+  <li>If isNotificationEnabled returns false, then no notification will be
+sent to that listener.</li>
+  <li>If isNotificationEnabled returns true, then the notification object
+along with the handback object of the corresponding listener will be sent
+to that listener. &nbsp;This handback object will be the one which is provided
+while invoking addNotificationListener(... , ..., Object handback)<br>
+  </li>
+  <li>When a notification is sent to a listener, the handleNotification method
+of that listener is called.</li>
+</ol>
+To see a sample demo of the working of Notification Mechanism, <a
+ href="../../../examples/notification/README.html">try out this example</a>.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="PTR_OUTER">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="PTR_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ class="PTR_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><b>Points to Remember</b><br>
+
+                  <ol>
+                    <li>Any type of MBean, standard, dynamic or model or
+a non-MBean class can be either a notification broadcaster, a notification
+listener, or both at the same time.</li>
+                    <li>For an MBean or Java class to be a notification broadcaster,
+it should implement the NotificationBroadcaster interface. &nbsp;Easier approach
+is to extend NotificationBroadcasterSupport.<br>
+  </li>
+                    <li>For an MBean or Java class to be a notification listener,
+it should implement the NotificationListener interface. &nbsp;For receiving
+notification, it should be registered as one of the listeners with the notification
+broadcaster.</li>
+                    <li>Notification can be filtered by passing a NotificationFilter
+object while invoking the addNotificationListener method.</li>
+                    <li>Notification filtering can be based on notification
+type, or notification message, or any other thing depending on how the NotificationFilter
+is implemented.</li>
+                    <li>Conversion of a notification into protocol-specific
+implementation, such as SNMP Trap, is the responsibility of the protocol adaptors.<br>
+                    </li>
+
+                  </ol>
+            </td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+	<tbody>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../mbeans/model/writing_model_mbean.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../../index_no_frames.html" class="HDR_LINK">Home</a></td>
+			<td valign="top" align="right" class="FTR_TDRight"><a
+ href="../../agent/agent_level.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+		</tr>
+		<tr>
+			<td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Writing&nbsp;a&nbsp;Model&nbsp;MBean</font></td>
+			<td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+			<td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Agent&nbsp;Level</font></td>
+		</tr>
+
+  </tbody>
+</table>
+</body>
+</html>

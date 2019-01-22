@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<file>
+<name id="PatchScreen_Readme_Button" >
+<![CDATA[Click to view the Service Pack information]]>
+</name>
+<name id="PatchScreen_TextField_Button" >
+<![CDATA[Specify the location of Service Pack to install and Press the Enter key]]>
+</name>
+<name id="PatchScreen_Browse_Button" >
+<![CDATA[Click to choose the Service Pack file]]>
+</name>
+<name id="UpdateManagerUI_Details_Button" >
+<![CDATA[Click to view the details of the selected Service Pack]]>
+</name>
+<name id="UpdateManagerUI_Uninstall_Button" >
+<![CDATA[Click to proceed with the uninstallation process]]>
+</name>
+<name id="UpdateManagerUI_Install_Button" >
+<![CDATA[Click to start the Installation Wizard]]>
+</name>
+<name id="RevertScreen_JList1" >
+<![CDATA[Installed Service Pack(s)]]>
+</name>
+<name id="ContextScreen_Table_Button" >
+<![CDATA[Optional Upgrades]]>
+</name>
+<name id="ContextScreen_Readme_Button" >
+<![CDATA[Click to view the Optional Upgrade information]]>
+</name>
+</file>

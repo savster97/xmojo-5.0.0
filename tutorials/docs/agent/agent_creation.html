@@ -1,0 +1,1166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Creating_a_JMX_agent</title>
+
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+  <link rel="STYLESHEET" href="../styles/xmojo.css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ class="HDR_TABLE">
+    <tbody>
+      <tr>
+        <td valign="top" align="center" rowspan="1" colspan="3"><font
+ class="HDR_TITLE">The&nbsp;XMOJO&nbsp;Project</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="left" class="HDR_TDLeft"><a
+ href="../mbean/mbean_shopkeeper.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+        <td valign="top" align="center" class="HDR_TDCenter"><font
+ class="HDR_CHAPTER">6.&nbsp;JMX Agent Creation</font></td>
+        <td valign="top" align="right" class="HDR_TDRight"><a
+ href="testing_agent.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+      </tr>
+
+  </tbody>
+</table>
+<br>
+<h2>&nbsp;Creating a JMX agent&nbsp;</h2>
+JMX agent comprises an MBeanServer, a set of MBeans representing the managed
+resources, a minimum number of agent services implemented as MBeans, and
+typically at least one protocol adaptpor or connector.<br>
+<br>
+The creation of a simple JMX agent can be split into following sub-divisions:<br>
+<ol>
+  <li>Creating MBeanServer</li>
+  <li>Registering MBeans with the MBeanServer</li>
+  <li>Creating adaptors and required services</li>
+</ol>
+<h3>&nbsp;Creating MBeanServer&nbsp;</h3>
+The factory class MBeanServerFactory is used to create an instance of the
+MBeanServer.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><code><font color="#3333ff">import <font
+ color="#000000">javax.management.MBeanServer;</font><br>
+                  </font></code><code><font color="#3333ff"><font
+ color="#3333ff">import <font color="#000000">javax.management.MBeanServerFactory;</font><br>
+                  <br>
+                  <font color="#3366ff">...</font></font></font></code><font
+ color="#3333ff"><font color="#3333ff"><font color="#3366ff"><br>
+                  <code><br>
+                  </code></font></font></font><code><font
+ color="#009900">// create an instance of MBeanServer</font></code><br>
+                  <font color="#3333ff"><font color="#3333ff"><font
+ color="#3366ff"><code><font color="#000000">MBeanServer mbs = MBeanServerFactory.createMBeanServer</font><font
+ color="#ff0000">(<font color="#336666">"MyServer")</font></font></code><code><font
+ color="#ff0000"><font color="#336666">;</font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000">    </font></font></font></code><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000">
+                 </font></font></font></font></font></font></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+The above code snippet, creates an MBeanServer instance with the domain name
+MyServer.
+<h3>&nbsp;Registering MBeans&nbsp;</h3>
+In the previous sections you have seen how to create MBeans to represent
+the managed resource, i.e, the Shopping Cart Application. &nbsp;You register
+those MBeans with the above instance of MBeanServer. &nbsp;To register an
+MBean, either the registerMBean method or the createMBean method can be used.
+&nbsp;If the registerMBean method is used, an instance of the MBean class
+has to be passed. &nbsp;If the createMBean method is used, the String representation
+of the class name is passed.<br>
+<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><font color="#33ff33"><code></code><code></code><code><font
+ color="#3333ff">import <font color="#000000">javax.management.ObjectName</font></font></code></font><font
+ color="#33ff33"><code><font color="#3333ff"><font color="#000000">;</font></font></code></font><br>
+                  <font color="#33ff33"><code><font color="#3333ff">
+     </font></code><font color="#3333ff"><br>
+                  <code><font color="#009900">// registering InventoryManager
+MBean<br>
+                  <br>
+                  <font color="#000000">InventoryManager im =</font>&nbsp;</font></code><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff">new</font></font></font></font></font></code><code>
+                  <font color="#009900"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#000000">InventoryManager</font></font></font></font></font></font></code><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000">(</font></font></font></font></font></font></code><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666">"Parrot"</font></font></font></font></font></font></font></font></code><code></code><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000">)</font></font></font></font></font></font></font></font></font></code><code></code></font></font><font
+ color="#33ff33"><code><font color="#3333ff"><font color="#000000">;</font></font></code></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000">    <br>
+                  <font color="#3333ff">try <br>
+                  <font color="#ff0000">{<br>
+&nbsp; &nbsp; <font color="#000000">mbs.registerMBean</font><font
+ color="#ff0000">(<font color="#336666"><font color="#000000">im , <font
+ color="#3333ff">new<font color="#000000"> ObjectName</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000">(</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666">"MyServer:type=inventory"</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000">))<font color="#33ff33"><code><font color="#3333ff"><font
+ color="#000000">;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><br>
+                  <code><font color="#ff0000">}<br>
+                  </font></code><font color="#ff0000"><font
+ color="#3333ff"><code>catch</code><code><font color="#ff0000">(</font></code><code><font
+ color="#ff0000"><font color="#000099">Exception&nbsp;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#000000">e</font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code></code><code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000">)<br>
+{<br>
+                  </font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000">&nbsp; &nbsp;
+                  <font color="#000000">e.printStackTrace</font></font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000"><font
+ color="#ff0000">()</font></font></font></font></code><code></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><code><font color="#3333ff"><font color="#000000">;</font></font></code></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code></code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000"><font color="#ff0000"><br>
+                  <code><font color="#ff0000">}</font></code><font
+ color="#ff0000"><br>
+                  <br>
+                  <code><font color="#009900">// registering Cart MBean</font></code><font
+ color="#009900"><br>
+                  <br>
+                  <code><font color="#000000">Cart crt =</font>&nbsp;</code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff">new</font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"> <font color="#000000">Cart</font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000">()</font></font></font></font></font></code><code></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><code><font color="#3333ff"><font color="#000000">;</font></font></code></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#009900"><code><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000">                  <br>
+                  </font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#3333ff">try</font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#3333ff">&nbsp;<br>
+                  <font color="#ff0000">{<br>
+&nbsp; &nbsp; <font color="#000000">mbs.registerMBean</font> <font
+ color="#ff0000">(<font color="#336666"> <font color="#000000">crt , <font
+ color="#3333ff">new <font color="#000000">ObjectName</font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000">(</font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666">"ShoppingCart:type=MBean"</font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000">) )</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code></code><code></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><code><font color="#3333ff"><font color="#000000">;</font></font></code></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#009900"><code></code><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><br>
+                  <code><font color="#ff0000">}<br>
+                  </font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code>catch</code><code><font color="#ff0000">(</font></code><code><font
+ color="#ff0000"><font color="#000099">Exception&nbsp;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#000000">e</font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code></code><code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000">)</font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#3333ff"><code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000"><br>
+{<br>
+                  </font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000">&nbsp; &nbsp;
+                  <font color="#000000">e.printStackTrace</font></font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000"><font
+ color="#ff0000">()<font color="#33ff33"><code><font color="#3333ff"><font
+ color="#000000">;</font></font></code></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000"><font color="#ff0000"><br>
+                  <code><font color="#ff0000">}</font></code><font
+ color="#ff0000"><br>
+                  <code><font color="#ff0000">                  </font></code>
+                  <font color="#ff0000">           </font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+The above code snippet registers both the MBeans with the MBeanServer instance
+mbs, which you created.<br>
+<br>
+The CartMBean will be registered with the MBeanServer and will be identified
+by its object name ShoppingCart:type=MBean (the object name passed while registering
+this MBean). &nbsp; In the case of InventoryManager MBean, &nbsp;the MBean
+will not be registered with the object name MyDomain:type=inventory. &nbsp;This
+is because the InventoryManager implements the javax.management.MBeanRegistration
+interface, and in the preRegister method, it returns an object name InventoryMBean:Pet=&lt;itemName&gt;
+where itemName is the String argument passed while instantiating this InventoryManager
+class. &nbsp;In your case, this argument is passed as Parrot, and the InventoryManager
+MBean will be registered with the MBeanServer and will be identified by the
+object name InventoryMBean:Pet=Parrot.
+<h3>&nbsp;Creating Adaptors and Required Services&nbsp;</h3>
+The below given code snippet shows how to create an instance of RMI Adaptor
+and register it with the MBeanServer.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><font color="#33ff33"><code></code><code></code><code></code><code></code><code><font
+ color="#3333ff">import <font color="#000000">com.adventnet.adaptors.rmi.RMIAdaptor;</font></font></code><font
+ color="#3333ff"><br>
+                  <code><font color="#000099"><br>
+Integer <font color="#000000">rmiPort = 1099;<br>
+                  <br>
+                  </font></font></code></font></font><code><font
+ color="#009900">// instantiating and registering an RMI adaptor instance<br>
+// with the MBeanServer</font></code><font color="#33ff33"><font
+ color="#3333ff"><code></code><code><font color="#000099"><br>
+                  <br>
+                  </font></code><code><font color="#000099"><font
+ color="#3333ff">try</font></font></code><code><font color="#000099"><font
+ color="#3333ff">&nbsp;<br>
+                  <font color="#ff0000">{<br>
+                  </font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000">&nbsp; &nbsp;
+                  <font color="#000000">RMIAdaptor rmiadaptor =</font> <font
+ color="#ff0000"><font color="#3333ff">new <font color="#000000">RMIAdaptor</font><font
+ color="#ff0000">()</font></font></font></font></font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000">&nbsp; &nbsp;
+                  <font color="#000000">rmiadaptor.setPort</font><font
+ color="#ff0000">(<font color="#000000">rmiPort</font><font
+ color="#ff0000">)</font></font></font></font></font></font></font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000">&nbsp; &nbsp; <font
+ color="#000000">mbs.registerMBean</font><font color="#ff0000">(<font
+ color="#000000">rmiadaptor,</font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"> new <font color="#33ff33"><font color="#3333ff"><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#009900"><code><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#000000">ObjectName</font></font></font></font></font></font></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000">(</font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666">"Adaptors:name=RMI,port="</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><font
+ color="#000000"><code>                  + rmiPort</code></font><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000">))</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><br>
+                  <code><font color="#ff0000">}<br>
+                  </font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code>catch</code><code><font color="#ff0000">(</font></code><code><font
+ color="#ff0000"><font color="#000099">Exception&nbsp;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#000000">e</font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code></code><code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000">)</font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><br>
+{<br>
+                  </font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000">&nbsp; &nbsp;
+                  <font color="#000000">e.printStackTrace</font></font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000"><font
+ color="#ff0000">()<font color="#33ff33"><font color="#3333ff"><code><font
+ color="#000099"><font color="#000000">;</font></font></code></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#ff0000"><br>
+                  <code><font color="#ff0000">}</font></code><font
+ color="#ff0000"><br>
+                  <code><font color="#ff0000">                  </font></code>
+                  <font color="#ff0000">           </font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+The below given code snippet shows how to create an instance of HTML Adaptor
+and register it with the MBeanServer.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><font color="#33ff33"><code></code><code></code><code></code><code></code></font><code><font
+ color="#3333ff">import</font> com.adventnet.adaptors.html.HtmlAdaptor;<br>
+                  <font color="#3333ff">import</font> com.adventnet.adaptors.html.HtmlAdaptorServerImpl;</code><font
+ color="#33ff33"><font color="#3333ff"><br>
+                  <code><font color="#000099"><br>
+                  <code><font color="#3333ff">private int</font> <font
+ color="#000000">htmlPort = 8030;</font></code></font></code></font></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><code><font
+ color="#000099"><br>
+                  </font></code></font></font><code><font
+ color="#009900">// instantiating and registering an HTML adaptor instance<br>
+// with the MBeanServer</font></code><br>
+                  <font color="#33ff33"><font color="#3333ff"><code></code><code><font
+ color="#000099"><font color="#3333ff">try</font></font></code><code><font
+ color="#000099"><font color="#3333ff">&nbsp;<br>
+                  <font color="#ff0000">{<br>
+                  </font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000">&nbsp; &nbsp;
+                  </font></font></font></code></font></font><code>HtmlAdaptor
+htmladaptor = <font color="#3333ff">new</font> HtmlAdaptor<font
+ color="#ff0000">()</font>;</code><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <code>htmladaptor.addHttpServerInterface<font
+ color="#ff0000">(<font color="#3333ff">new </font><font color="#000000">HtmlAdaptorServerImpl</font>()</font><font
+ color="#ff0000">)</font>;</code><br>
+                  <font color="#33ff33"><font color="#3333ff"><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000">&nbsp; &nbsp; <font
+ color="#000000">mbs.registerMBean</font><font color="#ff0000">(<font
+ color="#000000">htmladaptor,</font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"> new <font color="#33ff33"><font color="#3333ff"><font
+ color="#009900"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#009900"><code><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#000000">ObjectName</font></font></font></font></font></font></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000">(</font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666">"Adaptors:name=HTML,port="</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><font
+ color="#000000"><code>                  + htmlPort</code></font><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000">))</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <code>htmladaptor.setParentDir<font
+ color="#ff0000">(</font><font color="#336666">"."</font><font
+ color="#ff0000">)</font>;</code><font color="#33ff33"><font
+ color="#3333ff"><font color="#000099"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><br>
+                  <code><font color="#ff0000">}<br>
+                  </font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code>catch</code><code><font color="#ff0000">(</font></code><code><font
+ color="#ff0000"><font color="#000099">Exception&nbsp;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#000000">e</font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code></code><code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000">)</font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><br>
+{<br>
+                  </font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000">&nbsp; &nbsp;
+                  <font color="#000000">e.printStackTrace</font></font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000"><font
+ color="#ff0000">()<font color="#33ff33"><font color="#3333ff"><code><font
+ color="#000099"><font color="#000000">;</font></font></code></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#ff0000"><br>
+                  <code><font color="#ff0000">}</font></code><font
+ color="#ff0000"><br>
+                  <code><font color="#ff0000">                  </font></code>
+                  <font color="#ff0000">           </font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+You also create a GaugeMonitor service which monitors the inventory level
+for the pet item Parrot. &nbsp;Whenever the inventory level of Parrot reaches
+below 5, a notification will be sent. &nbsp;The below given code snippet
+shows how to create a GaugeMonitor instance and set the required parameters
+that have to be monitored.<br>
+<br>
+<table border="0" cellspacing="1" cellpadding="1" class="CODE_OUTER"
+ align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <table border="0" cellspacing="1" cellpadding="1"
+ class="CODE_CENTER" align="center">
+  <tbody>
+    <tr>
+      <td valign="top">
+            <table cellpadding="2" cellspacing="2" border="0"
+ width="100%" class="CODE_INNER">
+        <tbody>
+          <tr>
+            <td valign="top"><font color="#33ff33"><code></code><code></code><code></code><code></code><code><font
+ color="#3333ff">import  <font color="#000000">javax.management.monitor.GaugeMonitor</font></font></code></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><font
+ color="#33ff33"><code></code><font color="#3333ff"><br>
+                  <code><font color="#000099"><br>
+                  </font></code><code><code><font color="#000099"><font
+ color="#000000">GaugeMonitor gm =&nbsp;</font></font></code></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff">new</font></font></font></font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><code><font color="#000099"><font
+ color="#000000"> GaugeMonitor</font><font color="#ff0000">( )</font></font></code></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><code></code></code><font
+ color="#000099"><font color="#ff0000"><br>
+                  <code><br>
+                  </code><code><font color="#3333ff">try</font></code><code><font
+ color="#3333ff">&nbsp;<br>
+                  <font color="#ff0000">{</font></font></code><code><font
+ color="#3333ff"><font color="#ff0000">&nbsp; &nbsp;                   <code></code></font></font></code><code><font
+ color="#3333ff"><font color="#ff0000"><br>
+&nbsp; <code><font color="#000000">gm.setObservedObject</font><font
+ color="#ff0000">(<font color="#3333ff">new <font color="#000000">ObjectName</font><font
+ color="#ff0000">(</font></font></font></code></font></font></code><code><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666">"InventoryMBean:Pet=Parrot"</font></font></font></font></font></font></font></code><code><code><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#ff0000">))</font></font></font></font></font></font></font></font></font></code></code></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><code><code></code></code><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><br>
+                  <code>&nbsp; <font color="#000000">gm.setObservedAttribute</font><font
+ color="#ff0000">(<font color="#336666">"InventoryLevel<font
+ color="#336666">"<font color="#ff0000">)</font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><font
+ color="#000099"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><code><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#ff0000">&nbsp; <font
+ color="#000000">gm.setGranularityPeriod</font><font color="#ff0000">(<font
+ color="#000000">5000</font><font color="#ff0000">)</font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><font
+ color="#000099"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><code><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000">&nbsp; <font color="#000000">gm.setDifferenceMode</font><font
+ color="#ff0000">(<font color="#3333ff"><font color="#3333ff">false<font
+ color="#ff0000">)</font></font></font></font></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><code><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"> <br>
+&nbsp; <font color="#000000">gm.setNotifyHigh</font><font
+ color="#ff0000">(<font color="#3333ff">false<font color="#ff0000">)</font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><font
+ color="#000099"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><code><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000">&nbsp; <font
+ color="#000000">gm.setNotifyLow</font><font color="#ff0000">(<font
+ color="#3333ff"><font color="#3333ff">true<font color="#ff0000">)</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><br>
+                  <font color="#33ff33"><font color="#3333ff"><font
+ color="#000099"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><code><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000">&nbsp; <font color="#000000">gm.setThresholds</font><font
+ color="#ff0000">(<font color="#3333ff">new <font color="#000099">Integer</font><font
+ color="#ff0000">(<font color="#000000">50</font><font color="#ff0000">)
+                <font color="#ff0000"> <font color="#000000">,</font>
+          <font color="#3333ff">new Integer&nbsp;<font color="#ff0000">(<font
+ color="#000000">5</font><font color="#ff0000">)<font color="#ff0000">)</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><code></code><code><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><br>
+&nbsp; <font color="#000000">mbs.registerMBean</font><font
+ color="#ff0000">(<font color="#000000">gm ,</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"> new <font color="#000000">ObjectName</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000">(</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666">"</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#336666">Services:type=GaugeMonitor</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#336666">"</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code></code><code><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#336666"><font color="#ff0000">))</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code><code></code><code></code></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><code></code><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><br>
+                  <code>&nbsp; <font color="#000000">gm.start</font></code><code><code><font
+ color="#ff0000">()</font></code></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><code><font color="#000099"><font
+ color="#000000">;</font></font></code></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><code><code></code></code><font
+ color="#ff0000"><br>
+                  <code><font color="#ff0000">}</font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#000000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><code><font color="#ff0000"><br>
+                  </font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code>catch</code><code><font color="#ff0000">(</font></code><code><font
+ color="#ff0000"><font color="#000099">Exception&nbsp;</font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code><font color="#ff0000"><font color="#000099"><font
+ color="#ff0000"><font color="#000000">e</font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#009900"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#336666"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#ff0000"><font
+ color="#3333ff"><code></code><code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000">)</font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000"><br>
+{<br>
+                  </font></font></font></code><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000">&nbsp; &nbsp;
+                  <font color="#33ff33"><font color="#3333ff"><font
+ color="#000099"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#000000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#3333ff"><code><font color="#ff0000"><font
+ color="#000099"><font color="#ff0000"><font color="#000000">e.printStackTrace</font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><code><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000"><font
+ color="#ff0000">()<font color="#33ff33"><font color="#3333ff"><code><font
+ color="#000099"><font color="#000000">;</font></font></code></font></font></font></font></font></font></code></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+ color="#33ff33"><font color="#3333ff"><font color="#000099"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#336666"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#ff0000"><font color="#ff0000"><font
+ color="#3333ff"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#ff0000"><font color="#ff0000"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#000000"><font color="#3333ff"><font color="#ff0000"><font
+ color="#336666"><font color="#336666"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#336666"><font
+ color="#ff0000"><font color="#ff0000"><font color="#3333ff"><font
+ color="#ff0000"><font color="#000099"><font color="#ff0000"><font
+ color="#ff0000"><br>
+                  <code><font color="#ff0000">}</font></code><font
+ color="#ff0000"><br>
+                  <code><font color="#ff0000">                  </font></code>
+                  <font color="#ff0000">           </font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></td>
+          </tr>
+
+              </tbody>
+            </table>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<br>
+<a href="../../src/tutorials/agent/RunAgent.java">Download</a> the source file,
+which contains the implementation details of the above JMX agent.<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2"
+ class="FTR_TABLE">
+  <tbody>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><a
+ href="../mbean/mbean_shopkeeper.html" class="HDR_LINK">&lt;&lt;&nbsp;Prev</a></td>
+      <td valign="top" align="center" class="FTR_TDCenter"><a
+ href="../contents.html" class="HDR_LINK">Home</a></td>
+      <td valign="top" align="right" class="FTR_TDRight"><a
+ href="testing_agent.html" class="HDR_LINK">Next&nbsp;&gt;&gt;</a></td>
+    </tr>
+    <tr>
+      <td valign="top" align="left" class="FTR_TDLeft"><font
+ class="FTR_NAV">Shop Keeper MBean Creation</font></td>
+      <td valign="top" align="center" class="FTR_TDCenter"><br>
+      </td>
+      <td valign="top" align="right" class="FTR_TDRight"><font
+ class="FTR_NAV">Running and Testing the JMX Agent</font></td>
+    </tr>
+
+  </tbody>
+</table>
+</body>
+</html>
