@@ -1,0 +1,8 @@
+exclude:
+- /bin/.*
+- /conf/.*
+- /docs/.*
+- /lib/.*
+- /tutorials/classes/.*
+- /tutorials/docs/.*
+- /tutorials/images/.*
