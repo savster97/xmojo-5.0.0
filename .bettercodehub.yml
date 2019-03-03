@@ -8,3 +8,8 @@ exclude:
   - /tutorials/images/.*
 include:
   - /src/.*
+  - /examples/mbeans/dynamic/src/.*
+  - /examples/mbeans/model/src/.*
+  - /examples/mbeans/standard/src/.*
+  - /examples/notification/src/.*
+  - /tutorials/src/.*
