@@ -1,13 +1,10 @@
-- name: HTML
-  production:
-    exclude:
-    - /bin/.*
-    - /conf/.*
-    - /docs/.*
-    - /lib/.*
-    - /tutorials/classes/.*
-    - /tutorials/docs/.*
-    - /tutorials/images/.*
-  test:
-    include:
-      - /src/.*
+exclude:
+  - /bin/.*
+  - /conf/.*
+  - /docs/.*
+  - /lib/.*
+  - /tutorials/classes/.*
+  - /tutorials/docs/.*
+  - /tutorials/images/.*
+include:
+  - /src/.*
