@@ -1,8 +1,13 @@
-exclude:
-- /bin/.*
-- /conf/.*
-- /docs/.*
-- /lib/.*
-- /tutorials/classes/.*
-- /tutorials/docs/.*
-- /tutorials/images/.*
+- name: HTML
+  production:
+    exclude:
+    - /bin/.*
+    - /conf/.*
+    - /docs/.*
+    - /lib/.*
+    - /tutorials/classes/.*
+    - /tutorials/docs/.*
+    - /tutorials/images/.*
+  test:
+    include:
+      - /src/.*
